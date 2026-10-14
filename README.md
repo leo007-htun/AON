@@ -5,6 +5,7 @@
 [![Live](https://img.shields.io/badge/live-aon.vulkron.uk-00e5ff?style=for-the-badge&logo=cloudflare&logoColor=white)](https://aon.vulkron.uk)
 [![YouTube demo](https://img.shields.io/badge/demo-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=wLiVhkLOd-8)
 [![License: MIT](https://img.shields.io/badge/license-MIT-22c55e?style=for-the-badge)](LICENSE)
+[![Android APK](https://img.shields.io/badge/Android-download%20APK-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/leo007-htun/AON/releases/latest/download/AON.apk)
 
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.142-009688?logo=fastapi&logoColor=white)
@@ -31,10 +32,47 @@
 AON is a self-hosted chat agent that runs on your own hardware with local models. It answers
 questions, runs tools in a workspace (files, shell commands, web fetch and search), remembers you
 across chats, searches your own documents, and can be extended with skills and MCP servers. It
-has a web UI (also usable on phones) and an optional Telegram bot.
+has a web UI, an Android app and an optional Telegram bot.
 
 > 🔒 Nothing is sent to a cloud LLM: chat runs on [Ollama](https://ollama.com) or
 > [vLLM](https://docs.vllm.ai), embeddings on Ollama.
+
+## 💡 What makes AON different
+
+Memory and RAG are table stakes now. What AON adds:
+
+- 🔓 **Obliterated and fully yours.** It runs an uncensored ("obliterated") 27B model on a single
+  consumer GPU (RTX 4090), with no cloud, no API bills and no provider filtering or logging.
+  Your chats, memory and documents never leave the box.
+- 🧬 **It extends itself.** Paste a link and AON works out what it is: a GGUF model it can pull
+  (it checks the VRAM budget and tool support first), an MCP server it can connect, a skill repo
+  it can import, or docs it can learn from. It can also draft a new skill from any web page and
+  test it with evals.
+- 👥 **A private AI for your whole crew, from one GPU.** The chat model is served by vLLM, so
+  several people use it at once. Access goes through Cloudflare Access email PIN, and every user
+  is approved by hand.
+- 🛡️ **Honest by design.** Shell commands and file writes wait for your approval. A reply that
+  claims "done" without a tool having run is not trusted, so the real loop runs instead. Secrets
+  such as tokens and keys are never saved to memory.
+- 🗺️ **Grounded, not guessed.** Places and routes come from OpenStreetMap geocoding and routing,
+  drawn on a 3D globe. Distances and times are computed by the routing service, not written by
+  the model.
+- 📱 **Everywhere you are.** The web UI, the Android app and an optional Telegram bot all reach the
+  same agent on your server.
+
+## 📱 Android app
+
+[**Download AON.apk**](https://github.com/leo007-htun/AON/releases/latest/download/AON.apk) (260 KB, Android 7.0 or newer).
+
+1. Open the link on your phone and download the APK.
+2. Allow installs from your browser when Android asks (**Install unknown apps**), then tap **Install**.
+3. Open AON and sign in with your approved email address (see
+   [Trying the live instance](#-trying-the-live-instance)).
+
+The app opens <https://aon.vulkron.uk> by default. To use your own server, press **Back** in the
+app and choose **Change server**, for example `http://192.168.1.84:8700` on your home network.
+The APK is signed (APK Signature Scheme v2, certificate `CN=AON, O=Vulkron, C=GB`); its SHA-256 is
+listed on the [release page](https://github.com/leo007-htun/AON/releases/latest).
 
 ## 🎬 Demo
 
