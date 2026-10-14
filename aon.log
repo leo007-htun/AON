@@ -1,0 +1,28 @@
+INFO:     Started server process [19555]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://192.168.1.84:8700 (Press CTRL+C to quit)
+INFO:     192.168.1.84:49154 - "GET /api/skills HTTP/1.1" 200 OK
+INFO:     192.168.1.84:49164 - "GET / HTTP/1.1" 200 OK
+INFO:     192.168.1.182:60702 - "GET / HTTP/1.1" 200 OK
+INFO:     192.168.1.182:60702 - "GET /static/lib/atom-one-dark.min.css HTTP/1.1" 304 Not Modified
+INFO:     192.168.1.182:28213 - "GET /static/lib/highlight.min.js HTTP/1.1" 304 Not Modified
+INFO:     192.168.1.182:55981 - "GET /static/lib/purify.min.js HTTP/1.1" 304 Not Modified
+INFO:     192.168.1.182:27156 - "GET /static/lib/marked.min.js HTTP/1.1" 304 Not Modified
+INFO:     192.168.1.182:55981 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     192.168.1.182:55981 - "GET /static/aon-logo.svg HTTP/1.1" 304 Not Modified
+INFO:     192.168.1.182:55981 - "GET /api/memory HTTP/1.1" 200 OK
+INFO:     192.168.1.182:55981 - "GET /api/memory HTTP/1.1" 200 OK
+INFO:     192.168.1.182:55981 - "GET /api/skills HTTP/1.1" 200 OK
+INFO:     192.168.1.182:52039 - "GET / HTTP/1.1" 200 OK
+INFO:     192.168.1.182:52039 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [19555]
+INFO:     Started server process [30348]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://192.168.1.84:8700 (Press CTRL+C to quit)
+INFO:     192.168.1.84:39692 - "GET / HTTP/1.1" 200 OK
+INFO:     192.168.1.84:39700 - "GET /api/docs HTTP/1.1" 200 OK

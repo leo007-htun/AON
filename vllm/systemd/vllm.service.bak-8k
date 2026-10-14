@@ -1,0 +1,30 @@
+[Unit]
+Description=vLLM AON server (serves /home/cmpuser1/QWEN as the "aon" model)
+After=network-online.target tailscaled.service
+Wants=network-online.target
+
+[Service]
+User=cmpuser1
+Group=cmpuser1
+WorkingDirectory=/home/cmpuser1/QWEN
+Environment=HF_HUB_OFFLINE=1
+ExecStart=/home/cmpuser1/vllm-env/bin/vllm serve /home/cmpuser1/QWEN \
+  --served-model-name aon \
+  --chat-template /home/cmpuser1/QWEN/chat_template.full.jinja \
+  --max-model-len 8192 \
+  --max-num-seqs 6 \
+  --gpu-memory-utilization 0.93 \
+  --kv-cache-dtype fp8 \
+  --limit-mm-per-prompt '{"image": 1, "video": 0}' \
+  --enable-auto-tool-choice \
+  --tool-call-parser qwen3_coder \
+  --reasoning-parser qwen3 \
+  --default-chat-template-kwargs '{"enable_thinking": true}' \
+  --host 100.72.82.59 \
+  --port 8001
+Restart=always
+RestartSec=10
+TimeoutStartSec=600
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AON</title>
+<link rel="icon" type="image/svg+xml" href="/static/aon-logo.svg">
+<link rel="apple-touch-icon" href="/static/aon-logo.svg">
+<link rel="stylesheet" href="/static/lib/fonts.css">
+<link rel="stylesheet" href="/static/lib/cybercore.min.css">
+<link rel="stylesheet" href="/static/lib/atom-one-dark.min.css">
+<script defer src="/static/lib/marked.min.js"></script>
+<script defer src="/static/lib/purify.min.js"></script>
+<script defer src="/static/lib/highlight.min.js"></script>
+<style>
+/* AON on CybercoreCSS (github.com/sebyx07/cybercore-css). Framework styles live in @layers, so these
+   unlayered rules win where they overlap. AON tokens below are mapped onto the framework palette. */
+/* Blueprint palette: navy drafting surfaces, cyan lines, terminal green. Red is reserved for warnings:
+   the framework's magenta (danger) and yellow (warning) both resolve to the same red. */
+:root{
+  --cyber-void-100:#17507e; --cyber-void-200:#103d63; --cyber-void-300:#0c3050; --cyber-void-400:#092641;
+  --cyber-void-500:#061b31; --cyber-void-700:#041425; --cyber-void-800:#030e1b; --cyber-void-900:#020913;
+  --cyber-chrome-100:#e8f7ff; --cyber-chrome-200:#cde8f6; --cyber-chrome-300:#a6cbe0; --cyber-chrome-400:#80a9c4;
+  --cyber-chrome-500:#5f88a5; --cyber-chrome-600:#47708d;
+  --cyber-cyan-300:#93ecff; --cyber-cyan-400:#4fdcf5; --cyber-cyan-500:#00e5ff; --cyber-cyan-600:#00b8d4;
+  --cyber-cyan-700:#008fa6; --cyber-cyan-900:#00475a;
+  --cyber-green-400:#7dffbe; --cyber-green-500:#3dff9a; --cyber-green-700:#1d9a5e; --cyber-green-900:#052a1d;
+  --cyber-magenta-500:#ff4d5e; --cyber-magenta-700:#b3283a; --cyber-yellow-500:#ff4d5e; --cyber-yellow-700:#b3283a;
+  --color-bg-primary:var(--cyber-void-500); --color-bg-secondary:var(--cyber-void-400); --color-bg-tertiary:var(--cyber-void-300);
+  --color-bg-elevated:var(--cyber-void-200); --color-border-default:var(--cyber-void-100);
+  --bg:var(--cyber-void-500); --panel:var(--cyber-void-400); --panel2:var(--cyber-void-300); --rail:var(--cyber-void-700);
+  --fg:var(--cyber-cyan-500); --text:var(--cyber-chrome-200); --muted:var(--cyber-chrome-400);
+  --border:var(--cyber-void-100); --border2:var(--cyber-void-200); --accent:var(--cyber-cyan-500); --accent2:var(--cyber-green-500);
+  --green:var(--cyber-green-500); --red:var(--cyber-magenta-500); --warn:var(--cyber-magenta-500);
+  --code-bg:var(--cyber-void-700); --hover:var(--cyber-void-200);
+  --grid-minor:color-mix(in srgb,var(--cyber-cyan-500) 6%,transparent); --grid-major:color-mix(in srgb,var(--cyber-cyan-500) 12%,transparent);
+  --font:var(--font-body); --mono:var(--font-mono); --display:var(--font-display);
+  --sidebar-w:256px;
+}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --cyber-cyan-500:#00838f; --cyber-cyan-400:#00838f; --cyber-cyan-300:#006a74; --cyber-magenta-500:#c62828; --cyber-magenta-700:#8e1c1c;
+  --cyber-yellow-500:#c62828; --cyber-yellow-700:#8e1c1c; --cyber-green-500:#00875a; --cyber-green-400:#00754e; --cyber-green-700:#7fcfae; --cyber-green-900:#e3f6ee;
+  --cyber-void-100:#cdd2de; --cyber-void-200:#dde1ea; --cyber-void-300:#e9ecf2; --cyber-void-400:#f4f6f9; --cyber-void-500:#ffffff;
+  --cyber-void-700:#1b1f2a;
+  --cyber-chrome-100:#151821; --cyber-chrome-200:#232734; --cyber-chrome-300:#3a4052; --cyber-chrome-400:#555d73; --cyber-chrome-500:#6b7389;
+  --color-bg-primary:#ffffff; --color-bg-secondary:#f4f6f9; --color-bg-tertiary:#e9ecf2; --color-bg-elevated:#dde1ea;
+  --color-text-primary:#151821; --color-text-secondary:#3a4052; --color-text-muted:#6b7389; --color-border-default:#cdd2de;
+  --glow-cyan:0 0 10px color-mix(in srgb,#00838f 35%,transparent); --glow-magenta:0 0 10px color-mix(in srgb,#c62828 35%,transparent);
+  --glow-green:0 0 10px color-mix(in srgb,#00875a 35%,transparent); --glow-yellow:0 0 10px color-mix(in srgb,#c62828 35%,transparent);
+  --grid-minor:color-mix(in srgb,#00838f 7%,transparent); --grid-major:color-mix(in srgb,#00838f 13%,transparent);
+  --glow-text-cyan:none;
+  --rail:#151821; --code-bg:#f4f6f9;
+}
+html,body{height:100%}
+body{margin:0;display:flex;font-family:var(--font);font-size:15px;line-height:1.55;background:var(--bg);color:var(--text);overflow:hidden}
+/* in the framework's base layer so .cyber-* component fonts/colours still win */
+@layer base{button,input,select,textarea{font:inherit;color:inherit}}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--cyber-void-100);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:var(--cyber-cyan-900)}
+.ci{width:18px;height:18px;flex:none;display:block}
+
+/* ===== icon rail ===== */
+#rail{width:54px;background:var(--rail);display:flex;flex-direction:column;align-items:center;
+padding:.55rem 0;gap:.35rem;flex:none;z-index:30;border-right:1px solid color-mix(in srgb,var(--accent) 18%,transparent)}
+.rail-logo{width:34px;height:34px;margin-bottom:.4rem}
+.rail-btn{width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:1px solid transparent;
+background:transparent;color:var(--cyber-chrome-400);cursor:pointer;transition:color var(--duration-fast),border-color var(--duration-fast),box-shadow var(--duration-fast);
+position:relative;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+.rail-btn:hover{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent);
+background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.rail-btn.active{color:var(--accent);border-color:var(--accent);box-shadow:inset 0 0 12px color-mix(in srgb,var(--accent) 25%,transparent)}
+.rail-btn .ci{width:19px;height:19px}
+.rail-spacer{flex:1}
+
+/* ===== sidebar ===== */
+#sidebar{width:var(--sidebar-w);background:var(--panel);border-right:1px solid var(--border);
+display:flex;flex-direction:column;flex:none;min-width:0;transition:margin-left .18s var(--ease-cyber)}
+body.sb-collapsed #sidebar{margin-left:calc(-1 * var(--sidebar-w))}
+.sb-head{display:flex;align-items:center;gap:.5rem;padding:.75rem .85rem;border-bottom:1px solid var(--border)}
+.brand{display:flex;align-items:center;gap:.55rem;text-decoration:none;min-width:0}
+.brand-logo{width:30px;height:30px;display:block;flex:none}
+.brand-word{font-family:Orbitron,var(--display);font-weight:800;font-size:1.15rem;letter-spacing:.24em;color:var(--accent);text-shadow:var(--glow-text-cyan)}
+.sb-collapse{margin-left:auto;background:transparent;border:1px solid transparent;color:var(--muted);cursor:pointer;padding:.25rem}
+.sb-collapse:hover{color:var(--accent);border-color:var(--border)}
+.sb-inner{flex:1;overflow:auto;padding:.8rem .75rem 1rem;display:flex;flex-direction:column;gap:.6rem}
+.new-chat{width:100%;justify-content:flex-start}
+.new-chat .ci{width:16px;height:16px}
+.sb-search{font-size:.82rem;padding:.5rem .65rem}
+.section{display:flex;flex-direction:column;gap:.1rem;margin-top:.35rem}
+.section-title{font-family:var(--display);font-size:.74rem;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);font-weight:700;padding:.3rem .55rem .25rem}
+.section-title::before{content:"> ";color:var(--accent)}
+.nav-item{display:flex;align-items:center;gap:.6rem;padding:.48rem .6rem;color:var(--text);cursor:pointer;font-size:.88rem;
+border:none;border-left:2px solid transparent;transition:color var(--duration-fast),background var(--duration-fast),border-color var(--duration-fast);
+background:transparent;width:100%;text-align:left}
+.nav-item:hover{background:color-mix(in srgb,var(--accent) 7%,transparent);border-left-color:var(--accent);color:var(--fg)}
+.nav-item .ci{width:16px;height:16px;color:var(--muted)}
+.nav-item:hover .ci{color:var(--accent)}
+.sess{display:flex;align-items:center;gap:.5rem;padding:.45rem .6rem;color:var(--text);cursor:pointer;font-size:.86rem;
+border-left:2px solid transparent;white-space:nowrap;overflow:hidden;transition:background var(--duration-fast),border-color var(--duration-fast)}
+.sess:hover{background:var(--hover)}
+.sess.active{background:color-mix(in srgb,var(--accent) 10%,transparent);border-left-color:var(--accent);color:var(--fg)}
+.sess .t{flex:1;overflow:hidden;text-overflow:ellipsis}
+.sess .x{opacity:0;color:var(--muted);border:none;background:none;cursor:pointer;padding:0 .15rem;font-size:1rem;line-height:1}
+.sess:hover .x{opacity:.7}.sess .x:hover{opacity:1;color:var(--red)}
+.sess-empty{color:var(--muted);font-size:.8rem;padding:.4rem .6rem;font-family:var(--mono)}
+.sb-user{display:flex;align-items:center;gap:.55rem;padding:.6rem .85rem;border-top:1px solid var(--border);font-size:.78rem;color:var(--muted);font-family:var(--mono)}
+
+/* ===== main chat ===== */
+#main{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg)}
+.chat-top{display:flex;align-items:center;gap:.65rem;padding:.55rem .9rem;border-bottom:1px solid var(--border);
+background:color-mix(in srgb,var(--panel) 92%,transparent)}
+.icon-btn{background:transparent;border:1px solid transparent;color:var(--muted);cursor:pointer;padding:.35rem;display:flex;align-items:center;justify-content:center}
+.icon-btn:hover{color:var(--accent);border-color:var(--border)}
+.chat-title{font-family:var(--display);font-weight:700;color:var(--fg);font-size:1.05rem;letter-spacing:.08em;text-transform:uppercase}
+.msg-count{color:var(--muted);font-size:.76rem;font-family:var(--mono)}
+.top-spacer{flex:1}
+.cur-model{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+.cur-model:not(:empty)::before{content:"model: ";color:var(--accent)}
+
+#scroll{flex:1;overflow:auto;position:relative;background-color:var(--bg);
+background-image:linear-gradient(var(--grid-major) 1px,transparent 1px),linear-gradient(90deg,var(--grid-major) 1px,transparent 1px),
+linear-gradient(var(--grid-minor) 1px,transparent 1px),linear-gradient(90deg,var(--grid-minor) 1px,transparent 1px);
+background-size:120px 120px,120px 120px,24px 24px,24px 24px;background-position:-1px -1px;background-attachment:local}
+#chat-history{display:flex;flex-direction:column;gap:1.1rem;max-width:840px;margin:0 auto;width:100%;padding:1.4rem 1.1rem 1.7rem}
+
+/* welcome */
+#welcome{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+text-align:center;padding:2rem;gap:.3rem;pointer-events:none}
+#welcome.hide{display:none}
+#welcome .wlogo{width:96px;height:96px;filter:drop-shadow(0 0 22px color-mix(in srgb,var(--accent) 35%,transparent))}
+#welcome h1{--glitch-color-1:var(--cyber-cyan-300);--glitch-color-2:var(--cyber-green-500);font-family:Orbitron,var(--display);font-size:2.4rem;letter-spacing:.3em;margin:.4rem 0 0 .3em;color:var(--accent);text-shadow:var(--glow-text-cyan)}
+#welcome .tagline{font-family:var(--mono);font-size:.82rem;color:var(--muted);margin:.25rem 0 1.3rem;display:flex;align-items:center;gap:.15rem}
+#welcome .tagline b{color:var(--green);font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;max-width:640px;pointer-events:auto}
+button.chip{display:block;font-size:.84rem;text-align:left;max-width:200px;padding:.85rem 1rem;color:var(--text);text-transform:none;letter-spacing:0;border-radius:0;margin:0}
+button.chip b{display:flex;align-items:center;gap:.4rem;font-family:var(--display);font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;color:var(--fg);margin-bottom:.25rem}
+button.chip b .ci{width:16px;height:16px}
+
+/* messages */
+.msg{line-height:1.6}
+.msg-head{display:flex;align-items:center;gap:.5rem;font-family:var(--display);font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;margin-bottom:.45rem;font-weight:700}
+.avatar{width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.avatar.u{border:1px solid var(--green);color:var(--green);background:color-mix(in srgb,var(--green) 12%,transparent)}
+.avatar.u .ci{width:13px;height:13px}
+.avatar-logo{width:22px;height:22px;flex:none;filter:drop-shadow(0 0 4px color-mix(in srgb,var(--accent) 45%,transparent))}
+.bubble{padding:.85rem 1.05rem;border:1px solid var(--border)}
+.msg.user .bubble{background:color-mix(in srgb,var(--green) 6%,var(--panel));border-left:3px solid var(--green)}
+.msg.ai .bubble.cyber-card{padding:.95rem 1.15rem}
+.msg.tool{opacity:.95}
+.tool-box{border:1px solid var(--cyber-green-700);overflow:hidden;background:var(--panel)}
+.tool-bar{display:flex;align-items:center;gap:.5rem;padding:.4rem .7rem;font-family:var(--mono);font-size:.76rem;color:var(--cyber-green-500);cursor:pointer;background:var(--cyber-green-900);border-bottom:1px solid transparent}
+.tool-box.open .tool-bar{border-bottom-color:var(--cyber-green-700)}
+.tool-bar .ci{width:15px;height:15px}
+.tool-bar .tname{color:var(--cyber-green-400);letter-spacing:.04em}
+.tool-bar .tag-ok{color:var(--green)}.tool-bar .tag-no{color:var(--red);text-transform:uppercase;font-size:.7rem;letter-spacing:.08em}
+.tool-bar .caret{margin-left:auto;transition:transform var(--duration-fast)}
+.tool-box.open .caret{transform:rotate(90deg)}
+.tool-out{display:none}
+.tool-box.open .tool-out{display:block}
+.tool-out pre{font-family:var(--mono);font-size:.77rem;white-space:pre-wrap;margin:0;padding:.65rem .8rem;color:var(--cyber-green-400);max-height:280px;overflow:auto;line-height:1.6}
+.warn-note{color:var(--warn);font-size:.8rem;margin-top:.55rem;font-family:var(--mono)}
+#thinking{display:flex;align-items:center;gap:.7rem;color:var(--muted);font-family:var(--display);font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem 0}
+#thinking .tdots::after{content:'';animation:tdots 1.4s steps(4,end) infinite}
+@keyframes tdots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
+
+/* markdown inside replies (framework reset removes default spacing; headings are scaled down for chat) */
+.md>*:first-child{margin-top:0}.md>*:last-child{margin-bottom:0}
+.md p,.md ul,.md ol,.md pre,.md blockquote,.md table{margin:.55rem 0}
+.md ul,.md ol{padding-left:1.4rem}
+.md li{margin:.15rem 0}
+.md h1,.md h2,.md h3,.md h4,.md h5,.md h6{margin:.9rem 0 .45rem;color:var(--fg);letter-spacing:.05em;line-height:1.2}
+.md h1{font-size:1.45rem}.md h2{font-size:1.28rem}.md h3{font-size:1.14rem}.md h4,.md h5,.md h6{font-size:1rem}
+.md a{color:var(--accent)}
+.md strong{color:var(--cyber-chrome-100)}
+.md blockquote{border-left:3px solid var(--green);padding:.2rem .8rem;color:var(--muted)}
+.md pre{background:var(--code-bg);border:1px solid var(--border);border-left:3px solid var(--accent);padding:.7rem .85rem;overflow:auto}
+.md pre code{border:none;padding:0;background:transparent;color:inherit;font-size:.82rem}
+.md table{border-collapse:collapse;font-size:.85rem}
+.md th,.md td{border:1px solid var(--border);padding:.35rem .6rem;text-align:left}
+.md th{font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;color:var(--fg);background:var(--panel2)}
+.md hr{border:none;border-top:1px solid var(--border);margin:.8rem 0}
+
+/* approval card */
+.pending.cyber-alert{padding:.9rem 1rem .9rem 3rem}
+.pending .ph{display:flex;align-items:center;gap:.5rem;font-family:var(--display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--warn)}
+.cmd{font-family:var(--mono);background:var(--code-bg);padding:.6rem .8rem;margin:.6rem 0;white-space:pre-wrap;border:1px solid var(--border);border-left:3px solid var(--warn);font-size:.8rem;overflow:auto;max-height:220px;color:var(--text)}
+.row{display:flex;gap:.6rem;margin-top:.55rem;flex-wrap:wrap;align-items:center}
+
+/* composer */
+.composer-wrap{padding:.55rem .9rem 1rem;background:var(--bg)}
+.composer{max-width:840px;margin:0 auto;background:var(--panel2);border:1px solid var(--border);border-left:3px solid var(--accent);
+padding:.6rem .7rem .5rem;transition:border-color var(--duration-fast),box-shadow var(--duration-fast)}
+.composer:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent),inset 0 0 15px color-mix(in srgb,var(--accent) 8%,transparent)}
+.composer textarea{width:100%;background:transparent;border:none;color:var(--text);font-family:var(--mono);font-size:.9rem;
+resize:none;line-height:1.55;max-height:200px;padding:.3rem .35rem;display:block}
+.composer textarea:focus{outline:none}
+.composer textarea::placeholder{color:var(--muted)}
+.composer-bottom{display:flex;align-items:center;gap:.5rem;padding-top:.4rem}
+.model-pick{display:flex;align-items:center;gap:.4rem;background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--green);padding:.3rem .5rem .3rem .55rem}
+.model-pick .ci{width:15px;height:15px;color:var(--green)}
+.model-pick select{background:transparent;border:none;color:var(--text);font-family:var(--mono);font-size:.78rem;cursor:pointer}
+.model-pick select option{background:var(--panel);color:var(--text)}
+.model-pick select:focus{outline:none}
+.composer-bottom .sp{flex:1}
+.send.cyber-btn{width:42px;height:38px;padding:0;flex:none}
+.send .ci{width:18px;height:18px}
+.send.cyber-btn.stopping{background:transparent;color:var(--accent);box-shadow:0 0 12px color-mix(in srgb,var(--accent) 45%,transparent)}
+.attach-btn{width:36px;height:36px;border:1px solid var(--border);background:var(--panel);color:var(--muted);
+cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;transition:color var(--duration-fast),border-color var(--duration-fast)}
+.attach-btn:hover{color:var(--accent);border-color:var(--accent)}
+.attach-btn .ci{width:17px;height:17px}
+.composer.drag{border-color:var(--accent);border-style:dashed;background:color-mix(in srgb,var(--accent) 6%,var(--panel2))}
+.att-list{display:flex;flex-wrap:wrap;gap:.4rem;padding:.15rem .2rem .4rem}
+.att-list:empty{display:none}
+.att{display:flex;align-items:center;gap:.45rem;background:var(--panel);border:1px solid var(--border);border-left:2px solid var(--accent);
+padding:.25rem .45rem;font-size:.78rem;color:var(--text);max-width:240px}
+.att img{width:32px;height:32px;object-fit:cover;flex:none}
+.att .ficon{width:32px;height:32px;background:var(--panel2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;
+font-size:.58rem;font-family:var(--mono);color:var(--accent);flex:none;text-transform:uppercase}
+.att .an{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.att .as{color:var(--muted);font-size:.7rem;flex:none;font-family:var(--mono)}
+.att .ax{border:none;background:none;color:var(--muted);cursor:pointer;font-size:1rem;line-height:1;padding:0 .1rem}
+.att .ax:hover{color:var(--red)}
+.bubble .att-list{padding:.55rem 0 0}
+.att-msg{color:var(--warn);font-size:.76rem;padding:0 .3rem .3rem;font-family:var(--mono)}
+.att-msg:empty{display:none}
+.notice{max-width:840px;margin:.2rem auto;color:var(--warn);font-size:.8rem;font-family:var(--mono);border-left:3px solid var(--warn);padding:.35rem .7rem;
+background:color-mix(in srgb,var(--warn) 8%,transparent)}
+.composer-bottom .model-pick{min-width:0;flex:0 1 auto}
+.composer-bottom .model-pick select{min-width:0;max-width:100%;text-overflow:ellipsis}
+.chat-title{white-space:nowrap}
+.cur-model{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:600px){.cur-model,.msg-count{display:none}}
+
+/* map cards (static/lib/aon-map.js, ported from wireframe-map.html) */
+.mapcard{border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);background:var(--panel);overflow:hidden}
+.mc-head{display:flex;align-items:center;gap:.5rem;padding:.38rem .7rem;font-family:var(--mono);font-size:.74rem;color:var(--accent);
+background:color-mix(in srgb,var(--accent) 8%,var(--panel));border-bottom:1px solid color-mix(in srgb,var(--accent) 30%,transparent);letter-spacing:.06em}
+.mc-head .ci{width:15px;height:15px}
+.mc-head .mc-t{color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mc-body{position:relative;height:380px}
+.mc-body .mc-msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.mc-body .mc-msg.warn{color:var(--warn)}
+.mc-body .mc-msg button{background:transparent;border:1px solid var(--accent);color:var(--accent);padding:.4rem .8rem;font-family:var(--mono);cursor:pointer}
+#mapFull{position:relative;flex:1;min-height:0}
+#modal-map .cyber-modal__dialog{display:flex;flex-direction:column}
+#modal-map .cyber-modal__body{padding:0;flex:1;display:flex;overflow:hidden}
+@media (max-width:600px){.mc-body{height:300px}}
+
+/* buttons: everything AON creates as .btn renders as a framework button */
+.cyber-btn .ci{width:15px;height:15px}
+.cyber-btn.btn{padding:.4rem .95rem;font-size:.78rem}
+/* the framework's corner notch is painted with --color-bg-primary; match it to the surface the button sits on */
+.sb-inner,#welcome{--color-bg-primary:var(--panel)}
+#welcome{--color-bg-primary:var(--bg)}
+.cyber-modal__dialog{--color-bg-primary:var(--color-bg-secondary)}
+.pending{--color-bg-primary:color-mix(in srgb,var(--warn) 10%,var(--color-bg-secondary))}
+.composer{--color-bg-primary:var(--panel2)}
+
+/* ===== modal (framework .cyber-modal; AON toggles .cyber-modal--open) ===== */
+.cyber-modal{padding:1.5rem}
+.cyber-modal__dialog{max-height:84vh}
+.cyber-modal__header{gap:.55rem;padding:.85rem 1.1rem;flex-wrap:wrap}
+.cyber-modal__title{font-size:1.15rem}
+.cyber-modal__close:hover{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.cyber-modal__body{padding:1.1rem;color:var(--text);line-height:1.55}
+.tabs{display:flex;gap:.2rem;padding:.6rem 1.1rem 0;border-bottom:1px solid var(--border)}
+.tab,.hubtab{background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;margin-bottom:-1px;
+padding:.45rem .8rem;font-family:var(--display);font-weight:700;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase}
+.tab:hover,.hubtab:hover{color:var(--fg)}
+.tab.active,.hubtab.active{color:var(--accent);border-bottom-color:var(--accent);text-shadow:0 0 8px color-mix(in srgb,var(--accent) 50%,transparent)}
+.tabpane{display:none}.tabpane.active{display:block}
+.hint{color:var(--muted);font-size:.84rem;line-height:1.55}
+.hint code,.cyber-modal code{font-size:.8em}
+.cyber-modal__body input:not([type=checkbox]):not([type=file]),.cyber-modal__body select,.cyber-modal__body textarea{
+padding:.45rem .65rem;border:1px solid var(--border);border-left:3px solid var(--accent);font-family:var(--mono);font-size:.82rem;
+color:var(--text);background:var(--panel2);outline:none;transition:border-color var(--duration-fast),box-shadow var(--duration-fast)}
+.cyber-modal__body input:focus,.cyber-modal__body select:focus,.cyber-modal__body textarea:focus{border-color:var(--accent);
+box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+.cyber-modal__body select option{background:var(--panel)}
+pre.mem{white-space:pre-wrap;font-family:var(--mono);font-size:.82rem;background:var(--panel2);border:1px solid var(--border);padding:1rem;line-height:1.6;margin:0}
+.skill{background:var(--panel2);border:1px solid var(--border);border-left:2px solid var(--border);padding:.7rem .9rem;margin-bottom:.5rem;cursor:pointer;
+transition:border-color var(--duration-fast),box-shadow var(--duration-fast)}
+.skill:hover{border-color:var(--accent);box-shadow:0 0 14px color-mix(in srgb,var(--accent) 18%,transparent)}
+.skill .n{color:var(--fg);font-family:var(--display);font-weight:700;letter-spacing:.05em;font-size:.98rem}
+.skill .d{color:var(--muted);font-size:.83rem;margin-top:.2rem}
+.sd-head{margin:.8rem 0 .4rem;color:var(--fg);font-family:var(--display);text-transform:uppercase;letter-spacing:.08em;font-size:1rem}
+.tree{background:var(--panel2);border:1px solid var(--border);padding:.5rem .6rem;margin-bottom:.7rem}
+.tf{font-family:var(--mono);font-size:.78rem;color:var(--muted);padding:.08rem 0}
+.evloader{display:flex;align-items:center;gap:.7rem;color:var(--muted);font-size:.84rem;margin-top:.75rem;font-family:var(--mono)}
+.bench{margin-top:.8rem;display:flex;flex-direction:column;gap:.5rem}
+.brow{display:flex;align-items:center;gap:.6rem;font-size:.82rem}
+.brow>span:first-child{width:72px;color:var(--muted);font-family:var(--display);text-transform:uppercase;letter-spacing:.06em}
+.barwrap{flex:1;position:relative;background:var(--panel2);height:18px;border:1px solid var(--border)}
+.bar{background:linear-gradient(90deg,var(--cyber-cyan-500),var(--cyber-green-500));height:100%;box-shadow:0 0 10px color-mix(in srgb,var(--accent) 40%,transparent)}
+.barwrap>span{position:absolute;right:6px;top:0;font-size:.72rem;line-height:18px;color:var(--text);font-family:var(--mono)}
+.delta{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.delta.pos{color:var(--green)}.delta.neg{color:var(--red)}
+table.trig{width:100%;border-collapse:collapse;font-size:.78rem;margin-top:.3rem}
+table.trig th,table.trig td{border:1px solid var(--border);padding:.3rem .5rem;text-align:left}
+table.trig th{color:var(--fg);font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+.ep{display:flex;align-items:flex-start;gap:.6rem;padding:.55rem .65rem;border:1px solid var(--border);border-left:2px solid var(--accent);margin-bottom:.45rem;background:var(--panel2)}
+.ep-main{flex:1;line-height:1.5;font-size:.88rem}
+span.chip{display:inline-block;font-family:var(--display);font-weight:700;font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);
+border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);background:color-mix(in srgb,var(--accent) 12%,transparent);padding:.02rem .45rem;margin-right:.4rem;vertical-align:middle}
+.ep-tags{color:var(--muted);font-size:.76rem;font-family:var(--mono)}
+.ep-side{display:flex;align-items:center;gap:.3rem;flex:none}
+.doc-name{display:inline-flex;align-items:center;gap:.4rem;font-weight:600;color:var(--fg)}.doc-name .ci{width:16px;height:16px;flex:none;color:var(--accent)}
+.ep-age{color:var(--muted);font-size:.72rem;margin-right:.1rem;font-family:var(--mono)}
+.ep-btn{background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;padding:.1rem .4rem;font-size:.8rem}
+.ep-btn:hover{border-color:var(--accent);color:var(--fg)}.ep-btn.del:hover{border-color:var(--red);color:var(--red)}
+.req{font-family:var(--mono);font-size:.76rem;color:var(--warn);margin-bottom:.5rem}
+.empty{color:var(--muted);font-family:var(--mono);font-size:.84rem}
+/* ===== Hub (Skills hub / MCP hub; MCP data from the Glama API) ===== */
+#modal-hub .cyber-modal__dialog{width:min(1200px,96vw);max-width:none;max-height:90vh}
+.hub-home{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;padding:.4rem 0}
+.hub-pick{display:flex;flex-direction:column;justify-content:flex-start;text-align:left;padding:1.3rem 1.2rem;color:var(--text);cursor:pointer;border-radius:0;font:inherit}
+.hub-pick b{display:flex;align-items:center;gap:.5rem;font-family:Orbitron,var(--display);font-size:1.05rem;letter-spacing:.14em;color:var(--accent);margin-bottom:.45rem}
+.hub-pick b .ci{width:20px;height:20px}
+.hub-pick span{color:var(--muted);font-size:.86rem;line-height:1.5}
+.hub-bar{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:-1.1rem 0 .7rem;padding:1.1rem 0 .6rem;position:sticky;top:-1.1rem;z-index:2;background:var(--color-bg-secondary);border-bottom:1px solid var(--border)}
+.hub-bar input{flex:1;min-width:160px}
+.hub-credit{font-family:var(--mono);font-size:.8rem;color:var(--text)}
+.hub-credit a{color:var(--accent)}
+.hub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.7rem}
+.hub-card{background:var(--panel2);border:1px solid var(--border);border-left:2px solid var(--accent);padding:.75rem .85rem;cursor:pointer;
+display:flex;flex-direction:column;gap:.35rem;min-width:0;transition:border-color var(--duration-fast)}
+.hub-card:hover{border-color:var(--accent)}
+.hub-card .t{display:flex;align-items:center;gap:.45rem;font-weight:600;color:var(--fg);min-width:0}
+.hub-card .t img{width:20px;height:20px;flex:none;object-fit:contain}
+.hub-card .t span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hub-card .ns{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+.hub-card .d{font-size:.82rem;color:var(--text);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.hub-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem .6rem;font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-top:auto}
+.hub-meta a{color:var(--accent)}
+.hub-tag{border:1px solid var(--border);padding:0 .35rem;color:var(--muted);font-family:var(--mono);font-size:.72rem}
+.hub-tag.ad{border-color:var(--green);color:var(--green)}
+.hub-detail h3{font-family:var(--display);color:var(--fg);margin:.2rem 0 .3rem;font-size:1.25rem}
+.hub-detail h4{font-family:var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-size:.82rem;margin:1rem 0 .4rem}
+.hub-tool{border-left:2px solid var(--border);padding:.3rem .6rem;margin-bottom:.35rem}
+.hub-tool code{color:var(--green)}
+.hub-tool div{font-size:.8rem;color:var(--muted);white-space:pre-wrap}
+.hub-links{display:flex;flex-wrap:wrap;gap:.5rem;margin:.5rem 0}
+.hub-links a{display:inline-flex;align-items:center;gap:.3rem}
+#sysprompt{width:100%;min-height:260px;resize:vertical;line-height:1.55}
+.sp-status{font-size:.8rem;color:var(--green);margin-left:.5rem;font-family:var(--mono)}
+
+#sbBackdrop{display:none;position:fixed;inset:0;z-index:35;background:rgba(0,0,0,.45)}
+.nav-item.phone-only{display:none}
+@supports (height:100dvh){html,body{height:100dvh}}
+@media(max-width:760px){
+  #sidebar{position:fixed;top:0;bottom:0;left:54px;z-index:40;transition:transform .18s var(--ease-cyber)}
+  body:not(.sb-collapsed) #sidebar{box-shadow:0 0 40px rgba(0,0,0,.6)}
+  body.sb-collapsed #sidebar{margin-left:0;transform:translateX(calc(-100% - 60px))}
+  body:not(.sb-collapsed) #sbBackdrop{display:block}
+}
+/* phones: the rail goes (the sidebar has the same entries), sidebar is an overlay, modals use the full screen */
+@media(max-width:600px){
+  #rail{position:fixed;left:-200px;visibility:hidden}   /* not display:none: its svg defs colour the other logos */
+  .nav-item.phone-only{display:flex}
+  #sidebar{left:0;width:min(86vw,var(--sidebar-w))}
+  .cyber-modal{padding:.35rem}
+  .cyber-modal__dialog,#modal-hub .cyber-modal__dialog{width:100%;max-width:none;max-height:calc(100% - .7rem)}
+  .cyber-modal__body{padding:.8rem}
+  .hub-bar{margin-top:-.8rem;padding-top:.8rem;top:-.8rem}
+  .hub-bar input{flex-basis:100%;min-width:0}
+  .hub-grid{grid-template-columns:1fr}
+  .composer{margin:0 .1rem}
+}
+</style>
+</head>
+<body>
+<!-- icon rail -->
+<nav id="rail" aria-label="Sections">
+  <svg class="rail-logo" viewBox="214 134 372 372" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AON logo">
+    <defs>
+      <linearGradient id="aonRing" gradientUnits="userSpaceOnUse" x1="230" y1="490" x2="570" y2="150">
+        <stop offset="0" stop-color="#00E5FF"/><stop offset="0.5" stop-color="#1FF2D0"/><stop offset="1" stop-color="#3DFF9A"/>
+      </linearGradient>
+      <linearGradient id="aonLight" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0" stop-color="#7DFFBE"/><stop offset="1" stop-color="#E8F7FF"/>
+      </linearGradient>
+      <filter id="aonGlow" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <symbol id="aon-mark" viewBox="214 134 372 372">
+        <g filter="url(#aonGlow)" fill="none" stroke="url(#aonRing)">
+          <circle cx="400" cy="320" r="92" stroke-width="12"/>
+          <circle cx="400" cy="320" r="124" stroke-width="20" stroke-dasharray="11 13.35" opacity="0.9"/>
+          <circle cx="400" cy="320" r="174" stroke-width="8" stroke-dasharray="210 883" transform="rotate(-75 400 320)"/>
+        </g>
+        <g filter="url(#aonGlow)" transform="translate(356 269) scale(0.85)" fill="none" stroke="url(#aonLight)" stroke-width="18"><path d="M 80 120 L 80 9 L 14 106 L 80 106"/></g>
+      </symbol>
+    </defs>
+    <g filter="url(#aonGlow)" fill="none" stroke="url(#aonRing)">
+      <circle cx="400" cy="320" r="92" stroke-width="12"/>
+      <circle cx="400" cy="320" r="107" stroke-width="2.5" opacity="0.6"/>
+      <circle cx="400" cy="320" r="124" stroke-width="20" stroke-dasharray="11 13.35" opacity="0.9"/>
+      <circle cx="400" cy="320" r="146" stroke-width="7" stroke-dasharray="260 40 120 497" transform="rotate(-70 400 320)"/>
+      <circle cx="400" cy="320" r="160" stroke-width="3" stroke-dasharray="150 60 90 705" transform="rotate(95 400 320)" opacity="0.8"/>
+      <circle cx="400" cy="320" r="174" stroke-width="8" stroke-dasharray="210 883" transform="rotate(-75 400 320)"/>
+      <circle cx="400" cy="320" r="174" stroke-width="3" stroke-dasharray="70 1023" transform="rotate(150 400 320)" opacity="0.7"/>
+    </g>
+    <g filter="url(#aonGlow)" transform="translate(356 269) scale(0.85)" fill="none" stroke="url(#aonLight)" stroke-width="18" stroke-linejoin="miter" stroke-miterlimit="4">
+      <path d="M 80 120 L 80 9 L 14 106 L 80 106"/>
+    </g>
+  </svg>
+  <button class="rail-btn" id="rb-new" title="New chat"><svg class="ci"><use href="/static/lib/cyber-icons.svg#plus"/></svg></button>
+  <button class="rail-btn" data-modal="memory" data-view="memory" title="Memory"><svg class="ci"><use href="/static/lib/cyber-icons.svg#memory"/></svg></button>
+  <button class="rail-btn" data-modal="docs" data-view="docs" title="Documents"><svg class="ci"><use href="/static/lib/cyber-icons.svg#file-text"/></svg></button>
+  <button class="rail-btn" data-modal="skills" data-view="skills" title="Skills"><svg class="ci"><use href="/static/lib/cyber-icons.svg#zap"/></svg></button>
+  <button class="rail-btn" data-modal="mcp" data-view="mcp" title="MCP servers"><svg class="ci"><use href="/static/lib/cyber-icons.svg#server"/></svg></button>
+  <button class="rail-btn" data-modal="hub" data-view="hub" title="Hub"><svg class="ci"><use href="/static/lib/cyber-icons.svg#globe"/></svg></button>
+  <div class="rail-spacer"></div>
+  <button class="rail-btn" data-modal="settings" data-view="settings" title="Settings"><svg class="ci"><use href="/static/lib/cyber-icons.svg#settings"/></svg></button>
+  <button class="rail-btn" id="themeBtn" title="Toggle light / dark"><svg class="ci"><use href="/static/lib/cyber-icons.svg#eye"/></svg></button>
+</nav>
+
+<!-- sidebar -->
+<nav id="sidebar" aria-label="Chats and workspace">
+  <div class="sb-head">
+    <span class="brand">
+      <svg class="brand-logo" viewBox="214 134 372 372" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AON logo">
+        <g filter="url(#aonGlow)" fill="none" stroke="url(#aonRing)">
+          <circle cx="400" cy="320" r="92" stroke-width="12"/>
+          <circle cx="400" cy="320" r="124" stroke-width="20" stroke-dasharray="11 13.35" opacity="0.9"/>
+          <circle cx="400" cy="320" r="174" stroke-width="8" stroke-dasharray="210 883" transform="rotate(-75 400 320)"/>
+        </g>
+        <g filter="url(#aonGlow)" transform="translate(356 269) scale(0.85)" fill="none" stroke="url(#aonLight)" stroke-width="18"><path d="M 80 120 L 80 9 L 14 106 L 80 106"/></g>
+      </svg>
+      <span class="brand-word">AON</span>
+    </span>
+    <button class="sb-collapse" id="sbClose" title="Collapse sidebar"><svg class="ci"><use href="/static/lib/cyber-icons.svg#chevron-left"/></svg></button>
+  </div>
+  <div class="sb-inner">
+    <button class="new-chat cyber-btn cyber-btn--sm" id="newChat"><svg class="ci"><use href="/static/lib/cyber-icons.svg#plus"/></svg> New chat</button>
+    <input class="sb-search cyber-input" id="sessSearch" placeholder="search chats_">
+    <div class="section">
+      <div class="section-title">Chats</div>
+      <div id="session-list"></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Workspace</div>
+      <button class="nav-item" data-modal="memory"><svg class="ci"><use href="/static/lib/cyber-icons.svg#memory"/></svg> Memory</button>
+      <button class="nav-item" data-modal="docs"><svg class="ci"><use href="/static/lib/cyber-icons.svg#file-text"/></svg> Documents</button>
+      <button class="nav-item" data-modal="skills"><svg class="ci"><use href="/static/lib/cyber-icons.svg#zap"/></svg> Skills</button>
+      <button class="nav-item" data-modal="mcp"><svg class="ci"><use href="/static/lib/cyber-icons.svg#server"/></svg> MCP servers</button>
+      <button class="nav-item" data-modal="hub"><svg class="ci"><use href="/static/lib/cyber-icons.svg#globe"/></svg> Hub</button>
+      <button class="nav-item" data-modal="settings"><svg class="ci"><use href="/static/lib/cyber-icons.svg#settings"/></svg> System prompt</button>
+      <button class="nav-item phone-only" onclick="$('#themeBtn').click()"><svg class="ci"><use href="/static/lib/cyber-icons.svg#eye"/></svg> Light / dark</button>
+    </div>
+  </div>
+  <div class="sb-user"><span class="cyber-status"><span class="cyber-status__dot"></span>online</span> self-hosted</div>
+</nav>
+<div id="sbBackdrop" onclick="toggleSb()"></div>
+
+<!-- main -->
+<main id="main">
+  <div class="chat-top">
+    <button class="icon-btn" id="sbToggle" title="Toggle sidebar"><svg class="ci"><use href="/static/lib/cyber-icons.svg#menu"/></svg></button>
+    <span class="chat-title">AON Chat</span>
+    <span class="msg-count" id="msgCount"></span>
+    <span class="top-spacer"></span>
+    <span class="cur-model" id="curModel"></span>
+  </div>
+  <div id="scroll">
+    <div id="welcome">
+      <img class="wlogo" src="/static/aon-loader.svg" alt="AON logo">
+      <h1 class="cyber-glitch cyber-glitch--subtle" data-text="AON">AON</h1>
+      <div class="tagline"><b>&gt;</b>&nbsp;self-hosted dev agent<span class="cyber-terminal__cursor"></span></div>
+      <div class="chips">
+        <button class="chip cyber-card cyber-card--interactive" data-prompt="List the files in the workspace and summarize what this project does."><b><svg class="ci"><use href="/static/lib/cyber-icons.svg#folder-open"/></svg>Explore</b>Summarize the project structure</button>
+        <button class="chip cyber-card cyber-card--interactive" data-prompt="Search the web for the latest FastAPI release notes and summarize the key changes."><b><svg class="ci"><use href="/static/lib/cyber-icons.svg#globe"/></svg>Research</b>Latest FastAPI release notes</button>
+        <button class="chip cyber-card cyber-card--interactive cyber-card--green" data-prompt="Read README.md and propose three concrete improvements to it."><b><svg class="ci"><use href="/static/lib/cyber-icons.svg#edit"/></svg>Review</b>Propose improvements to the README</button>
+      </div>
+    </div>
+    <div id="chat-history" role="log" aria-live="polite"></div>
+  </div>
+  <div class="composer-wrap">
+    <div class="composer" id="composer">
+      <div class="att-list" id="attList"></div>
+      <div class="att-msg" id="attMsg"></div>
+      <textarea id="goal" rows="1" placeholder="> give AON a goal_   (Enter to send, Shift+Enter for a new line)"></textarea>
+      <input type="file" id="attFile" multiple style="display:none">
+      <div class="composer-bottom">
+        <button class="attach-btn" id="attachBtn" title="Attach files or photos (or drop / paste them)"><svg class="ci"><use href="/static/lib/cyber-icons.svg#attachment"/></svg></button>
+        <span class="model-pick"><svg class="ci"><use href="/static/lib/cyber-icons.svg#cpu"/></svg><select id="model" title="model"></select></span>
+        <span class="sp"></span>
+        <button class="send cyber-btn cyber-btn--filled" id="sendBtn" title="Send"><svg class="ci"><use href="/static/lib/cyber-icons.svg#send"/></svg></button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- modals (framework .cyber-modal; openModal/closeModals toggle .cyber-modal--open) -->
+<div class="modal hidden cyber-modal cyber-modal--lg" id="modal-memory">
+  <div class="modal-content cyber-modal__dialog">
+    <div class="cyber-modal__header"><h2 class="cyber-modal__title">Memory</h2><button class="btn cyber-btn cyber-btn--sm" onclick="loadMemory()"><svg class="ci"><use href="/static/lib/cyber-icons.svg#refresh"/></svg>Refresh</button><button class="btn no cyber-btn cyber-btn--sm cyber-btn--magenta" onclick="clearMemory()"><svg class="ci"><use href="/static/lib/cyber-icons.svg#delete"/></svg>Clear all</button><button class="x cyber-modal__close" data-close title="Close"><svg class="ci"><use href="/static/lib/cyber-icons.svg#x"/></svg></button></div>
+    <div class="cyber-modal__body"><div class="hint" style="margin-bottom:.7rem">Episodes AON remembers. Only recent active ones are injected; the rest are searched on demand. Mark outdated or delete to curate.</div><div id="mem"></div></div>
+  </div>
+</div>
+<div class="modal hidden cyber-modal cyber-modal--lg" id="modal-docs">
+  <div class="modal-content cyber-modal__dialog">
+    <div class="cyber-modal__header"><h2 class="cyber-modal__title">Documents</h2><button class="btn primary cyber-btn cyber-btn--sm cyber-btn--filled" onclick="$('#docs-file').click()"><svg class="ci"><use href="/static/lib/cyber-icons.svg#upload"/></svg>Add files</button><input type="file" id="docs-file" multiple hidden onchange="docsUpload(this.files)"><button class="btn cyber-btn cyber-btn--sm" onclick="loadDocs()"><svg class="ci"><use href="/static/lib/cyber-icons.svg#refresh"/></svg>Refresh</button><button class="x cyber-modal__close" data-close title="Close"><svg class="ci"><use href="/static/lib/cyber-icons.svg#x"/></svg></button></div>
+    <div class="cyber-modal__body"><div class="hint" style="margin-bottom:.7rem">AON searches these files by meaning and by exact words, and adds the relevant passages to its answers. Text, code, Markdown, HTML, Word (.docx) and PDF with a text layer, up to 20 MB each. Files you attach in chat are added here too.</div><div id="docs-msg" class="hint" style="margin-bottom:.5rem"></div><div id="docs-list"></div></div>
+  </div>
+</div>
+<div class="modal hidden cyber-modal cyber-modal--lg" id="modal-skills">
+  <div class="modal-content cyber-modal__dialog">
+    <div class="cyber-modal__header"><h2 class="cyber-modal__title">Skills</h2><button class="btn primary cyber-btn cyber-btn--sm cyber-btn--filled" title="Import skills" onclick="const p=$('#imp-panel');p.style.display=p.style.display?'':'none'"><svg class="ci"><use href="/static/lib/cyber-icons.svg#download"/></svg>Import</button><button class="btn cyber-btn cyber-btn--sm" onclick="loadSkills()"><svg class="ci"><use href="/static/lib/cyber-icons.svg#refresh"/></svg>Refresh</button><button class="x cyber-modal__close" data-close title="Close"><svg class="ci"><use href="/static/lib/cyber-icons.svg#x"/></svg></button></div>
+    <div class="cyber-modal__body"><div class="hint" style="margin-bottom:.7rem">Reusable procedure packs AON can read and author with <code>write_skill</code>. Click a skill to view its files and run evals.</div>
+      <div id="imp-panel" style="display:none;margin-bottom:.9rem;padding:.75rem .85rem;border:1px solid var(--border);border-left:3px solid var(--accent);background:var(--panel2)">
+        <div class="row" style="gap:.5rem;margin:0 0 .5rem">
+          <input id="imp-url" placeholder="https://github.com/owner/repo  (or …/tree/main/skills/name)" style="flex:2;min-width:220px">
+          <button class="btn cyber-btn cyber-btn--sm" onclick="impPreview('url')"><svg class="ci"><use href="/static/lib/cyber-icons.svg#search"/></svg>Fetch</button>
+          <button class="btn cyber-btn cyber-btn--sm" onclick="$('#imp-file').click()"><svg class="ci"><use href="/static/lib/cyber-icons.svg#upload"/></svg>Upload .zip</button><input type="file" id="imp-file" accept=".zip,application/zip" hidden onchange="impPreview('zip')">
+          <button class="btn cyber-btn cyber-btn--sm cyber-btn--ghost" onclick="const t=$('#imp-mdwrap');t.style.display=t.style.display?'':'none'"><svg class="ci"><use href="/static/lib/cyber-icons.svg#paste"/></svg>Paste SKILL.md</button>
+        </div>
+        <div id="imp-mdwrap" style="display:none;margin-bottom:.4rem">
+          <textarea id="imp-md" spellcheck="false" placeholder="---&#10;name: my-skill&#10;description: what it does and when to use it&#10;---&#10;&#10;instructions…" style="width:100%;min-height:130px"></textarea>
+          <div class="row" style="margin-top:.5rem"><button class="btn primary cyber-btn cyber-btn--sm cyber-btn--filled" onclick="impPasteUpload(false)"><svg class="ci"><use href="/static/lib/cyber-icons.svg#upload"/></svg>Upload skill</button><span id="imp-mdmsg" class="hint"></span></div>
+        </div>
+        <div id="imp-preview"></div>
+      </div>
+      <div id="skills"></div><div id="skill-detail"></div></div>
+  </div>
+</div>
+<div class="modal hidden cyber-modal cyber-modal--lg" id="modal-mcp">
+  <div class="modal-content cyber-modal__dialog">
+    <div class="cyber-modal__header"><h2 class="cyber-modal__title">MCP servers</h2><button class="btn cyber-btn cyber-btn--sm" onclick="loadMcp()"><svg class="ci"><use href="/static/lib/cyber-icons.svg#refresh"/></svg>Refresh</button><button class="x cyber-modal__close" data-close title="Close"><svg class="ci"><use href="/static/lib/cyber-icons.svg#x"/></svg></button></div>
+    <div class="cyber-modal__body">
+      <div class="hint" style="margin-bottom:.7rem">Connect MCP servers (stdio). Their <b>tools</b> become AON tools; their <b>prompts</b> become skills. Adding a server runs the command you provide.</div>
+      <div class="row" style="flex-wrap:wrap;gap:.45rem;margin-bottom:.5rem">
+        <input id="mcp-name" placeholder="name" style="flex:1;min-width:100px">
+        <select id="mcp-transport" onchange="mcpToggleTransport()" style="min-width:110px">
+          <option value="stdio">stdio (local)</option>
+          <option value="http">http (url)</option>
+        </select>
+        <input id="mcp-cmd" placeholder="command (e.g. npx)" style="flex:1;min-width:120px">
+        <input id="mcp-args" placeholder="args (e.g. @playwright/mcp)" style="flex:2;min-width:150px">
+        <input id="mcp-url" placeholder="https://host/mcp" style="flex:2;min-width:160px;display:none">
+        <button class="btn primary cyber-btn cyber-btn--sm cyber-btn--filled" onclick="addMcpServer()"><svg class="ci"><use href="/static/lib/cyber-icons.svg#plus"/></svg>Add server</button>
+      </div>
+      <textarea id="mcp-headers" placeholder="Headers (one per line, e.g. Authorization: Bearer ...)" style="width:100%;min-height:48px;display:none;margin-bottom:.8rem"></textarea>
+      <div id="mcp-list"></div>
+    </div>
+  </div>
+</div>
+<div class="modal hidden cyber-modal cyber-modal--lg" id="modal-hub">
+  <div class="modal-content cyber-modal__dialog">
+    <div class="cyber-modal__header"><button class="btn cyber-btn cyber-btn--sm" id="hub-back" style="display:none" onclick="hubShow('home')"><svg class="ci"><use href="/static/lib/cyber-icons.svg#arrow-left"/></svg>Back</button><h2 class="cyber-modal__title" id="hub-title">Hub</h2><button class="x cyber-modal__close" data-close title="Close"><svg class="ci"><use href="/static/lib/cyber-icons.svg#x"/></svg></button></div>
+    <div class="cyber-modal__body">
+      <div id="hub-home" class="hub-home">
+        <button class="hub-pick cyber-card cyber-card--interactive" onclick="hubShow('skills')"><b><svg class="ci"><use href="/static/lib/cyber-icons.svg#zap"/></svg>SKILLS HUB</b><span>Explore skills to add to AON.</span></button>
+        <button class="hub-pick cyber-card cyber-card--interactive cyber-card--green" onclick="hubShow('mcp')"><b><svg class="ci"><use href="/static/lib/cyber-icons.svg#server"/></svg>MCP HUB</b><span>Explore MCP servers and remote connectors from the Glama directory.</span></button>
+      </div>
+      <div id="hub-skills" style="display:none"><div class="empty">Skills hub: coming soon.</div></div>
+      <div id="hub-mcp" style="display:none">
+        <div class="hub-bar">
+          <div class="tabs" style="padding:0;border:none">
+            <button class="hubtab active" data-hubkind="servers" onclick="hubKind('servers')">Servers</button>
+            <button class="hubtab" data-hubkind="connectors" onclick="hubKind('connectors')">Remote connectors</button>
+          </div>
+          <input id="hub-q" placeholder="search MCP servers…" onkeydown="if(event.key==='Enter')hubSearch()">
+          <button class="btn cyber-btn cyber-btn--sm" onclick="hubSearch()"><svg class="ci"><use href="/static/lib/cyber-icons.svg#search"/></svg>Search</button>
+          <span class="hub-credit">MCP data from <a href="https://glama.ai" target="_blank">Glama</a></span>
+        </div>
+        <div id="hub-key" style="display:none;margin-bottom:.8rem">
+          <div class="hint" style="margin-bottom:.5rem">The MCP hub reads the Glama directory through the Glama API, which needs a free API key. Create one at <a href="https://glama.ai/settings/api-keys" target="_blank">glama.ai/settings/api-keys</a> and paste it here. It is stored on the AON server only.</div>
+          <div class="row" style="gap:.45rem"><input id="hub-key-in" type="password" placeholder="Glama API key" style="flex:1"><button class="btn primary cyber-btn cyber-btn--sm cyber-btn--filled" onclick="hubSaveKey()"><svg class="ci"><use href="/static/lib/cyber-icons.svg#key"/></svg>Save key</button></div>
+          <div id="hub-key-msg" class="hint" style="margin-top:.4rem"></div>
+        </div>
+        <div id="hub-list"></div>
+        <div id="hub-detail" class="hub-detail" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal hidden cyber-modal cyber-modal--lg" id="modal-settings">
+  <div class="modal-content cyber-modal__dialog">
+    <div class="cyber-modal__header"><h2 class="cyber-modal__title">Settings</h2><button class="x cyber-modal__close" data-close title="Close"><svg class="ci"><use href="/static/lib/cyber-icons.svg#x"/></svg></button></div>
+    <div class="tabs"><button class="tab active" data-tab="sp">System prompt</button><button class="tab" data-tab="about">About</button></div>
+    <div class="cyber-modal__body">
+      <div class="tabpane active" id="pane-sp">
+        <div class="hint" style="margin-bottom:.6rem">Guidance only — editing this <b>cannot</b> disable the approval gate. Applies to new runs. <span>Endpoint: <code>/api/system-prompt</code></span></div>
+        <textarea id="sysprompt" spellcheck="false"></textarea>
+        <div class="row"><button class="btn primary cyber-btn cyber-btn--sm cyber-btn--filled" onclick="savePrompt()"><svg class="ci"><use href="/static/lib/cyber-icons.svg#save"/></svg>Save</button><button class="btn cyber-btn cyber-btn--sm" onclick="loadPrompt()"><svg class="ci"><use href="/static/lib/cyber-icons.svg#refresh"/></svg>Reload</button><span class="sp-status" id="spstatus"></span></div>
+      </div>
+      <div class="tabpane" id="pane-about">
+        <div class="hint">AON is a self-hosted dev agent. Read-only tools (read, list, search, fetch) run freely; shell commands and file writes require your explicit approval. Guardrails — the approval gate, path confinement, the bounded executor, and the Telegram allowlist — are fixed and cannot be edited from this UI.</div>
+        <div class="hint" style="margin-top:.7rem">Interface styled with <a href="https://github.com/sebyx07/cybercore-css" target="_blank" rel="noopener" style="color:var(--accent)">CybercoreCSS</a> (MIT) and its icon set; fonts Rajdhani, Orbitron, Exo&nbsp;2 and JetBrains&nbsp;Mono (SIL OFL), served locally.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal hidden cyber-modal cyber-modal--fullscreen" id="modal-map">
+  <div class="modal-content cyber-modal__dialog">
+    <div class="cyber-modal__header"><h2 class="cyber-modal__title">Map explorer</h2><button class="x cyber-modal__close" data-close title="Close"><svg class="ci"><use href="/static/lib/cyber-icons.svg#x"/></svg></button></div>
+    <div class="cyber-modal__body"><div id="mapFull"></div></div>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const IC=(n,c)=>'<svg class="ci'+(c?' '+c:'')+'"><use href="/static/lib/cyber-icons.svg#'+n+'"/></svg>';
+const chatHistory=$('#chat-history'), scroll=$('#scroll'), welcome=$('#welcome');
+let ws=null, sessions=[], curId=null, busy=false;
+
+function esc(s){return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function md(t){try{return DOMPurify.sanitize(marked.parse(t||'',{breaks:true}));}catch(e){return esc(t);}}
+function hl(el){try{el.querySelectorAll('pre code').forEach(b=>hljs.highlightElement(b));}catch(e){}}
+function scrollDown(){scroll.scrollTop=scroll.scrollHeight;}
+
+/* ---- theme ---- */
+(function(){if(localStorage.getItem('aon-theme')==='light')document.documentElement.setAttribute('data-theme','light');})();
+$('#themeBtn').onclick=()=>{const l=document.documentElement.getAttribute('data-theme')!=='light';
+  if(l)document.documentElement.setAttribute('data-theme','light');else document.documentElement.removeAttribute('data-theme');
+  localStorage.setItem('aon-theme',l?'light':'dark');};
+
+/* ---- sidebar toggle ---- */
+function toggleSb(){document.body.classList.toggle('sb-collapsed');}
+$('#sbToggle').onclick=toggleSb; $('#sbClose').onclick=toggleSb;
+// small screens: the sidebar starts closed and closes again once something in it is picked
+const narrow=()=>window.matchMedia('(max-width:760px)').matches;
+if(narrow())document.body.classList.add('sb-collapsed');
+// rotation, folding or split screen into a small width closes it too
+window.matchMedia('(max-width:760px)').addEventListener('change',e=>{if(e.matches)document.body.classList.add('sb-collapsed');});
+$('#sidebar').addEventListener('click',e=>{if(narrow()&&e.target.closest('.sess .t,.nav-item,#newChat'))document.body.classList.add('sb-collapsed');});
+
+/* ---- modals ---- */
+function openModal(name){const m=$('#modal-'+name);if(!m)return;m.classList.remove('hidden');m.classList.add('cyber-modal--open');
+  if(name==='memory')loadMemory(); if(name==='docs')loadDocs(); if(name==='skills')loadSkills(); if(name==='settings')loadPrompt(); if(name==='mcp')loadMcp(); if(name==='hub')hubShow('home');}
+/* ===== Hub. MCP data comes from the Glama API (proxied by AON). Glama's API Data License: a visible
+   crawlable credit on every view (.hub-credit), a link from each record to its own listing (s.url),
+   and boosted listings labelled as ads (isBoosted). Keep all three. ===== */
+const HUB={kind:'servers',q:'',after:null,more:false,busy:false};
+function escA(s){return esc(String(s==null?'':s)).replace(/"/g,'&quot;');}
+function hubShow(v){['home','skills','mcp'].forEach(x=>$('#hub-'+x).style.display=x===v?'':'none');
+  $('#hub-back').style.display=v==='home'?'none':'';
+  $('#hub-title').textContent={home:'Hub',skills:'Skills hub',mcp:'MCP hub'}[v];
+  if(v==='mcp')hubStart();}
+function hubStart(){fetch('/api/hub/glama/status').then(r=>r.json()).then(d=>{
+  $('#hub-key').style.display=d.configured?'none':'';
+  if(d.configured)hubLoad(false);else{$('#hub-list').innerHTML='';$('#hub-detail').style.display='none';}});}
+function hubSaveKey(){const k=$('#hub-key-in').value.trim();if(!k)return;$('#hub-key-msg').textContent='Checking the key with Glama…';
+  fetch('/api/hub/glama/key',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:k})})
+    .then(r=>r.json()).then(d=>{if(d.error){$('#hub-key-msg').textContent=d.error;return;}
+      $('#hub-key-in').value='';$('#hub-key-msg').textContent='';hubStart();});}
+function hubKind(k){HUB.kind=k;document.querySelectorAll('.hubtab').forEach(t=>t.classList.toggle('active',t.dataset.hubkind===k));
+  $('#hub-q').placeholder=k==='servers'?'search MCP servers…':'search remote connectors…';hubLoad(false);}
+function hubSearch(){HUB.q=$('#hub-q').value.trim();hubLoad(false);}
+function hubLoad(more){if(HUB.busy)return;HUB.busy=true;
+  const list=$('#hub-list');$('#hub-detail').style.display='none';list.style.display='';
+  if(!more){HUB.after=null;list.innerHTML='<div class="empty">loading…</div>';}
+  const p=new URLSearchParams();if(HUB.q)p.set('query',HUB.q);if(more&&HUB.after)p.set('after',HUB.after);
+  fetch('/api/hub/mcp/'+HUB.kind+'?'+p).then(r=>r.json()).then(d=>{HUB.busy=false;
+    if(d.error){if(d.code==='no_key'||d.code==='unauthorized')$('#hub-key').style.display='';
+      list.innerHTML='<div class="empty">'+esc(d.error)+'</div>';return;}
+    const items=d[HUB.kind]||[];let grid=list.querySelector('.hub-grid');
+    if(!more||!grid){list.innerHTML='';grid=document.createElement('div');grid.className='hub-grid';list.appendChild(grid);}
+    const old=list.querySelector('.hub-more');if(old)old.remove();
+    if(!items.length&&!grid.children.length){list.innerHTML='<div class="empty">(nothing found)</div>';return;}
+    items.forEach(s=>grid.appendChild(hubCard(s)));
+    const pi=d.pageInfo||{};HUB.after=pi.endCursor||null;
+    if(pi.hasNextPage&&HUB.after){const b=document.createElement('button');b.className='btn cyber-btn cyber-btn--sm hub-more';
+      b.style.marginTop='.8rem';b.textContent='Load more';b.onclick=()=>hubLoad(true);list.appendChild(b);}
+  }).catch(e=>{HUB.busy=false;list.innerHTML='<div class="empty">'+esc(String(e))+'</div>';});}
+function hubTags(s){const t=[];
+  if(s.isBoosted)t.push('<span class="hub-tag ad" title="Promoted listing">Ad</span>');
+  if(s.qualityScore!=null)t.push('<span title="Glama tool-definition quality score (0–5)">★ '+Number(s.qualityScore).toFixed(1)+'</span>');
+  if(s.spdxLicense&&s.spdxLicense.name)t.push('<span>'+esc(s.spdxLicense.name)+'</span>');
+  if(s.tools)t.push('<span>'+s.tools.length+' tools</span>');else if(s.toolCount!=null)t.push('<span>'+s.toolCount+' tools</span>');
+  if(s.healthy===true)t.push('<span style="color:var(--green)">● healthy</span>');else if(s.healthy===false)t.push('<span style="color:var(--red)">● failing check</span>');
+  if(s.deprecatedAt)t.push('<span class="hub-tag">deprecated</span>');
+  return t.join('');}
+function hubCard(s){const el=document.createElement('div');el.className='hub-card';
+  el.innerHTML='<div class="t">'+(s.thumbnailUrl?'<img src="'+escA(s.thumbnailUrl)+'" alt="" loading="lazy">':'')+'<span>'+esc(s.name)+'</span></div>'+
+    '<div class="ns">'+esc(s.namespace)+'/'+esc(s.slug)+'</div><div class="d">'+esc(s.description||'')+'</div>'+
+    '<div class="hub-meta">'+hubTags(s)+'<a href="'+escA(s.url)+'" target="_blank" onclick="event.stopPropagation()">Glama ↗</a></div>';
+  el.onclick=()=>hubOpen(s);return el;}
+function hubOpen(s){const box=$('#hub-detail');$('#hub-list').style.display='none';box.style.display='';
+  box.innerHTML='<div class="empty">loading…</div>';
+  fetch('/api/hub/mcp/'+HUB.kind+'/'+encodeURIComponent(s.namespace)+'/'+encodeURIComponent(s.slug)).then(r=>r.json()).then(d=>{
+    if(d.error){box.innerHTML='<div class="empty">'+esc(d.error)+'</div>';return;}
+    let h='<button class="btn cyber-btn cyber-btn--sm" onclick="hubBackToList()"><svg class="ci"><use href="/static/lib/cyber-icons.svg#arrow-left"/></svg>All results</button>'+
+      '<h3>'+esc(d.name)+'</h3><div class="ns ep-tags">'+esc(d.namespace)+'/'+esc(d.slug)+'</div><div class="hub-meta" style="margin:.4rem 0">'+hubTags(d)+'</div>'+
+      '<div class="hub-links"><a class="btn cyber-btn cyber-btn--sm" href="'+escA(d.url)+'" target="_blank"><svg class="ci"><use href="/static/lib/cyber-icons.svg#external-link"/></svg>View on Glama</a>'+
+      (d.repository&&d.repository.url?'<a class="btn cyber-btn cyber-btn--sm" href="'+escA(d.repository.url)+'" target="_blank"><svg class="ci"><use href="/static/lib/cyber-icons.svg#git-branch"/></svg>Repository</a>':'')+
+      (d.documentationUrl?'<a class="btn cyber-btn cyber-btn--sm" href="'+escA(d.documentationUrl)+'" target="_blank"><svg class="ci"><use href="/static/lib/cyber-icons.svg#file-text"/></svg>Docs</a>':'')+'</div>'+
+      '<div class="md">'+md(d.description||'')+'</div>';
+    if(d.connection)h+='<h4>Connection</h4><div class="ep-tags">'+esc(d.connection.transport)+' · auth: '+esc(d.connection.authType)+'</div><code>'+esc(d.connection.url)+'</code>';
+    if(d.attributes&&d.attributes.length)h+='<h4>Attributes</h4><div class="hub-meta">'+d.attributes.map(a=>'<span class="hub-tag">'+esc(a)+'</span>').join('')+'</div>';
+    const env=d.environmentVariablesJsonSchema;
+    if(env&&env.properties&&Object.keys(env.properties).length){const req=env.required||[];
+      h+='<h4>Environment variables</h4>'+Object.entries(env.properties).map(([k,v])=>'<div class="hub-tool"><code>'+esc(k)+'</code>'+(req.includes(k)?' <span class="hub-tag">required</span>':'')+'<div>'+esc((v&&v.description)||'')+'</div></div>').join('');}
+    if(d.tools&&d.tools.length)h+='<h4>Tools ('+d.tools.length+')</h4>'+d.tools.map(t=>'<div class="hub-tool"><code>'+esc(t.name)+'</code><div>'+esc(t.description||'')+'</div></div>').join('');
+    box.innerHTML=h;box.closest('.cyber-modal__body').scrollTop=0;
+  }).catch(e=>{box.innerHTML='<div class="empty">'+esc(String(e))+'</div>';});}
+function hubBackToList(){$('#hub-detail').style.display='none';$('#hub-list').style.display='';}
+function loadMcp(){fetch('/api/mcp').then(r=>r.json()).then(d=>{const c=$('#mcp-list');c.innerHTML='';
+  const servers=d.servers||[];
+  if(!servers.length){c.innerHTML='<div class="empty">(no MCP servers yet)</div>';return;}
+  servers.forEach(s=>{const el=document.createElement('div');el.className='skill';
+    const dot=s.status==='connected'?'var(--green)':(s.status&&s.status.startsWith('error')?'var(--red)':'var(--muted)');
+    el.innerHTML='<div class="n" style="display:flex;align-items:center;gap:.5rem"><span class="dot" style="background:'+dot+';box-shadow:0 0 7px '+dot+'"></span>'+esc(s.name)+
+      ' <span class="ep-tags">'+esc(s.transport==='http'?s.url:(s.command+' '+(s.args||[]).join(" ")))+'</span></div>'+
+      '<div class="d">'+esc(s.status||'')+(s.tools&&s.tools.length?' · tools: '+s.tools.map(esc).join(", "):'')+
+      (s.prompts&&s.prompts.length?' · prompts: '+s.prompts.map(esc).join(", "):'')+'</div>';
+    const row=document.createElement('div');row.className='row';
+    const tg=document.createElement('button');tg.className='btn cyber-btn cyber-btn--sm';tg.textContent=s.enabled?'Disable':'Enable';
+    tg.onclick=()=>fetch('/api/mcp/'+encodeURIComponent(s.name)+'/toggle',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({enabled:!s.enabled})}).then(loadMcp);
+    const rm=document.createElement('button');rm.className='btn cyber-btn cyber-btn--sm cyber-btn--magenta';rm.textContent='Remove';
+    rm.onclick=()=>fetch('/api/mcp/'+encodeURIComponent(s.name),{method:'DELETE'}).then(loadMcp);
+    row.append(tg,rm);el.appendChild(row);c.appendChild(el);});});}
+function mcpToggleTransport(){const http=$('#mcp-transport').value==='http';
+  $('#mcp-url').style.display=http?'':'none';$('#mcp-headers').style.display=http?'':'none';
+  $('#mcp-cmd').style.display=http?'none':'';$('#mcp-args').style.display=http?'none':'';}
+function addMcpServer(){const name=$('#mcp-name').value.trim();if(!name)return;
+  const transport=$('#mcp-transport').value;let body;
+  if(transport==='http'){const url=$('#mcp-url').value.trim();if(!url)return;
+    const headers={};$('#mcp-headers').value.split(/\n/).forEach(l=>{const i=l.indexOf(':');if(i>0)headers[l.slice(0,i).trim()]=l.slice(i+1).trim();});
+    body={name,transport:'http',url,headers};}
+  else{const command=$('#mcp-cmd').value.trim();if(!command)return;
+    body={name,command,args:$('#mcp-args').value.trim().split(/\s+/).filter(Boolean)};}
+  fetch('/api/mcp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+    .then(r=>r.json()).then(()=>{['#mcp-name','#mcp-cmd','#mcp-args','#mcp-url','#mcp-headers'].forEach(s=>$(s).value='');loadMcp();});}
+function closeModals(){closeMapFull();document.querySelectorAll('.modal').forEach(m=>{m.classList.add('hidden');m.classList.remove('cyber-modal--open');});}
+document.querySelectorAll('[data-modal]').forEach(b=>b.onclick=()=>openModal(b.dataset.modal));
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeModals);
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModals();}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModals();});
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{const p=t.dataset.tab;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===t));
+  document.querySelectorAll('.tabpane').forEach(x=>x.classList.toggle('active',x.id==='pane-'+p));});
+
+/* ---- sessions (client-side history) ---- */
+function loadSessions(){try{sessions=JSON.parse(localStorage.getItem('aon-sessions')||'[]');}catch(e){sessions=[];}}
+function persist(){try{localStorage.setItem('aon-sessions',JSON.stringify(sessions.slice(0,40)));}catch(e){}}
+function cur(){return sessions.find(s=>s.id===curId);}
+function updateCount(){const n=chatHistory.querySelectorAll('.msg.user,.msg.ai').length;
+  $('#msgCount').textContent=n?('· '+n+' message'+(n>1?'s':'')):'';}
+function showWelcome(on){welcome.classList.toggle('hide',!on);}
+function saveCur(){const s=cur();if(!s)return;
+  // save a copy without the live map internals; each map card keeps its settings in data-map
+  const c=chatHistory.cloneNode(true);const t=c.querySelector('#thinking');if(t)t.remove();
+  c.querySelectorAll('.mc-body').forEach(b=>{b.innerHTML='';b.className='mc-body';b.removeAttribute('style');});
+  s.html=c.innerHTML;persist();}
+let saveT=0;function saveSoon(){clearTimeout(saveT);saveT=setTimeout(saveCur,800);}
+function renderSessions(){const q=($('#sessSearch').value||'').toLowerCase();const c=$('#session-list');c.innerHTML='';
+  const list=sessions.filter(s=>!q||s.title.toLowerCase().includes(q));
+  if(!list.length){c.innerHTML='<div class="sess-empty">'+(q?'No matches':'No chats yet')+'</div>';return;}
+  list.forEach(s=>{const el=document.createElement('div');el.className='sess'+(s.id===curId?' active':'');
+    el.innerHTML='<span class="t">'+esc(s.title)+'</span><button class="x" title="Delete">&times;</button>';
+    el.querySelector('.t').onclick=()=>openSession(s.id);
+    el.querySelector('.x').onclick=(e)=>{e.stopPropagation();delSession(s.id);};
+    c.appendChild(el);});}
+function newChat(){dropMaps();curId='s'+Date.now()+Math.random().toString(36).slice(2,6);
+  sessions.unshift({id:curId,title:'New chat',html:''});chatHistory.innerHTML='';showWelcome(true);updateCount();renderSessions();persist();$('#goal').focus();}
+function openSession(id){const s=sessions.find(x=>x.id===id);if(!s)return;dropMaps();curId=id;chatHistory.innerHTML=s.html||'';
+  rehydrate();showWelcome(!(s.html&&s.html.trim()));updateCount();renderSessions();scrollDown();closeModals();}
+// re-attach behaviour to saved messages: tool boxes expand, map cards come back (the newest few live)
+function rehydrate(){
+  chatHistory.querySelectorAll('.tool-bar').forEach(b=>{const box=b.closest('.tool-box');b.onclick=()=>box.classList.toggle('open');});
+  const cards=[...chatHistory.querySelectorAll('.mapcard')];
+  cards.forEach((c,i)=>{let d={};try{d=JSON.parse(c.dataset.map||'{}');}catch(e){}
+    if(i>=cards.length-MAP_LIVE)mountMap(c,d);else pausedCard(c,d);});}
+function delSession(id){fetch('/api/conversations/'+encodeURIComponent(id),{method:'DELETE'}).catch(()=>{});sessions=sessions.filter(s=>s.id!==id);if(curId===id){if(sessions.length)openSession(sessions[0].id);else newChat();}else{renderSessions();}persist();}
+$('#newChat').onclick=newChat; $('#rb-new').onclick=()=>{newChat();if(window.innerWidth<=760&&!document.body.classList.contains('sb-collapsed'))toggleSb();};
+$('#sessSearch').oninput=renderSessions;
+
+/* ---- render messages ---- */
+function add(cls,html){const d=document.createElement('div');d.className='msg '+cls;d.innerHTML=html;
+  chatHistory.appendChild(d);const t=document.getElementById('thinking');if(t)chatHistory.appendChild(t);
+  showWelcome(false);updateCount();scrollDown();return d;}
+function showThinking(){if(document.getElementById('thinking'))return;
+  const d=document.createElement('div');d.id='thinking';
+  d.innerHTML='<span class="cyber-spinner cyber-spinner--sm cyber-spinner--green cyber-spinner--glow"></span><span>AON is working<span class="tdots"></span></span>';
+  chatHistory.appendChild(d);scrollDown();}
+function hideThinking(){const t=document.getElementById('thinking');if(t)t.remove();}
+function addUser(t,atts){return add('user','<div class="msg-head"><span class="avatar u">'+IC('user')+'</span>You</div><div class="bubble">'+esc(t)+(atts&&atts.length?'<div class="att-list">'+atts.map(a=>attChip(a,false)).join('')+'</div>':'')+'</div>');}
+function addAI(t,stuck){const d=add('ai','<div class="msg-head"><svg class="avatar-logo"><use href="#aon-mark"/></svg>AON</div><div class="bubble cyber-card"><div class="md">'+md(t)+'</div>'+(stuck?'<div class="warn-note">⚠ agent stopped early</div>':'')+'</div>');hl(d);return d;}
+function addTool(tool,output,approved){
+  const tag=approved===false?'<span class="tag-no">rejected</span>':'';
+  const d=add('tool','<div class="tool-box"><div class="tool-bar">'+IC('terminal')+'<span class="tname">'+esc(tool)+'</span>'+tag+IC('chevron-right','caret')+'</div><div class="tool-out"><pre>'+esc(output)+'</pre></div></div>');
+  const box=d.querySelector('.tool-box');d.querySelector('.tool-bar').onclick=()=>box.classList.toggle('open');return d;}
+
+/* ---- models ---- */
+fetch('/api/models').then(r=>r.json()).then(d=>{const s=$('#model');
+  (d.models||[]).forEach(m=>{const o=document.createElement('option');o.textContent=m;s.add(o);});
+  $('#curModel').textContent=s.value||''; s.onchange=()=>$('#curModel').textContent=s.value;
+  if(d.error){const dv=addAI('⚠ Could not load models: '+esc(d.error));}});
+
+/* ---- send / run ---- */
+const ta=$('#goal');
+function autogrow(){ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,200)+'px';}
+ta.addEventListener('input',autogrow);
+ta.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();go();}});
+$('#sendBtn').onclick=()=>busy?stopRun():go();
+// while AON works the send button becomes Stop: cancelling the run closes the model request,
+// which stops the GPU generating
+function setBusy(b){busy=b;const s=$('#sendBtn');s.disabled=false;s.classList.toggle('stopping',b);
+  s.title=b?'Stop':'Send';s.innerHTML=IC(b?'stop':'send');}
+function stopRun(){if(ws&&ws.readyState===1){try{ws.send(JSON.stringify({type:'stop'}));}catch(e){}}else setBusy(false);}
+/* ---- maps (static/lib/aon-map.js) ---- */
+const MAP_V='2026.10.13-3';   // bump when aon-map.js/.css change so browsers fetch the new files
+// AON asks for the user's position when a route names no start. Browsers only allow this on HTTPS
+// (https://aon.vulkron.uk); otherwise reply at once so AON falls back to asking where to start.
+function sendLocation(sock){
+  const reply=o=>{try{sock.send(JSON.stringify(Object.assign({type:'location'},o)));}catch(e){}};
+  if(!window.isSecureContext||!navigator.geolocation){reply({error:'unavailable'});return;}
+  const t=document.querySelector('#thinking span:not(.cyber-spinner)');if(t&&t.firstChild)t.firstChild.textContent='Locating you';
+  navigator.geolocation.getCurrentPosition(
+    p=>reply({lat:p.coords.latitude,lon:p.coords.longitude,accuracy:Math.round(p.coords.accuracy)}),
+    e=>reply({error:e.code===1?'denied':'unavailable'}),
+    {enableHighAccuracy:true,timeout:15000,maximumAge:60000});}
+const MAP_LIVE=3;            // browsers cap WebGL contexts; older map cards pause until clicked
+let liveMaps=[], mapLib=null, fullMap=null;
+function loadMapLib(){
+  if(mapLib)return mapLib;
+  const css=h=>{const l=document.createElement('link');l.rel='stylesheet';l.href=h;document.head.appendChild(l);};
+  const js=s=>new Promise((ok,bad)=>{const e=document.createElement('script');e.src=s;e.onload=ok;e.onerror=bad;document.head.appendChild(e);});
+  css('/static/lib/maplibre-gl.css');css('/static/lib/aon-map.css?v='+MAP_V);
+  mapLib=js('/static/lib/maplibre-gl.js').then(()=>js('/static/lib/aon-map.js?v='+MAP_V)).catch(e=>{mapLib=null;throw e;});
+  return mapLib;}
+function mapTitle(s){const t=(s.targets||[]);const n=x=>esc(x&&x.name||'?');
+  if(s.mode==='route'&&s.start)return['route',n(s.start)+' → '+n(t[0])];
+  if(t.length>1)return['area',t.length+' targets: '+t.map(n).join(', ')];
+  return['target',n(t[0])];}
+function addMap(spec){
+  const [mode,title]=mapTitle(spec);
+  const d=add('map','<div class="mapcard"><div class="mc-head">'+IC(mode==='route'?'send':'globe')+'<span>'+mode.toUpperCase()+'</span><span class="mc-t">'+title+'</span></div><div class="mc-body"></div></div>');
+  const card=d.querySelector('.mapcard');card.dataset.map=JSON.stringify({spec});
+  mountMap(card,{spec});saveSoon();return card;}
+function mountMap(card,init){
+  const body=card.querySelector('.mc-body');body.className='mc-body';body.innerHTML='<div class="mc-msg">loading map…</div>';
+  loadMapLib().then(()=>{
+    body.innerHTML='';
+    const api=AonMap.create(body,{spec:init.spec,state:init.state,
+      onState:st=>{card.dataset.map=JSON.stringify({state:st});saveSoon();},
+      onExpand:st=>openMapFull(card,st)});
+    liveMaps.push({card,api});
+    while(liveMaps.length>MAP_LIVE){const o=liveMaps.shift();let d={};try{d=JSON.parse(o.card.dataset.map||'{}');}catch(e){}o.api.destroy();pausedCard(o.card,d);}
+  }).catch(()=>{body.innerHTML='<div class="mc-msg warn">⚠ Map library failed to load.</div>';});}
+function pausedCard(card,d){const body=card.querySelector('.mc-body');body.className='mc-body';
+  body.innerHTML='<div class="mc-msg"><button>▶ Map paused. Click to reload</button></div>';
+  body.querySelector('button').onclick=()=>mountMap(card,d);}
+function dropMaps(){liveMaps.forEach(o=>{try{o.api.destroy();}catch(e){}});liveMaps=[];closeMapFull();}
+function lastMap(){return liveMaps.length?liveMaps[liveMaps.length-1]:null;}
+function applyMapUpdate(m){const o=lastMap();if(o)o.api.applySpec(m);else addNotice('Map: no map is open to update.');}
+function openMapFull(card,st){
+  openModal('map');
+  loadMapLib().then(()=>{closeMapFull(true);
+    fullMap={card,api:AonMap.create($('#mapFull'),{full:true,state:st})};});}
+function closeMapFull(discard){
+  if(!fullMap)return;const f=fullMap;fullMap=null;
+  if(!discard){const st=f.api.state();const o=liveMaps.find(x=>x.card===f.card);
+    if(o)o.api.restore(st);else f.card.dataset.map=JSON.stringify({state:st});saveSoon();}
+  try{f.api.destroy();}catch(e){}$('#mapFull').innerHTML='';$('#mapFull').className='';}
+async function mapCommand(text){
+  try{const r=await fetch('/api/map',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});const d=await r.json();
+    if(d.error){addAI('⚠ '+d.error);return;}
+    (d.notices||[]).forEach(addNotice);
+    if(d.event)addMap(d.event);
+    if(d.ask)addAI(d.ask);
+  }catch(e){addAI('⚠ Map request failed. Is AON running?');}
+  finally{saveCur();}}
+
+/* ---- attachments ---- */
+const ATT_MAX_FILES=10, ATT_MAX_FILE=20*1024*1024, ATT_MAX_TOTAL=40*1024*1024;
+let atts=[];
+function fmtSize(n){return n<1024?n+' B':n<1048576?(n/1024).toFixed(1)+' KB':(n/1048576).toFixed(1)+' MB';}
+function attChip(a,removable,i){
+  const ext=(a.name.split('.').pop()||'file').slice(0,4);
+  return '<span class="att">'+(a.thumb?'<img src="'+a.thumb+'" alt="">':'<span class="ficon">'+esc(ext)+'</span>')+
+    '<span class="an" title="'+esc(a.name).replace(/"/g,'&quot;')+'">'+esc(a.name)+'</span><span class="as">'+fmtSize(a.size)+'</span>'+
+    (removable?'<button class="ax" title="Remove" onclick="removeAtt('+i+')">×</button>':'')+'</span>';}
+function renderAtts(){$('#attList').innerHTML=atts.map((a,i)=>attChip(a,true,i)).join('');}
+function removeAtt(i){atts.splice(i,1);renderAtts();$('#attMsg').textContent='';}
+function attWarn(t){$('#attMsg').textContent=t;}
+function readB64(f){return new Promise((ok,bad)=>{const r=new FileReader();
+  r.onload=()=>ok(String(r.result).split(',')[1]||'');r.onerror=()=>bad(r.error);r.readAsDataURL(f);});}
+function thumbOf(f){return new Promise(ok=>{const u=URL.createObjectURL(f),im=new Image();
+  im.onload=()=>{const s=Math.min(1,96/Math.max(im.width,im.height)),c=document.createElement('canvas');
+    c.width=Math.max(1,Math.round(im.width*s));c.height=Math.max(1,Math.round(im.height*s));
+    c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL('image/jpeg',.7));};
+  im.onerror=()=>{URL.revokeObjectURL(u);ok('');};im.src=u;});}
+async function addFiles(list){attWarn('');
+  for(const f0 of Array.from(list||[])){
+    let f=f0;
+    if(!f.name||f.name==='image.png'){const ext=(f.type.split('/')[1]||'png').replace('jpeg','jpg');
+      f=new File([f],'pasted-'+new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')+'.'+ext,{type:f.type});}
+    if(atts.length>=ATT_MAX_FILES){attWarn('At most '+ATT_MAX_FILES+' attachments per message.');break;}
+    if(f.size>ATT_MAX_FILE){attWarn(f.name+' is larger than 20 MB.');continue;}
+    if(atts.reduce((n,a)=>n+a.size,0)+f.size>ATT_MAX_TOTAL){attWarn('Attachments are limited to 40 MB in total.');continue;}
+    try{const isImg=f.type.startsWith('image/');
+      atts.push({name:f.name,type:f.type,size:f.size,data:await readB64(f),thumb:isImg?await thumbOf(f):''});}
+    catch(e){attWarn('Could not read '+f.name+'.');}
+    renderAtts();}}
+$('#attachBtn').onclick=()=>$('#attFile').click();
+$('#attFile').onchange=e=>{addFiles(e.target.files);e.target.value='';};
+ta.addEventListener('paste',e=>{const fs=e.clipboardData&&e.clipboardData.files;
+  if(fs&&fs.length){e.preventDefault();addFiles(fs);}});
+const comp=$('#composer');
+['dragenter','dragover'].forEach(t=>comp.addEventListener(t,e=>{if(e.dataTransfer&&Array.from(e.dataTransfer.types).includes('Files')){e.preventDefault();comp.classList.add('drag');}}));
+['dragleave','drop'].forEach(t=>comp.addEventListener(t,e=>{if(t==='dragleave'&&comp.contains(e.relatedTarget))return;comp.classList.remove('drag');}));
+comp.addEventListener('drop',e=>{if(e.dataTransfer&&e.dataTransfer.files.length){e.preventDefault();addFiles(e.dataTransfer.files);}});
+function addNotice(t){const d=document.createElement('div');d.className='notice';d.textContent='⚠ '+t;
+  chatHistory.appendChild(d);const th=document.getElementById('thinking');if(th)chatHistory.appendChild(th);scrollDown();}
+
+function go(){const sent=atts;let goal=ta.value.trim();if((!goal&&!sent.length)||busy)return;
+  if(!goal)goal='Please look at the attached '+(sent.length>1?'files':'file')+'.';
+  const s=cur();if(s&&s.title==='New chat')s.title=goal.slice(0,42);
+  if(/^\/map\b/i.test(goal)&&!sent.length){addUser(goal);ta.value='';autogrow();renderSessions();showWelcome(false);mapCommand(goal);return;}
+  addUser(goal,sent);ta.value='';autogrow();atts=[];renderAtts();attWarn('');saveCur();renderSessions();setBusy(true);showThinking();
+  const attachments=sent.map(a=>({name:a.name,type:a.type,data:a.data}));
+  ws=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/ws`);
+  ws.onopen=()=>ws.send(JSON.stringify({type:'goal',goal,model:$('#model').value,session_id:curId,attachments}));
+  ws.onerror=()=>{hideThinking();addAI('⚠ Connection error — is the agent running?');setBusy(false);saveCur();};
+  ws.onmessage=(e)=>{const m=JSON.parse(e.data);
+    if(m.type==='notice'){addNotice(m.text);saveCur();}
+    else if(m.type==='map'){if(m.action==='update')applyMapUpdate(m);else addMap(m);}
+    else if(m.type==='need_location'){sendLocation(ws);}
+    else if(m.type==='pending'){hideThinking();showPending(m);}
+    else if(m.type==='step'){addTool(m.tool,m.output,m.approved);saveCur();}
+    else if(m.type==='final'&&m.status==='stopped'){hideThinking();addAI('⏹ Stopped.');setBusy(false);saveCur();}
+    else if(m.type==='final'){hideThinking();addAI(m.final,m.status==='stuck'||m.status==='error');setBusy(false);saveCur();}};
+  ws.onclose=()=>{setBusy(false);};
+}
+function showPending(m){const d=add('','<div class="pending cyber-alert cyber-alert--warning"><div class="ph"> Approve action? <span style="color:var(--muted);font-weight:400">'+esc(m.tool)+'</span></div><div class="cmd">'+esc(JSON.stringify(m.args,null,2))+'</div></div>');
+  const card=d.querySelector('.pending');
+  const row=document.createElement('div');row.className='row';
+  const ok=document.createElement('button');ok.className='btn cyber-btn cyber-btn--sm cyber-btn--green';ok.textContent='Approve';ok.onclick=()=>decide(m.req_id,true,card,row);
+  const no=document.createElement('button');no.className='btn cyber-btn cyber-btn--sm cyber-btn--magenta';no.textContent='Reject';no.onclick=()=>decide(m.req_id,false,card,row);
+  row.append(ok,no);card.appendChild(row);scrollDown();}
+function decide(req_id,approved,card,row){ws.send(JSON.stringify({type:'decision',req_id,approved,edited_args:null}));
+  row.remove();const s=document.createElement('div');s.style.cssText='font-size:.8rem;margin-top:.5rem;color:var(--muted)';
+  s.textContent=approved?'✓ approved':'✕ rejected';card.appendChild(s);saveCur();if(busy)showThinking();}
+
+/* ---- modal data ---- */
+function _age(ts){if(!ts)return'';const s=Date.now()/1000-ts;if(s<3600)return Math.round(s/60)+'m';if(s<86400)return Math.round(s/3600)+'h';return Math.round(s/86400)+'d';}
+function loadMemory(){fetch('/api/memory').then(r=>r.json()).then(d=>{const c=$('#mem');c.innerHTML='';
+  const eps=d.episodes||[];
+  if(!eps.length){c.innerHTML='<div class="empty">(no memory yet)</div>';return;}
+  eps.forEach(e=>{const el=document.createElement('div');el.className='ep';
+    el.innerHTML='<div class="ep-main"><span class="chip">'+esc(e.type||'fact')+'</span>'+esc(e.content)+
+      (e.tags?' <span class="ep-tags">'+esc(e.tags)+'</span>':'')+'</div>'+
+      '<div class="ep-side"><span class="ep-age">'+_age(e.created_at)+'</span>'+
+      '<button class="ep-btn" title="Mark outdated">⊘</button>'+
+      '<button class="ep-btn del" title="Delete">✕</button></div>';
+    el.querySelector('.ep-btn:not(.del)').onclick=()=>fetch('/api/memory/'+e.id+'/outdated',{method:'POST'}).then(loadMemory);
+    el.querySelector('.ep-btn.del').onclick=()=>fetch('/api/memory/'+e.id,{method:'DELETE'}).then(loadMemory);
+    c.appendChild(el);});});}
+/* ===== Document library (RAG): /api/docs ===== */
+function _kb(n){return n<1024?n+' chars':(n<1048576?(n/1024).toFixed(1)+'K chars':(n/1048576).toFixed(1)+'M chars');}
+function loadDocs(){fetch('/api/docs').then(r=>r.json()).then(d=>{const c=$('#docs-list');c.innerHTML='';
+  const ds=d.documents||[];
+  if(!ds.length){c.innerHTML='<div class="empty">(no documents yet)</div>';return;}
+  ds.forEach(x=>{const el=document.createElement('div');el.className='ep';
+    el.innerHTML='<div class="ep-main"><span class="doc-name">'+IC('file-text')+esc(x.name)+'</span>'+
+      ' <span class="ep-tags">'+_kb(x.chars)+' · '+x.chunks+(x.chunks===1?' passage':' passages')+' · '+esc(x.source)+'</span></div>'+
+      '<div class="ep-side"><span class="ep-age">'+_age(x.added_at)+'</span>'+
+      '<button class="ep-btn del" title="Remove from the library">✕</button></div>';
+    el.querySelector('.ep-btn.del').onclick=()=>{if(confirm('Remove '+x.name+' from the library?'))
+      fetch('/api/docs/'+x.id,{method:'DELETE'}).then(loadDocs);};
+    c.appendChild(el);});});}
+async function docsUpload(files){const msg=$('#docs-msg');const list=[...(files||[])];$('#docs-file').value='';
+  for(let i=0;i<list.length;i++){const f=list[i];
+    if(f.size>20*1024*1024){msg.textContent=f.name+': larger than 20 MB, skipped';continue;}
+    msg.textContent='Adding '+f.name+' ('+(i+1)+'/'+list.length+') — reading and indexing…';
+    try{const r=await fetch('/api/docs',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({name:f.name,data:await readB64(f)})}).then(r=>r.json());
+      msg.textContent=r.error?(f.name+': '+r.error):(f.name+(r.document.existing?' is already in the library':' added ('+r.document.chunks+(r.document.chunks===1?' passage)':' passages)')));
+    }catch(e){msg.textContent=f.name+': upload failed';}
+    loadDocs();}}
+function clearMemory(){if(!confirm('Clear ALL memory? This cannot be undone.'))return;
+  fetch('/api/memory',{method:'DELETE'}).then(loadMemory);}
+function loadSkills(){const det=$('#skill-detail');if(det)det.innerHTML='';
+  fetch('/api/skills').then(r=>r.json()).then(d=>{const c=$('#skills');c.innerHTML='';
+  if(!d.skills||!d.skills.length){c.innerHTML='<div class="empty">(no skills yet — AON can author them with write_skill)</div>';return;}
+  d.skills.forEach(s=>{const el=document.createElement('div');el.className='skill';
+    el.innerHTML='<div class="n">'+esc(s.name)+'</div><div class="d">'+esc(s.desc)+'</div>';
+    el.onclick=()=>openSkill(s.name);c.appendChild(el);});});}
+let _impSrc=null;
+function _impPost(body){return fetch('/api/skills/import',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json());}
+function impPreview(kind){const p=$('#imp-preview');
+  const go=src=>{_impSrc=src;p.innerHTML='<div class="hint">reading…</div>';_impPost(Object.assign({dry_run:true},src)).then(renderImp);};
+  if(kind==='url'){const u=$('#imp-url').value.trim();if(u)go({url:u});}
+  else if(kind==='md'){const t=$('#imp-md').value;if(t.trim())go({skill_md:t});}
+  else{const f=$('#imp-file').files[0];if(!f)return;const rd=new FileReader();
+    rd.onload=()=>go({zip_b64:String(rd.result).split(',')[1]||''});rd.readAsDataURL(f);$('#imp-file').value='';}}
+function impPasteUpload(overwrite){const t=$('#imp-md').value,m=$('#imp-mdmsg');if(!t.trim()){m.textContent='Paste a SKILL.md first.';return;}
+  m.textContent='uploading…';
+  _impPost({skill_md:t,overwrite}).then(d=>{
+    if(d.error){m.innerHTML='<span style="color:var(--red)">'+esc(d.error)+'</span>';return;}
+    if(d.installed&&d.installed.length){m.innerHTML='<span style="color:var(--green)">✓ Installed '+d.installed.map(esc).join(', ')+'</span>';$('#imp-md').value='';loadSkills();return;}
+    const sk=(d.skipped||[])[0]||{};
+    if(sk.reason==='already installed'){m.innerHTML='Skill <b>'+esc(sk.name)+'</b> already exists. <button class="btn cyber-btn cyber-btn--sm cyber-btn--magenta" id="imp-replace">Replace it</button>';
+      $('#imp-replace').onclick=()=>impPasteUpload(true);return;}
+    m.innerHTML='<span style="color:var(--red)">Not installed: '+esc(sk.reason||'unknown error')+'</span>';});}
+function renderImp(d){const p=$('#imp-preview');
+  if(d.error){p.innerHTML='<div class="empty">'+esc(d.error)+'</div>';return;}
+  if(!d.skills||!d.skills.length){p.innerHTML='<div class="empty">No SKILL.md found in that source.</div>';return;}
+  let h='<div class="hint" style="margin-bottom:.4rem">Found '+d.skills.length+' skill(s). Untick any you don\'t want.</div>';
+  d.skills.forEach(s=>{const ok=!s.error;
+    h+='<label class="skill" style="display:block"><div class="n"><input type="checkbox" data-n="'+esc(s.name)+'"'+(ok?' checked':' disabled')+'> '+esc(s.name||'(unnamed)')+
+      (s.path?' <span class="ep-tags">'+esc(s.path)+'</span>':'')+(s.exists?' <span class="ep-tags">· already installed</span>':'')+'</div>'+
+      '<div class="d">'+(ok?esc(s.description):'<span style="color:var(--red)">'+esc(s.error)+'</span>')+'</div>'+
+      '<div class="d">'+s.files.length+' file(s)'+(s.scripts.length?' · <span style="color:var(--red)">⚠ scripts: '+s.scripts.map(esc).join(', ')+'</span>':'')+'</div></label>';});
+  h+='<div class="hint">Scripts in a skill can be run by AON via <code>run_command</code> (still needs your approval). Only install skills you trust.</div>';
+  h+='<div class="row" style="align-items:center;margin-bottom:.4rem"><label class="hint"><input type="checkbox" id="imp-over"> replace already-installed skills</label>'+
+     '<button class="btn cyber-btn cyber-btn--sm cyber-btn--filled" onclick="impInstall()">Install selected</button></div>';
+  p.innerHTML=h;}
+function impInstall(){if(!_impSrc)return;
+  const names=[...document.querySelectorAll('#imp-preview input[data-n]:checked')].map(x=>x.dataset.n);if(!names.length)return;
+  const p=$('#imp-preview');p.innerHTML='<div class="hint">installing…</div>';
+  _impPost(Object.assign({},_impSrc,{names,overwrite:$('#imp-over').checked})).then(d=>{
+    if(d.error){p.innerHTML='<div class="empty">'+esc(d.error)+'</div>';return;}
+    p.innerHTML='<div class="hint">Installed: '+(d.installed.length?d.installed.map(esc).join(', '):'none')+
+      (d.skipped.length?' · skipped: '+d.skipped.map(s=>esc(s.name)+' ('+esc(s.reason)+')').join(', '):'')+'</div>';
+    loadSkills();});}
+function openSkill(name){const d=$('#skill-detail');d.innerHTML='<div class="hint">loading…</div>';
+  fetch('/api/skills/'+encodeURIComponent(name)).then(r=>r.json()).then(j=>{
+    if(j.error){d.innerHTML='<div class="empty">'+esc(j.error)+'</div>';return;}
+    let h='<div class="sd-head"><b>'+esc(j.name)+'</b></div>';
+    if(j.description)h+='<div class="hint" style="margin:.1rem 0 .5rem">'+esc(j.description)+'</div>';
+    if(j.requires)h+='<div class="req">requires: '+esc(j.requires)+'</div>';
+    h+='<div class="tree">'+(j.files||[]).map(f=>'<div class="tf">'+esc(f)+'</div>').join('')+'</div>';
+    h+=j.has_evals?'<button class="btn cyber-btn cyber-btn--sm cyber-btn--filled" id="runEvalsBtn">Run evals</button>'
+                  :'<div class="hint">No evals/evals.json yet — add one with write_skill to run evaluations.</div>';
+    h+='<div id="bench"></div>';d.innerHTML=h;
+    if(j.has_evals)$('#runEvalsBtn').onclick=()=>runEvals(name);
+    fetch('/api/skills/'+encodeURIComponent(name)+'/report').then(r=>r.json()).then(b=>{if(b&&b.summary)renderBench(b);});
+  });}
+function runEvals(name){const bn=$('#bench');
+  bn.innerHTML='<div class="evloader"><span class="cyber-spinner-dots"><span></span><span></span><span></span></span><span>running evals… sandboxed with/without runs, this can take a while</span></div>';
+  fetch('/api/skills/'+encodeURIComponent(name)+'/evals/run',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
+    .then(r=>r.json()).then(b=>{if(b.error){bn.innerHTML='<div class="empty">'+esc(b.error)+'</div>';return;}renderBench(b);});}
+function _bar(v){const pct=Math.round((v||0)*100);return '<div class="barwrap"><div class="bar" style="width:'+pct+'%"></div><span>'+pct+'%</span></div>';}
+function renderBench(b){const s=b.summary||{},w=s.with||{},wo=s.without||{},dl=s.delta||{};
+  let h='<div class="bench"><div class="brow"><span>with skill</span>'+_bar(w.pass_rate)+'</div>';
+  h+='<div class="brow"><span>without</span>'+_bar(wo.pass_rate)+'</div>';
+  const dp=Math.round((dl.pass_rate||0)*100);
+  h+='<div class="delta '+(dp>0?'pos':(dp<0?'neg':''))+'">Δ pass '+(dp>0?'+':'')+dp+'%  ·  Δ tokens '+(dl.tokens||0)+'  ·  trigger '+Math.round((s.trigger_pass_rate||0)*100)+'%</div>';
+  if(b.triggers&&b.triggers.length){h+='<table class="trig"><tr><th>trigger query</th><th>rate</th><th>expect</th><th></th></tr>';
+    b.triggers.forEach(t=>{h+='<tr><td>'+esc(t.query)+'</td><td>'+Math.round((t.trigger_rate||0)*100)+'%</td><td>'+(t.should_trigger?'yes':'no')+'</td><td>'+(t.pass?'✓':'✕')+'</td></tr>';});
+    h+='</table>';}
+  h+='</div>';$('#bench').innerHTML=h;}
+function loadPrompt(){fetch('/api/system-prompt').then(r=>r.json()).then(d=>{$('#sysprompt').value=d.prompt||'';setStatus('loaded');});}
+function savePrompt(){const prompt=$('#sysprompt').value;
+  fetch('/api/system-prompt',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})})
+    .then(r=>r.json()).then(d=>setStatus(d.ok?'saved — applies to new runs':('error: '+(d.error||'?'))));}
+function setStatus(t){const e=$('#spstatus');e.textContent=t;setTimeout(()=>{e.textContent='';},4000);}
+
+/* ---- chips ---- */
+document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{ta.value=c.dataset.prompt;autogrow();ta.focus();});
+
+/* ---- boot ---- */
+loadSessions();
+if(sessions.length){curId=sessions[0].id;chatHistory.innerHTML=sessions[0].html||'';showWelcome(!(sessions[0].html&&sessions[0].html.trim()));
+  rehydrate();updateCount();scrollDown();}
+else newChat();
+renderSessions();
+</script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+#!/bin/sh
+# npx using AON's bundled Node (it is not on the system PATH). Use as an MCP stdio command.
+NODE_BIN=/home/ubuntu/app/workspace/node-v20.12.2-linux-x64/bin
+PATH="$NODE_BIN:$PATH" exec "$NODE_BIN/npx" "$@"

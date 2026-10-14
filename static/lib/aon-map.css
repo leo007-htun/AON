@@ -1,0 +1,72 @@
+/* AON map (ported from wireframe-map.html): targeting reticle, start marker, compact + full controls.
+   Colours follow the AON rules: cyan/green only, red only for warnings. */
+.amap{position:relative;overflow:hidden;background:#061b31;font-family:var(--mono,"JetBrains Mono",monospace);font-size:12px;color:#cde8f6;
+  --tgt:#00e5ff;--start:#3dff9a;--route:#3dff9a;--warn:#ff4d5e;--ln:#17507e;--pnl:rgba(6,27,49,.9);--dim:#80a9c4;--tsize:120px}
+.amap.compact{--tsize:86px}
+.amap .amap-canvas{position:absolute;inset:0}
+.amap .amap-grid{position:absolute;inset:0;pointer-events:none;opacity:.35;
+  background-image:linear-gradient(var(--ln) 1px,transparent 1px),linear-gradient(90deg,var(--ln) 1px,transparent 1px);background-size:48px 48px}
+.amap .amap-grid[hidden]{display:none}
+.amap button{background:transparent;color:#cde8f6;border:1px solid var(--ln);padding:4px 8px;font:inherit;font-size:11px;cursor:pointer;letter-spacing:.04em}
+.amap button:hover{border-color:var(--tgt);color:var(--tgt)}
+.amap button.on{border-color:var(--tgt);color:#061b31;background:var(--tgt)}
+.amap button:focus-visible{outline:2px solid var(--tgt);outline-offset:1px}
+.amap .amap-bar{position:absolute;top:8px;left:8px;right:52px;display:flex;flex-wrap:wrap;gap:4px;z-index:2}
+.amap .amap-bar .sep{width:6px}
+.amap .amap-bar button{background:var(--pnl);backdrop-filter:blur(4px)}
+.amap .amap-bar button.on{background:var(--tgt)}
+.amap .amap-bar select{background:var(--pnl);color:#cde8f6;border:1px solid var(--ln);font:inherit;font-size:11px;padding:3px 4px}
+.amap .amap-panel{position:absolute;top:12px;left:12px;width:250px;max-width:calc(100% - 24px);max-height:calc(100% - 70px);overflow:auto;z-index:2;
+  background:var(--pnl);border:1px solid var(--ln);padding:12px;display:flex;flex-direction:column;gap:12px;backdrop-filter:blur(6px)}
+.amap .amap-panel h1{font-size:13px;margin:0;letter-spacing:.12em;text-transform:uppercase;color:var(--tgt)}
+.amap .lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.amap .row{display:flex;flex-wrap:wrap;gap:6px}
+.amap .toggles{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.amap .toggles label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.amap input[type=text]{width:100%;box-sizing:border-box;background:transparent;color:#cde8f6;border:1px solid var(--ln);padding:7px 8px;font:inherit}
+.amap input[type=text]:focus{outline:1px solid var(--tgt)}
+.amap input[type=range]{width:100%;accent-color:var(--tgt)}
+.amap .amap-info{position:absolute;left:8px;right:8px;bottom:8px;z-index:2;display:flex;gap:10px;align-items:flex-end;pointer-events:none}
+.amap .amap-info>div{background:var(--pnl);border:1px solid var(--ln);padding:5px 9px;pointer-events:auto;font-variant-numeric:tabular-nums}
+.amap .amap-read{color:var(--dim)}.amap .amap-read b,.amap .amap-nav b{color:#cde8f6;font-weight:400}
+.amap .amap-nav{color:var(--dim);line-height:1.5;max-width:60%}
+.amap .amap-nav.warn{color:var(--warn);border-color:var(--warn)}
+.amap.full .amap-info{left:274px}
+.amap .maplibregl-popup-content{background:var(--pnl);color:#cde8f6;border:1px solid var(--tgt);font-family:inherit;font-size:11px}
+.amap .maplibregl-popup-tip{display:none}
+.amap .maplibregl-ctrl-attrib{background:rgba(0,0,0,.5)!important;color:var(--dim)}.amap .maplibregl-ctrl-attrib a{color:var(--dim)}
+.amap .maplibregl-canvas{cursor:crosshair}
+/* reticle */
+/* marker roots must stay position:absolute with no transform of their own: MapLibre pins them to
+   their coordinates with an inline transform (relative would stack them and make them drift on zoom) */
+.tgt{position:absolute;width:var(--tsize);height:var(--tsize);pointer-events:none;color:var(--tgt)}
+.tgt .ring{position:absolute;inset:0;border-radius:50%;border:1.5px dashed currentColor;opacity:.8;animation:amap-spin 8s linear infinite}
+.tgt .r2{inset:18%;border-style:solid;border-color:currentColor transparent;animation-duration:3s;animation-direction:reverse}
+.tgt .cross::before,.tgt .cross::after{content:"";position:absolute;background:currentColor;opacity:.7}
+.tgt .cross::before{left:50%;top:-14px;bottom:-14px;width:1px;transform:translateX(-.5px);
+  -webkit-mask:linear-gradient(#000 0 30%,transparent 30% 70%,#000 70%);mask:linear-gradient(#000 0 30%,transparent 30% 70%,#000 70%)}
+.tgt .cross::after{top:50%;left:-14px;right:-14px;height:1px;transform:translateY(-.5px);
+  -webkit-mask:linear-gradient(90deg,#000 0 30%,transparent 30% 70%,#000 70%);mask:linear-gradient(90deg,#000 0 30%,transparent 30% 70%,#000 70%)}
+.tgt i{position:absolute;width:16px;height:16px;border:2px solid currentColor}
+.tgt .tl{top:7%;left:7%;border-right:0;border-bottom:0}.tgt .tr{top:7%;right:7%;border-left:0;border-bottom:0}
+.tgt .bl{bottom:7%;left:7%;border-right:0;border-top:0}.tgt .br{bottom:7%;right:7%;border-left:0;border-top:0}
+.tgt .dot{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px;border-radius:50%;background:currentColor;box-shadow:0 0 12px currentColor}
+.tgt .dot::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:1px solid currentColor;animation:amap-ping 1.6s ease-out infinite}
+.tgt .tag{position:absolute;left:calc(var(--tsize) - 8px);top:-6px;white-space:nowrap;padding:5px 8px;background:var(--pnl,rgba(6,27,49,.9));
+  border:1px solid currentColor;border-left-width:3px;font:10px/1.5 var(--mono,monospace);color:#cde8f6;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.tgt .tag b{display:block;color:currentColor;letter-spacing:.18em}
+.tgt .tag::before{content:"";position:absolute;right:100%;top:14px;width:30px;height:1px;background:currentColor;transform-origin:right;transform:rotate(25deg)}
+.tgt.lock i{animation:amap-lock .6s cubic-bezier(.2,.9,.3,1.3) both}
+.tgt.lock .tag{animation:amap-blink .5s steps(2) 2}
+.tgt.lock .dot{color:var(--start)}
+.amap-start{position:absolute;width:18px;height:18px;pointer-events:none}
+.amap-start::before{content:"";position:absolute;inset:0;transform:rotate(45deg);border:2px solid var(--start,#3dff9a);box-shadow:0 0 10px var(--start,#3dff9a)}
+.amap-start::after{content:"";position:absolute;inset:6px;transform:rotate(45deg);background:var(--start,#3dff9a)}
+@keyframes amap-spin{to{transform:rotate(360deg)}}
+@keyframes amap-ping{from{transform:scale(1);opacity:1}to{transform:scale(5);opacity:0}}
+@keyframes amap-lock{from{transform:scale(3);opacity:0}to{transform:none;opacity:1}}
+@keyframes amap-blink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.tgt *,.tgt *::after,.tgt .tag{animation:none!important}}
+@media (max-width:600px){.amap.full .amap-panel{width:auto;right:12px;max-height:45%}.amap.full .amap-info{left:8px}}
+.amap-start .lbl{position:absolute;left:22px;top:0;font:700 10px/1 var(--mono,monospace);letter-spacing:.18em;color:var(--start,#3dff9a);
+  white-space:nowrap;text-shadow:0 0 6px var(--start,#3dff9a)}

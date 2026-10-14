@@ -1,0 +1,13 @@
+ollama_base_url = "http://localhost:11434/v1"
+default_model = "aon"
+workdir = "~/app/workspace"
+always_ask = []
+max_steps = 40
+command_timeout = 120
+bind = "192.168.1.84:8700"
+telegram_bot_token = ""
+telegram_allowed_chat_ids = []
+chat_base_url = "http://100.72.82.59:8001/v1"
+chat_model = "aon"
+chat_temperature = 0.2
+chat_repetition_penalty = 1.15
