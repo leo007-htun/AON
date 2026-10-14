@@ -21,7 +21,9 @@
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-Tunnel%20%2B%20Access-F38020?logo=cloudflare&logoColor=white)
 ![pytest](https://img.shields.io/badge/tests-pytest-0A9EDC?logo=pytest&logoColor=white)
 
-![AON web UI](docs/screenshot.png)
+| 💬 Chat | 🗺️ Maps |
+|:---:|:---:|
+| ![AON chat UI](docs/screenshot.png) | ![AON route on the 3D globe map](docs/map.png) |
 
 </div>
 
