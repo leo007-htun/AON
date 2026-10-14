@@ -1,10 +1,10 @@
 import asyncio, json
 import httpx
 from fastapi.testclient import TestClient
-from agent.hub import GlamaHub, HubError
-from agent.web import create_app
-from agent.config import Config
-from agent.persistence import Database
+from aon.hub import GlamaHub, HubError
+from aon.web import create_app
+from aon.config import Config
+from aon.persistence import Database
 
 SERVER = {"id": "abc", "name": "Playwright MCP Server", "namespace": "microsoft", "slug": "playwright-mcp",
           "description": "Browser automation", "attributes": ["author:official"], "isBoosted": False,

@@ -1,8 +1,8 @@
 import pytest
-from agent.engine import dispatch, Step
-from agent.llm_client import ToolCall
-from agent.tools.base import Tool, ToolResult, ToolRegistry
-from agent.approval_gate import AutoGate, ApprovalGate, PendingAction, Decision
+from aon.engine import dispatch, Step
+from aon.llm_client import ToolCall
+from aon.tools.base import Tool, ToolResult, ToolRegistry
+from aon.approval_gate import AutoGate, ApprovalGate, PendingAction, Decision
 
 class Recorder(Tool):
     def __init__(self, name, mutating): self.name=name; self.mutating=mutating; self.calls=[]; self.description=""; self.parameters={}

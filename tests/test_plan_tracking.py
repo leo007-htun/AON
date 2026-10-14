@@ -1,9 +1,9 @@
 import pytest
-from agent.router import render_step, plan_progress, Plan
-from agent.engine import Agent
-from agent.llm_client import ChatResult, ToolCall
-from agent.tools.base import Tool, ToolResult, ToolRegistry
-from agent.approval_gate import AutoGate
+from aon.router import render_step, plan_progress, Plan
+from aon.engine import Agent
+from aon.llm_client import ChatResult, ToolCall
+from aon.tools.base import Tool, ToolResult, ToolRegistry
+from aon.approval_gate import AutoGate
 
 
 def test_render_step_and_progress():

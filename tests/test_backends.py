@@ -2,9 +2,9 @@
 model-management stay on Ollama. With no chat backend configured, everything stays on Ollama."""
 import httpx
 import pytest
-from agent.config import Config, load_config
-from agent.backends import chat_base_url, chat_sampling, make_chat_llm, model_is_chat
-from agent.llm_client import LLMClient
+from aon.config import Config, load_config
+from aon.backends import chat_base_url, chat_sampling, make_chat_llm, model_is_chat
+from aon.llm_client import LLMClient
 
 
 def _cfg(tmp, **kw):
@@ -96,9 +96,9 @@ async def test_llm_client_without_sampling_sends_none():
 
 def test_api_models_lists_the_chat_backend(tmp_path, monkeypatch):
     from fastapi.testclient import TestClient
-    from agent.persistence import Database
-    from agent.web import create_app
-    import agent.web as W
+    from aon.persistence import Database
+    from aon.web import create_app
+    import aon.web as W
     async def fake_list(base_url, model):
         return ["aon"] if "vllm" in base_url else ["gpt-oss", "nomic-embed-text"]
     monkeypatch.setattr(W, "_list_models", fake_list)
@@ -112,6 +112,6 @@ def test_api_models_lists_the_chat_backend(tmp_path, monkeypatch):
 async def test_chat_model_image_uses_configured_vision(tmp_path):
     # the chat backend model is not an Ollama model, so its vision support comes from config,
     # not an Ollama /api/show probe
-    from agent.backends import model_is_chat
+    from aon.backends import model_is_chat
     c = _cfg(tmp_path, chat_base_url="http://vllm:8001/v1", chat_model="aon", chat_vision=True)
     assert model_is_chat(c, "aon") and c.chat_vision is True

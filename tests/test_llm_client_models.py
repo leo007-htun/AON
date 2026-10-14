@@ -1,5 +1,5 @@
 import httpx, pytest
-from agent.llm_client import LLMClient
+from aon.llm_client import LLMClient
 
 @pytest.mark.asyncio
 async def test_list_models_parses_ids():

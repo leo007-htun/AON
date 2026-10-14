@@ -1,6 +1,6 @@
-from agent.config import Config
-from agent.build import build_registry
-from agent.mcp_client import McpToolSpec
+from aon.config import Config
+from aon.build import build_registry
+from aon.mcp_client import McpToolSpec
 
 
 class FakeMgr:

@@ -1,7 +1,7 @@
 import json
 import pytest
-from agent.router import Plan, deliberate, render_plan_hint
-from agent.llm_client import ChatResult
+from aon.router import Plan, deliberate, render_plan_hint
+from aon.llm_client import ChatResult
 
 
 class FakeLLM:

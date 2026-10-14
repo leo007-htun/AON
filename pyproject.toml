@@ -1,8 +1,55 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "agent"
-version = "0.1.0"
+name = "aon-agent"
+version = "1.0.0"
+description = "Self-contained, obliterated AI agent on your own GPU: memory, document RAG, tools, MCP, maps, multi-user via vLLM."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Sithu Htun" }]
 requires-python = ">=3.11"
-dependencies = ["httpx>=0.27"]
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "httpx>=0.27",
+    "websockets>=12",
+    "mcp>=1.20,<2",          # 2.x renamed FastMCP and changed the client API
+    "pypdf>=5",
+]
+keywords = ["ai-agent", "llm", "self-hosted", "local-llm", "uncensored", "vllm", "ollama", "rag", "mcp", "agentic-ai"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Framework :: FastAPI",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8", "pytest-asyncio>=0.23"]
+
+[project.scripts]
+aon = "aon.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/leo007-htun/AON"
+Source = "https://github.com/leo007-htun/AON"
+Issues = "https://github.com/leo007-htun/AON/issues"
+Demo = "https://www.youtube.com/watch?v=wLiVhkLOd-8"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["aon*"]
+
+[tool.setuptools.package-data]
+aon = ["static/**/*", "default_skills/**/*"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

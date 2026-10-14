@@ -1,9 +1,9 @@
 """A rolling summary per chat, kept in the database, covers turns older than the recent ones."""
 import pytest
-from agent.persistence import Database
-from agent.llm_client import ChatResult
-from agent.summary import update_summary, summary_background
-from agent.context import estimate_tokens
+from aon.persistence import Database
+from aon.llm_client import ChatResult
+from aon.summary import update_summary, summary_background
+from aon.context import estimate_tokens
 
 
 class LLM:
@@ -113,9 +113,9 @@ def test_background_text(tmp_path):
 
 def _web(tmp_path, monkeypatch, seen):
     from fastapi.testclient import TestClient
-    from agent.config import Config
-    from agent.web import create_app
-    import agent.web as W
+    from aon.config import Config
+    from aon.web import create_app
+    import aon.web as W
     db = Database(str(tmp_path / "d.db"))
 
     class FakeAgent:

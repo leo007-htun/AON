@@ -1,5 +1,5 @@
 import asyncio, pytest
-from agent.approval_gate import PendingAction, Decision, AutoGate, QueueGate
+from aon.approval_gate import PendingAction, Decision, AutoGate, QueueGate
 
 @pytest.mark.asyncio
 async def test_autogate_approves():

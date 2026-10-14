@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-from agent.executor import run_command, CommandResult
+from aon.executor import run_command, CommandResult
 
 @pytest.mark.asyncio
 async def test_runs_and_captures(tmp_path):

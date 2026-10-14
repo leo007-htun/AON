@@ -1,9 +1,9 @@
 import json
 import pytest
-from agent.memory import EpisodicMemory
-from agent.memory_extract import (extract_episodes, maybe_extract,
+from aon.memory import EpisodicMemory
+from aon.memory_extract import (extract_episodes, maybe_extract,
                                   SearchMemoryTool, LearnUrlTool)
-from agent.llm_client import ChatResult
+from aon.llm_client import ChatResult
 
 
 class FakeLLM:

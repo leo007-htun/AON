@@ -1,10 +1,10 @@
 """Semantic recall: chat turns get embeddings in the database; relevant older turns come back."""
 import math
 import pytest
-from agent.persistence import Database
-from agent.recall import index_turns, recall, recall_background, Embedder
-from agent.memory_extract import SearchConversationTool
-from agent.context import estimate_tokens
+from aon.persistence import Database
+from aon.recall import index_turns, recall, recall_background, Embedder
+from aon.memory_extract import SearchConversationTool
+from aon.context import estimate_tokens
 
 VOCAB = ["port", "rust", "pizza", "weather", "docker", "cat", "colo"]
 
@@ -139,8 +139,8 @@ async def test_embedder_normalises_and_prefixes(monkeypatch):
 
 def _web(tmp_path, embedder, seen, history_tokens=8000, cross_chat=True):
     from fastapi.testclient import TestClient
-    from agent.config import Config
-    from agent.web import create_app
+    from aon.config import Config
+    from aon.web import create_app
     db = _db(tmp_path)
 
     class FakeAgent:

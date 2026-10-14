@@ -1,0 +1,23 @@
+{
+  "evals": [
+    { "id": "format-known",
+      "prompt": "Create a skill named greet that greets a user by name.",
+      "expected_output": "A skills/greet/SKILL.md with YAML frontmatter (name, description) and body instructions.",
+      "assertions": [
+        "The output describes a SKILL.md with YAML frontmatter containing name and description",
+        "The name field is the kebab-case skill name"
+      ] },
+    { "id": "not-a-tool",
+      "prompt": "Create a skill that sends real emails via SMTP.",
+      "expected_output": "Notes that sending email needs an email TOOL/credentials, not a skill alone.",
+      "assertions": [
+        "The response explains a skill alone cannot send email and a tool/capability is required"
+      ] }
+  ],
+  "triggers": [
+    { "query": "write a new skill for formatting commit messages", "should_trigger": true },
+    { "query": "how do I author a reusable procedure for the agent?", "should_trigger": true },
+    { "query": "what's the weather today?", "should_trigger": false },
+    { "query": "refactor this python function", "should_trigger": false }
+  ]
+}

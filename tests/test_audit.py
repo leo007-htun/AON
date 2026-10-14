@@ -1,6 +1,6 @@
 import pytest
-from agent.persistence import Database
-from agent.audit import make_audit_hook
+from aon.persistence import Database
+from aon.audit import make_audit_hook
 
 @pytest.mark.asyncio
 async def test_audit_records_steps(tmp_path):

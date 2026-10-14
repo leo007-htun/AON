@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
-from agent.tools.paths import resolve_in_root
-from agent.tools.files_read import ReadFileTool, ListDirTool
+from aon.tools.paths import resolve_in_root
+from aon.tools.files_read import ReadFileTool, ListDirTool
 
 def test_resolve_rejects_escape(tmp_path):
     with pytest.raises(ValueError):

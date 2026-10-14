@@ -1,4 +1,4 @@
-from agent.memory_extract import is_install_command
+from aon.memory_extract import is_install_command
 
 
 def test_true_cases():

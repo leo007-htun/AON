@@ -1,6 +1,6 @@
 import json
 import pytest
-from agent.mcp_client import McpManager, McpServerCfg
+from aon.mcp_client import McpManager, McpServerCfg
 
 
 class FakeSession:

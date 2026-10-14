@@ -4,13 +4,13 @@ and a reply cut off at the length limit with no text is retried once with thinki
 import json
 import httpx
 import pytest
-from agent.llm_client import LLMClient, ChatResult
-from agent.context import fit_exact, fit_messages, message_tokens, estimate_tokens
-from agent.backends import make_chat_llm
-from agent.config import Config
-from agent.engine import Agent
-from agent.tools.base import ToolRegistry
-from agent.approval_gate import AutoGate
+from aon.llm_client import LLMClient, ChatResult
+from aon.context import fit_exact, fit_messages, message_tokens, estimate_tokens
+from aon.backends import make_chat_llm
+from aon.config import Config
+from aon.engine import Agent
+from aon.tools.base import ToolRegistry
+from aon.approval_gate import AutoGate
 
 
 def _resp(message, finish="stop"):

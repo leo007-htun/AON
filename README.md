@@ -135,15 +135,32 @@ people's personal data, and expect a short wait when several people are using it
 ## 📦 Install
 
 ```bash
-git clone https://github.com/leo007-htun/AON.git ~/app
-cd ~/app
-python3 -m venv venv
-venv/bin/pip install -r requirements.txt
-cp config.toml.example config.toml      # then edit it, see below
-mkdir -p workspace memory
+pipx install aon-agent            # or: pip install aon-agent
+aon init                          # creates ~/.aon with a starter config.toml
 ```
 
+`aon init` takes `--ollama URL`, `--model NAME`, `--bind HOST:PORT` and `--home DIR`. Then pull the
+models it names:
+
+```bash
+ollama pull nomic-embed-text
+ollama pull qwen3:14b             # or the chat model you chose with --model
+```
+
+**From source** (for development):
+
+```bash
+git clone https://github.com/leo007-htun/AON.git && cd AON
+python3 -m venv venv && venv/bin/pip install -e ".[test]"
+venv/bin/aon init
+```
+
+Everything AON keeps (config, chats, memory, documents, skills) lives in its **home folder**:
+`--home DIR`, else `$AON_HOME`, else `~/.aon`.
+
 ## ⚙️ Configure (`config.toml`)
+
+`aon init` writes this file into the home folder; edit it to taste.
 
 | Key | Meaning | Example |
 |---|---|---|
@@ -169,27 +186,21 @@ Keep `context_window` equal to vLLM's `--max-model-len` (or the Ollama model's c
 
 ## 🚀 Run
 
-From the app folder:
-
 ```bash
-./run.sh
+aon serve                         # web UI on the bind address from config.toml
+aon serve --port 9000             # or override host/port
+aon --help
 ```
 
-which is the same as:
-
-```bash
-PYTHONPATH=src venv/bin/python -m agent.main config.toml
-```
-
-Then open `http://<bind address>:8700` in a browser.
+Then open `http://<bind address>` in a browser.
 
 ### 🌙 In the background
 
 ```bash
-cd ~/app && setsid nohup ./run.sh >> aon.log 2>&1 < /dev/null &
-pgrep -af '[a]gent.main'          # is it running?
-tail -f aon.log                    # its log
-pkill -f '[a]gent.main'            # stop it
+setsid nohup aon serve >> ~/.aon/aon.log 2>&1 < /dev/null &
+pgrep -af '[a]on serve'           # is it running?
+tail -f ~/.aon/aon.log            # its log
+pkill -f '[a]on serve'            # stop it
 ```
 
 ### 🔁 As a service (starts at boot, restarts on failure)
@@ -203,9 +214,8 @@ Wants=network-online.target
 
 [Service]
 User=ubuntu
-WorkingDirectory=/home/ubuntu/app
-Environment=PYTHONPATH=src
-ExecStart=/home/ubuntu/app/venv/bin/python -m agent.main config.toml
+Environment=AON_HOME=/home/ubuntu/.aon
+ExecStart=/home/ubuntu/.local/bin/aon serve
 Restart=always
 RestartSec=5
 
@@ -216,8 +226,43 @@ sudo systemctl daemon-reload && sudo systemctl enable --now aon
 journalctl -u aon -f
 ```
 
-Change `User` and the paths if your user or folder differs. Python code changes need a restart;
+Change `User`, `AON_HOME` and the `aon` path (`which aon`) to match your setup. Python code changes need a restart;
 `static/index.html` is read on every request, so UI changes show on reload.
+
+## 🔌 Use AON from other AI apps (MCP)
+
+`aon mcp` runs AON as an [MCP](https://modelcontextprotocol.io) server over stdio, so Claude
+Desktop, Claude Code, Cursor and other MCP clients can use it:
+
+| Tool | What it does |
+|---|---|
+| `ask_aon` | Hand AON a task or question; it answers with its own model, memory, documents and tools. Use `chat` to continue a conversation. |
+| `search_memory` | Search AON's long-term memory about you (read-only) |
+| `remember` | Save a fact to AON's memory |
+| `search_documents` | Search your document library (read-only) |
+| `list_documents` | List the library (read-only) |
+| `add_document` | Add a text document to the library |
+
+Shell commands and file writes are always refused over MCP, because there is no one to approve them there.
+
+**Claude Desktop** (`claude_desktop_config.json`) and **Cursor** (`~/.cursor/mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "aon": { "command": "aon", "args": ["mcp"] }
+  }
+}
+```
+
+**Claude Code:**
+
+```bash
+claude mcp add aon -- aon mcp
+```
+
+Add `"--home", "/path/to/home"` to `args` to use a different home folder. If the client cannot find
+`aon`, give the full path from `which aon`.
 
 ## ⚡ Chat on vLLM (several users at once)
 
@@ -244,34 +289,37 @@ Geolocation in the map needs HTTPS.
 ## 🧪 Tests
 
 ```bash
-PYTHONPATH=src venv/bin/python -m pytest -q
+pip install -e ".[test]"
+pytest -q
 ```
 
 ## 🗂️ Project layout
 
 | Path | What it is |
 |---|---|
-| `src/agent/main.py` | Entry point: builds the app from `config.toml` |
-| `src/agent/web.py` | FastAPI app: REST API and the chat WebSocket |
-| `src/agent/engine.py` | The agent loop (tool calls, approval, loop guard) |
-| `src/agent/router.py` | Planner: answer directly, ask, or plan tool steps |
-| `src/agent/llm_client.py`, `backends.py` | Model calls; Ollama or vLLM per model |
-| `src/agent/context.py` | Fitting requests into the context window |
-| `src/agent/recall.py`, `summary.py` | Chat recall, rolling summary, outline |
-| `src/agent/memory*.py` | Episodic memory, extraction, consolidation |
-| `src/agent/docs.py` | Document library (RAG) |
-| `src/agent/skills.py`, `skill_*.py` | Skills: store, import, authoring, evals |
-| `src/agent/mcp_client.py`, `mcp_tools.py`, `hub.py` | MCP servers and the Glama hub |
-| `src/agent/tools/` | Built-in tools (files, shell, web, map) |
-| `static/` | Web UI (`index.html`), icons, fonts, map library |
-| `skills/` | Installed skills |
+| `src/aon/cli.py` | The `aon` command: `init`, `serve`, `mcp` |
+| `src/aon/main.py` | Builds AON from `config.toml` (shared by `serve` and `mcp`) |
+| `src/aon/mcp_server.py` | AON as an MCP server |
+| `src/aon/web.py` | FastAPI app: REST API and the chat WebSocket |
+| `src/aon/engine.py` | The agent loop (tool calls, approval, loop guard) |
+| `src/aon/router.py` | Planner: answer directly, ask, or plan tool steps |
+| `src/aon/llm_client.py`, `backends.py` | Model calls; Ollama or vLLM per model |
+| `src/aon/context.py` | Fitting requests into the context window |
+| `src/aon/recall.py`, `summary.py` | Chat recall, rolling summary, outline |
+| `src/aon/memory*.py` | Episodic memory, extraction, consolidation |
+| `src/aon/docs.py` | Document library (RAG) |
+| `src/aon/skills.py`, `skill_*.py` | Skills: store, import, authoring, evals |
+| `src/aon/mcp_client.py`, `mcp_tools.py`, `hub.py` | MCP servers and the Glama hub |
+| `src/aon/tools/` | Built-in tools (files, shell, web, map) |
+| `src/aon/static/` | Web UI (`index.html`), icons, fonts, map library |
+| `src/aon/default_skills/` | Skills copied into a new home by `aon init` |
 | `tests/` | Test suite |
 | `specs/` | Design notes |
 | `vllm/` | vLLM server setup |
 
 ## 💾 Data
 
-AON keeps its data in the app folder: `workspace/app.db` (chats), `workspace/docs.db` (document
+AON keeps its data in its home folder: `workspace/app.db` (chats), `workspace/docs.db` (document
 library), `memory/episodes.db` (memory) and `workspace/uploads/` (attachments). This repository
 includes a snapshot of them from 2026-10-14. A fresh install creates empty ones; to start clean,
 delete them before the first run. The Glama API key is kept in `.glama_key`, which is git-ignored.

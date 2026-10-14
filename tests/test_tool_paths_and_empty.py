@@ -1,12 +1,12 @@
 import pytest
 from pathlib import Path
-from agent.tools.files_read import ReadFileTool, ListDirTool
-from agent.tools.files_write import WriteFileTool, EditFileTool
-from agent.tools.paths import resolve_in_root
-from agent.engine import Agent
-from agent.llm_client import ChatResult
-from agent.tools.base import ToolRegistry
-from agent.approval_gate import AutoGate
+from aon.tools.files_read import ReadFileTool, ListDirTool
+from aon.tools.files_write import WriteFileTool, EditFileTool
+from aon.tools.paths import resolve_in_root
+from aon.engine import Agent
+from aon.llm_client import ChatResult
+from aon.tools.base import ToolRegistry
+from aon.approval_gate import AutoGate
 
 @pytest.mark.parametrize("cls", [ReadFileTool, ListDirTool, WriteFileTool, EditFileTool])
 def test_path_param_tells_model_paths_are_workspace_relative(cls, tmp_path):

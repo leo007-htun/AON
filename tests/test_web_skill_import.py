@@ -2,10 +2,10 @@ import base64
 import io
 import zipfile
 from fastapi.testclient import TestClient
-from agent.config import Config
-from agent.persistence import Database
-from agent.web import create_app
-from agent.skills import SkillStore
+from aon.config import Config
+from aon.persistence import Database
+from aon.web import create_app
+from aon.skills import SkillStore
 
 SK = "---\nname: {n}\ndescription: does {n}\n---\n\nbody\n"
 
@@ -50,7 +50,7 @@ def test_import_paste_skill_md(tmp_path):
 
 
 def test_import_url_uses_fetcher(tmp_path, monkeypatch):
-    import agent.skill_import as si
+    import aon.skill_import as si
     seen = {}
     async def fake_fetch(url):
         seen["url"] = url

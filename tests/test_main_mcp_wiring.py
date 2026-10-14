@@ -1,7 +1,7 @@
 import pytest
-from agent.config import Config
-from agent.build import build_registry
-from agent.mcp_client import McpManager, McpServerCfg
+from aon.config import Config
+from aon.build import build_registry
+from aon.mcp_client import McpManager, McpServerCfg
 
 
 async def _fake_conn(cfg):

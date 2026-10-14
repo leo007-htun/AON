@@ -2,12 +2,12 @@
 and the tools that call the model themselves use the model picked in the UI."""
 import httpx
 from fastapi.testclient import TestClient
-from agent.config import Config
-from agent.persistence import Database
-from agent.web import create_app, model_error_text
-from agent.engine import Agent
-from agent.build import build_registry
-from agent.tools.base import ToolRegistry
+from aon.config import Config
+from aon.persistence import Database
+from aon.web import create_app, model_error_text
+from aon.engine import Agent
+from aon.build import build_registry
+from aon.tools.base import ToolRegistry
 
 
 def _cfg(tmp):

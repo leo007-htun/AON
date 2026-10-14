@@ -1,5 +1,5 @@
 import base64, pytest
-from agent.attachments import (AttachmentError, save_attachments, attachment_note, image_parts,
+from aon.attachments import (AttachmentError, save_attachments, attachment_note, image_parts,
                                supports_vision, MAX_FILES)
 
 def _item(name, data: bytes, type_=""):
@@ -45,7 +45,7 @@ def test_too_many_files_rejected(tmp_path):
     assert not (tmp_path / "uploads").exists() or not any((tmp_path / "uploads").iterdir())
 
 def test_oversize_file_rejected(tmp_path, monkeypatch):
-    import agent.attachments as at
+    import aon.attachments as at
     monkeypatch.setattr(at, "MAX_FILE_BYTES", 10)
     with pytest.raises(AttachmentError):
         save_attachments([_item("big.bin", b"x" * 11)], tmp_path)
@@ -59,7 +59,7 @@ def test_note_lists_paths_and_inlines_small_text(tmp_path):
     assert "\x00" not in note
 
 def test_note_does_not_inline_large_text(tmp_path, monkeypatch):
-    import agent.attachments as at
+    import aon.attachments as at
     monkeypatch.setattr(at, "INLINE_TEXT_BYTES", 5)
     atts = save_attachments([_item("long.txt", b"abcdefghij", "text/plain")], tmp_path)
     note = attachment_note(atts)
@@ -100,7 +100,7 @@ class _Client:
 
 @pytest.mark.asyncio
 async def test_supports_vision_reads_capabilities(monkeypatch):
-    import agent.attachments as at
+    import aon.attachments as at
     c = _Client(_Resp(200, {"capabilities": ["completion", "tools", "vision"]}))
     monkeypatch.setattr(at.httpx, "AsyncClient", lambda **k: c)
     assert await supports_vision("http://localhost:11434/v1", "m") is True
@@ -108,7 +108,7 @@ async def test_supports_vision_reads_capabilities(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_supports_vision_false_without_capability_or_on_error(monkeypatch):
-    import agent.attachments as at
+    import aon.attachments as at
     monkeypatch.setattr(at.httpx, "AsyncClient", lambda **k: _Client(_Resp(200, {"capabilities": ["tools"]})))
     assert await supports_vision("http://h/v1", "m") is False
     monkeypatch.setattr(at.httpx, "AsyncClient", lambda **k: _Client(_Resp(404, {})))

@@ -1,6 +1,6 @@
 import json, pytest, httpx
-from agent import geo
-from agent.geo import (normalize_map, Geo, auto_view, great_circle, parse_map_command, build_map)
+from aon import geo
+from aon.geo import (normalize_map, Geo, auto_view, great_circle, parse_map_command, build_map)
 
 # ---- planner output normalisation ----
 
@@ -222,7 +222,7 @@ async def test_new_road_route_ends_in_3d_even_if_planner_said_2d():
     assert g.event["view"] == "globe"
 
 # ---- verifying the model's places against real lookups; ask when unsure ----
-from agent.geo import resolve_place
+from aon.geo import resolve_place
 
 def _hit(name, display, lat, lon, imp, typ="station"):
     return {"lat": str(lat), "lon": str(lon), "display_name": display, "name": name, "type": typ,
@@ -282,7 +282,7 @@ async def test_build_map_asks_instead_of_routing_somewhere_else():
     assert out.event["mode"] == "area" and out.event["targets"][0]["name"] == "Crewe"   # candidates shown on the map
 
 # ---- places that don't exist: suggest similarly named ones and ask ----
-from agent.geo import suggest_similar
+from aon.geo import suggest_similar
 
 def _place(name, display, lat, lon, kind="", imp=0.3):
     return {"query": name, "name": name, "display": display, "lat": lat, "lon": lon, "kind": kind, "bbox": None, "importance": imp}

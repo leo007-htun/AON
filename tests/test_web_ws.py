@@ -1,12 +1,12 @@
 import json, pytest
 from pathlib import Path
 from fastapi.testclient import TestClient
-from agent.config import Config
-from agent.persistence import Database
-from agent.web import create_app
-from agent.engine import Agent
-from agent.llm_client import ChatResult, ToolCall
-from agent.tools.base import Tool, ToolResult, ToolRegistry
+from aon.config import Config
+from aon.persistence import Database
+from aon.web import create_app
+from aon.engine import Agent
+from aon.llm_client import ChatResult, ToolCall
+from aon.tools.base import Tool, ToolResult, ToolRegistry
 
 class Mut(Tool):
     name="run_command"; description=""; parameters={}; mutating=True

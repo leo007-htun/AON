@@ -1,9 +1,9 @@
 import json
 import pytest
-from agent.config import Config
-from agent.skills import SkillStore, WriteSkillTool
-from agent.skill_evals import EvalRunner, RunSkillEvalsTool, EvalCase
-from agent.engine import RunResult, Step
+from aon.config import Config
+from aon.skills import SkillStore, WriteSkillTool
+from aon.skill_evals import EvalRunner, RunSkillEvalsTool, EvalCase
+from aon.engine import RunResult, Step
 
 
 def _cfg(tmp):
@@ -86,7 +86,7 @@ async def test_run_once_isolation_and_cleanup(tmp_path):
 # --- Final review fixes ---
 @pytest.mark.asyncio
 async def test_eval_agent_excludes_run_skill_evals(tmp_path):
-    from agent.build import build_registry, build_eval_agent
+    from aon.build import build_registry, build_eval_agent
     cfg = _cfg(tmp_path)
     assert "run_skill_evals" in {t.name for t in build_registry(cfg).list()}
     (tmp_path / "ws").mkdir()

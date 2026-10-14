@@ -1,5 +1,5 @@
 import pytest
-from agent.tools.files_write import WriteFileTool, EditFileTool
+from aon.tools.files_write import WriteFileTool, EditFileTool
 
 @pytest.mark.asyncio
 async def test_write_creates_file(tmp_path):
@@ -8,10 +8,10 @@ async def test_write_creates_file(tmp_path):
 
 @pytest.mark.asyncio
 async def test_write_blocks_guardrail_path(tmp_path):
-    (tmp_path / "src/agent").mkdir(parents=True)
-    res = await WriteFileTool(tmp_path).run({"path": "src/agent/executor.py", "content": "x"})
+    (tmp_path / "src/aon").mkdir(parents=True)
+    res = await WriteFileTool(tmp_path).run({"path": "src/aon/executor.py", "content": "x"})
     assert not res.ok and "guardrail" in (res.error or "").lower()
-    assert not (tmp_path / "src/agent/executor.py").exists()
+    assert not (tmp_path / "src/aon/executor.py").exists()
 
 @pytest.mark.asyncio
 async def test_write_blocks_escape(tmp_path):

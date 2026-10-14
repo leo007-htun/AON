@@ -1,11 +1,11 @@
 import pytest
-from agent.memory import EpisodicMemory, RememberTool
-from agent.engine import Agent
-from agent.router import Plan, _SYS
-from agent.llm_client import ChatResult
-from agent.tools.base import ToolRegistry
-from agent.approval_gate import AutoGate
-from agent.memory_extract import _EXTRACT_SYS, _CONVO_RULE
+from aon.memory import EpisodicMemory, RememberTool
+from aon.engine import Agent
+from aon.router import Plan, _SYS
+from aon.llm_client import ChatResult
+from aon.tools.base import ToolRegistry
+from aon.approval_gate import AutoGate
+from aon.memory_extract import _EXTRACT_SYS, _CONVO_RULE
 
 
 def _mem(tmp_path):
@@ -78,7 +78,7 @@ def test_extract_prompt_only_user_statements():
 
 @pytest.mark.asyncio
 async def test_maybe_extract_uses_user_only_rule(tmp_path):
-    from agent.memory_extract import maybe_extract
+    from aon.memory_extract import maybe_extract
     seen = {}
     class L:
         async def chat(self, m, tools=None):

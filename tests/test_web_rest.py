@@ -1,9 +1,9 @@
 import httpx, pytest
 from pathlib import Path
 from fastapi.testclient import TestClient
-from agent.config import Config
-from agent.persistence import Database
-from agent.web import create_app
+from aon.config import Config
+from aon.persistence import Database
+from aon.web import create_app
 
 def _cfg(tmp):
     return Config("http://x/v1","gpt-oss",tmp,[],5,10,"127.0.0.1:8700")
@@ -12,7 +12,7 @@ def _app(tmp, models=None, fail=False):
     db = Database(str(tmp/"d.db"))
     def make_agent(gate, on_event, model): raise AssertionError("not used in REST test")
     app = create_app(_cfg(tmp), db, make_agent)
-    import agent.web as W
+    import aon.web as W
     async def fake_list(base, model):
         if fail: raise RuntimeError("down")
         return models or ["gpt-oss"]
