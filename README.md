@@ -5,6 +5,7 @@
 [![Live](https://img.shields.io/badge/live-aon.vulkron.uk-00e5ff?style=for-the-badge&logo=cloudflare&logoColor=white)](https://aon.vulkron.uk)
 [![YouTube demo](https://img.shields.io/badge/demo-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=wLiVhkLOd-8)
 [![PyPI](https://img.shields.io/pypi/v/aon-agent?style=for-the-badge&logo=pypi&logoColor=white&label=PyPI&color=3775A9)](https://pypi.org/project/aon-agent/)
+[![MCP server](https://img.shields.io/badge/MCP-server-6E56CF?style=for-the-badge&logo=modelcontextprotocol&logoColor=white)](#-use-aon-from-other-ai-apps-mcp)
 [![License: MIT](https://img.shields.io/badge/license-MIT-22c55e?style=for-the-badge)](LICENSE)
 [![Android APK](https://img.shields.io/badge/Android-download%20APK-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/leo007-htun/AON/releases/latest/download/AON.apk)
 
@@ -13,7 +14,7 @@
 ![Uvicorn](https://img.shields.io/badge/Uvicorn-0.54-499848?logo=gunicorn&logoColor=white)
 ![httpx](https://img.shields.io/badge/httpx-0.28-2D7FF9)
 ![WebSockets](https://img.shields.io/badge/WebSockets-17.2-010101?logo=socketdotio&logoColor=white)
-![MCP](https://img.shields.io/badge/MCP-1.30-6E56CF)
+[![MCP](https://img.shields.io/badge/MCP-1.30-6E56CF)](https://modelcontextprotocol.io)
 ![pypdf](https://img.shields.io/badge/pypdf-5.1-E34F26)
 ![SQLite](https://img.shields.io/badge/SQLite-FTS5%20%2B%20vectors-003B57?logo=sqlite&logoColor=white)
 
@@ -24,6 +25,8 @@
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-Tunnel%20%2B%20Access-F38020?logo=cloudflare&logoColor=white)
 ![pytest](https://img.shields.io/badge/tests-pytest-0A9EDC?logo=pytest&logoColor=white)
 
+**[📦 Install](#-install) · [🔌 MCP server](#-use-aon-from-other-ai-apps-mcp) · [📱 Android](#-android-app) · [🔑 Live instance](#-trying-the-live-instance) · [🎬 Demo](#-demo)**
+
 | 💬 Chat | 🗺️ Maps |
 |:---:|:---:|
 | ![AON chat UI](docs/screenshot.png) | ![AON route on the 3D globe map](docs/map.png) |
@@ -33,7 +36,8 @@
 AON is a self-hosted chat agent that runs on your own hardware with local models. It answers
 questions, runs tools in a workspace (files, shell commands, web fetch and search), remembers you
 across chats, searches your own documents, and can be extended with skills and MCP servers. It
-has a web UI, an Android app and an optional Telegram bot.
+has a web UI, an Android app and an optional Telegram bot, and it is an
+[MCP server](#-use-aon-from-other-ai-apps-mcp) itself, so Claude Desktop, Claude Code and Cursor can use it too.
 
 > 🔒 Nothing is sent to a cloud LLM: chat runs on [Ollama](https://ollama.com) or
 > [vLLM](https://docs.vllm.ai), embeddings on Ollama.
@@ -58,6 +62,9 @@ Memory and RAG are table stakes now. What AON adds:
 - 🗺️ **Grounded, not guessed.** Places and routes come from OpenStreetMap geocoding and routing,
   drawn on a 3D globe. Distances and times are computed by the routing service, not written by
   the model.
+- 🔌 **Plugs into the AI apps you already use.** `aon mcp` makes AON an [MCP](#-use-aon-from-other-ai-apps-mcp) server:
+  Claude Desktop, Claude Code or Cursor can hand it tasks and search its memory and your
+  documents, while your data stays on your machine.
 - 📱 **Everywhere you are.** The web UI, the Android app and an optional Telegram bot all reach the
   same agent on your server.
 
@@ -119,7 +126,9 @@ people's personal data, and expect a short wait when several people are using it
   count (vLLM), so long chats never overflow.
 - 🧩 **Skills**: reusable procedures in the Agent Skills (`SKILL.md`) format. Import from a zip, a
   GitHub URL or pasted text; draft one from a web page; run evals.
-- 🔌 **MCP**: connect stdio or HTTP MCP servers; browse the Glama MCP directory in the Hub.
+- 🔌 **MCP, both ways**: AON connects to stdio or HTTP MCP servers (browse the
+  [Glama MCP directory](https://glama.ai/mcp/servers) in the Hub), and `aon mcp` makes AON an
+  MCP server for other apps ([setup](#-use-aon-from-other-ai-apps-mcp)).
 - 📎 **Attachments**: files and photos in chat; images go to vision models.
 - 🗺️ **Maps**: places and routes from OpenStreetMap (Nominatim, OSRM), shown with MapLibre.
 - 👥 **Multi-user serving**: put the chat model on vLLM to serve several users at once.
@@ -232,8 +241,21 @@ Change `User`, `AON_HOME` and the `aon` path (`which aon`) to match your setup. 
 
 ## 🔌 Use AON from other AI apps (MCP)
 
-`aon mcp` runs AON as an [MCP](https://modelcontextprotocol.io) server over stdio, so Claude
-Desktop, Claude Code, Cursor and other MCP clients can use it:
+`aon mcp` runs AON as a [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server over
+stdio, so [Claude Desktop](https://modelcontextprotocol.io/docs/develop/connect-local-servers),
+[Claude Code](https://code.claude.com/docs/en/mcp), [Cursor](https://cursor.com/docs/mcp) and
+other MCP clients can use it. It ships in the [`aon-agent`](https://pypi.org/project/aon-agent/)
+package; the code is [`src/aon/mcp_server.py`](src/aon/mcp_server.py).
+
+**Quick start**
+
+```bash
+pipx install aon-agent
+aon init          # once: creates ~/.aon
+aon mcp           # what your MCP client runs (you don't start it by hand)
+```
+
+**Tools**
 
 | Tool | What it does |
 |---|---|
@@ -246,7 +268,10 @@ Desktop, Claude Code, Cursor and other MCP clients can use it:
 
 Shell commands and file writes are always refused over MCP, because there is no one to approve them there.
 
-**Claude Desktop** (`claude_desktop_config.json`) and **Cursor** (`~/.cursor/mcp.json`):
+**Connect a client.** Claude Desktop and Cursor both take the same JSON:
+
+- **[Claude Desktop](https://modelcontextprotocol.io/docs/develop/connect-local-servers)**: Settings → Developer → Edit Config (`claude_desktop_config.json`), then restart Claude Desktop.
+- **[Cursor](https://cursor.com/docs/mcp)**: `~/.cursor/mcp.json`, or `.cursor/mcp.json` in a project.
 
 ```json
 {
@@ -256,7 +281,7 @@ Shell commands and file writes are always refused over MCP, because there is no 
 }
 ```
 
-**Claude Code:**
+**[Claude Code](https://code.claude.com/docs/en/mcp):**
 
 ```bash
 claude mcp add aon -- aon mcp
