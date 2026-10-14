@@ -4,6 +4,7 @@
 
 [![Live](https://img.shields.io/badge/live-aon.vulkron.uk-00e5ff?style=for-the-badge&logo=cloudflare&logoColor=white)](https://aon.vulkron.uk)
 [![YouTube demo](https://img.shields.io/badge/demo-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=wLiVhkLOd-8)
+[![License: MIT](https://img.shields.io/badge/license-MIT-22c55e?style=for-the-badge)](LICENSE)
 
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.142-009688?logo=fastapi&logoColor=white)
@@ -236,3 +237,13 @@ AON keeps its data in the app folder: `workspace/app.db` (chats), `workspace/doc
 library), `memory/episodes.db` (memory) and `workspace/uploads/` (attachments). This repository
 includes a snapshot of them from 2026-10-14. A fresh install creates empty ones; to start clean,
 delete them before the first run. The Glama API key is kept in `.glama_key`, which is git-ignored.
+
+## 📄 License
+
+AON is released under the [MIT License](LICENSE). © 2026 Sithu Htun ([@leo007-htun](https://github.com/leo007-htun)).
+
+Bundled third-party files keep their own licenses, included next to them:
+[CybercoreCSS](static/lib/cybercore.LICENSE) (MIT),
+[MapLibre GL JS](static/lib/maplibre-gl.LICENSE) (BSD-3-Clause),
+highlight.js (BSD-3-Clause), and the Exo 2, JetBrains Mono, Orbitron and Rajdhani fonts
+([SIL Open Font License](static/fonts/)).
