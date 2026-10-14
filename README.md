@@ -1,61 +1,88 @@
-# AON — a self-hosted AI agent
+<div align="center">
+
+# 🛰️ AON — a self-hosted AI agent
+
+[![Live](https://img.shields.io/badge/live-aon.vulkron.uk-00e5ff?style=for-the-badge&logo=cloudflare&logoColor=white)](https://aon.vulkron.uk)
+[![YouTube demo](https://img.shields.io/badge/demo-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=wLiVhkLOd-8)
+
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.142-009688?logo=fastapi&logoColor=white)
+![Uvicorn](https://img.shields.io/badge/Uvicorn-0.54-499848?logo=gunicorn&logoColor=white)
+![httpx](https://img.shields.io/badge/httpx-0.28-2D7FF9)
+![WebSockets](https://img.shields.io/badge/WebSockets-17.2-010101?logo=socketdotio&logoColor=white)
+![MCP](https://img.shields.io/badge/MCP-1.30-6E56CF)
+![pypdf](https://img.shields.io/badge/pypdf-5.1-E34F26)
+![SQLite](https://img.shields.io/badge/SQLite-FTS5%20%2B%20vectors-003B57?logo=sqlite&logoColor=white)
+
+![vLLM](https://img.shields.io/badge/vLLM-0.31-30A2FF)
+![Ollama](https://img.shields.io/badge/Ollama-local%20models-000000?logo=ollama&logoColor=white)
+![nomic-embed-text](https://img.shields.io/badge/embeddings-nomic--embed--text-5B5BD6)
+![MapLibre](https://img.shields.io/badge/MapLibre-5.22-396CB2?logo=maplibre&logoColor=white)
+![Cloudflare](https://img.shields.io/badge/Cloudflare-Tunnel%20%2B%20Access-F38020?logo=cloudflare&logoColor=white)
+![pytest](https://img.shields.io/badge/tests-pytest-0A9EDC?logo=pytest&logoColor=white)
+
+![AON web UI](docs/screenshot.png)
+
+</div>
 
 AON is a self-hosted chat agent that runs on your own hardware with local models. It answers
 questions, runs tools in a workspace (files, shell commands, web fetch and search), remembers you
 across chats, searches your own documents, and can be extended with skills and MCP servers. It
 has a web UI (also usable on phones) and an optional Telegram bot.
 
-Nothing is sent to a cloud LLM: chat runs on [Ollama](https://ollama.com) or [vLLM](https://docs.vllm.ai),
-embeddings on Ollama.
+> 🔒 Nothing is sent to a cloud LLM: chat runs on [Ollama](https://ollama.com) or
+> [vLLM](https://docs.vllm.ai), embeddings on Ollama.
 
-**Live instance:** <https://aon.vulkron.uk> · **Video:** [AON on YouTube](https://www.youtube.com/watch?v=wLiVhkLOd-8)
+## 🎬 Demo
 
-![AON web UI](docs/screenshot.png)
-
-## Demo
+<div align="center">
 
 [![Watch the AON demo on YouTube](https://img.youtube.com/vi/wLiVhkLOd-8/hqdefault.jpg)](https://www.youtube.com/watch?v=wLiVhkLOd-8)
 
-## Trying the live instance
+▶️ *Click the image to watch on YouTube*
+
+</div>
+
+## 🔑 Trying the live instance
 
 Access to the live instance is by approval only:
 
-1. **Request access.** [Open an issue](https://github.com/leo007-htun/AON/issues/new?title=Access%20request)
+1. 📝 **Request access.** [Open an issue](https://github.com/leo007-htun/AON/issues/new?title=Access%20request)
    titled *Access request*, saying who you are and what you would like to use AON for. Please do
    **not** post your email address in the issue; the maintainer will reply and tell you how to send it.
-2. **Wait for approval.** Requests are reviewed by hand. Once yours is approved, your email address
+2. ⏳ **Wait for approval.** Requests are reviewed by hand. Once yours is approved, your email address
    is added to the allowed list and the issue is closed with a note.
-3. **Sign in.** Open <https://aon.vulkron.uk>, enter the approved email address, and type the
+3. ✅ **Sign in.** Open <https://aon.vulkron.uk>, enter the approved email address, and type the
    one-time PIN that is emailed to you. The PIN sign-in is handled by Cloudflare Access.
 
 Access can be withdrawn at any time. The instance runs on private hardware with limited capacity:
 please do not use it for anything illegal, for automated or bulk traffic, or to process other
 people's personal data, and expect a short wait when several people are using it.
 
-## Features
+## ✨ Features
 
-- **Agent loop with tools**: read, write and edit files, run shell commands, fetch and search the
+- 🛠️ **Agent loop with tools**: read, write and edit files, run shell commands, fetch and search the
   web, show maps, remember facts. Commands and file writes ask for your approval first.
-- **Long memory**
+- 🧠 **Long memory**
   - **Episodic memory**: facts about you and your work, stored and searched by meaning; a
     duplicate or an updated fact is merged by the model.
   - **Chat recall**: older turns of a chat (and of your other chats) are found by meaning and by
     exact strings (IPs, codes, numbers) and added to the request.
   - **Rolling summary** of each chat, plus a numbered outline of everything you asked, so
     "what did I ask first?" works in long chats.
-- **Document library (RAG)**: add text, code, Markdown, HTML, Word (.docx) and PDF files in the
+- 📚 **Document library (RAG)**: add text, code, Markdown, HTML, Word (.docx) and PDF files in the
   Documents panel or by attaching them in chat. They are chunked, embedded and indexed (SQLite
   FTS5 + vectors); the relevant passages are added to answers, with the document name.
-- **Context budget**: every request is fitted to the model's window using the server's exact token
+- 📏 **Context budget**: every request is fitted to the model's window using the server's exact token
   count (vLLM), so long chats never overflow.
-- **Skills**: reusable procedures in the Agent Skills (`SKILL.md`) format. Import from a zip, a
+- 🧩 **Skills**: reusable procedures in the Agent Skills (`SKILL.md`) format. Import from a zip, a
   GitHub URL or pasted text; draft one from a web page; run evals.
-- **MCP**: connect stdio or HTTP MCP servers; browse the Glama MCP directory in the Hub.
-- **Attachments**: files and photos in chat; images go to vision models.
-- **Maps**: places and routes from OpenStreetMap (Nominatim, OSRM), shown with MapLibre.
-- **Multi-user serving**: put the chat model on vLLM to serve several users at once.
+- 🔌 **MCP**: connect stdio or HTTP MCP servers; browse the Glama MCP directory in the Hub.
+- 📎 **Attachments**: files and photos in chat; images go to vision models.
+- 🗺️ **Maps**: places and routes from OpenStreetMap (Nominatim, OSRM), shown with MapLibre.
+- 👥 **Multi-user serving**: put the chat model on vLLM to serve several users at once.
 
-## Requirements
+## 📋 Requirements
 
 - Linux (runs on Ubuntu), Python 3.11 or newer (3.12 in use).
 - [Ollama](https://ollama.com) with:
@@ -64,7 +91,7 @@ people's personal data, and expect a short wait when several people are using it
 - Optional: a GPU server running vLLM (see [`vllm/README.md`](vllm/README.md)).
 - Optional: Node.js 20 for `npx`-based MCP servers (`bin/npx` is a wrapper for a bundled copy).
 
-## Install
+## 📦 Install
 
 ```bash
 git clone https://github.com/leo007-htun/AON.git ~/app
@@ -75,7 +102,7 @@ cp config.toml.example config.toml      # then edit it, see below
 mkdir -p workspace memory
 ```
 
-## Configure (`config.toml`)
+## ⚙️ Configure (`config.toml`)
 
 | Key | Meaning | Example |
 |---|---|---|
@@ -99,7 +126,7 @@ mkdir -p workspace memory
 
 Keep `context_window` equal to vLLM's `--max-model-len` (or the Ollama model's context).
 
-## Run
+## 🚀 Run
 
 From the app folder:
 
@@ -115,7 +142,7 @@ PYTHONPATH=src venv/bin/python -m agent.main config.toml
 
 Then open `http://<bind address>:8700` in a browser.
 
-### In the background
+### 🌙 In the background
 
 ```bash
 cd ~/app && setsid nohup ./run.sh >> aon.log 2>&1 < /dev/null &
@@ -124,7 +151,7 @@ tail -f aon.log                    # its log
 pkill -f '[a]gent.main'            # stop it
 ```
 
-### As a service (starts at boot, restarts on failure)
+### 🔁 As a service (starts at boot, restarts on failure)
 
 ```bash
 sudo tee /etc/systemd/system/aon.service >/dev/null <<'EOF'
@@ -151,7 +178,7 @@ journalctl -u aon -f
 Change `User` and the paths if your user or folder differs. Python code changes need a restart;
 `static/index.html` is read on every request, so UI changes show on reload.
 
-## Chat on vLLM (several users at once)
+## ⚡ Chat on vLLM (several users at once)
 
 Ollama answers one request at a time for some models. To serve several users, run the chat
 model on vLLM and point AON at it:
@@ -167,19 +194,19 @@ context_window = 16384
 Measured on one RTX 4090 (24 GB) with a 27B 4-bit model: 16K context serves 2–3 full-length
 requests at once and the rest queue; 8K serves 4.
 
-## Remote access
+## 🌐 Remote access
 
 AON has no login of its own. Keep `bind` on your LAN and, to reach it from outside, put it behind
 an authenticating proxy, for example a Cloudflare Tunnel with Cloudflare Access (email PIN).
 Geolocation in the map needs HTTPS.
 
-## Tests
+## 🧪 Tests
 
 ```bash
 PYTHONPATH=src venv/bin/python -m pytest -q
 ```
 
-## Project layout
+## 🗂️ Project layout
 
 | Path | What it is |
 |---|---|
@@ -201,7 +228,7 @@ PYTHONPATH=src venv/bin/python -m pytest -q
 | `specs/` | Design notes |
 | `vllm/` | vLLM server setup |
 
-## Data
+## 💾 Data
 
 AON keeps its data in the app folder: `workspace/app.db` (chats), `workspace/docs.db` (document
 library), `memory/episodes.db` (memory) and `workspace/uploads/` (attachments). This repository
