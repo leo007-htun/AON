@@ -2,7 +2,15 @@
 
 ![AON](https://raw.githubusercontent.com/leo007-htun/AON/main/docs/aon-logo-animated.svg)
 
+<!-- mcp-name: io.github.leo007-htun/aon -->
+
+**Website:** https://leo007-htun.github.io/AON/ · **GitHub:** https://github.com/leo007-htun/AON · **Demo:** https://www.youtube.com/watch?v=wLiVhkLOd-8
+
 AON is a self-hosted AI agent that runs on your own hardware with local models. It answers questions, runs tools (files, shell, web search, maps), remembers you across chats, reads your documents, and extends itself with new models, skills and MCP servers. Use it from the web, the Android app, Telegram, or from Claude Desktop, Claude Code and Cursor through the MCP server.
+
+![AON chat UI](https://raw.githubusercontent.com/leo007-htun/AON/main/docs/screenshot.png)
+
+![AON route on a 3D globe](https://raw.githubusercontent.com/leo007-htun/AON/main/docs/map.png)
 
 > Important: Nothing leaves your box. Chat runs on vLLM or Ollama on your own GPU, embeddings on Ollama. No cloud LLM, no API bills, no provider filtering or logging.
 

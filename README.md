@@ -6,6 +6,7 @@
 
 ### Your own uncensored AI agent. One GPU. Zero cloud. Zero filters.
 
+[![Website](https://img.shields.io/badge/website-aon--agent-0A1628?style=for-the-badge&logo=githubpages&logoColor=00e5ff)](https://leo007-htun.github.io/AON/)
 [![Live](https://img.shields.io/badge/live-aon.vulkron.uk-00e5ff?style=for-the-badge&logo=cloudflare&logoColor=white)](https://aon.vulkron.uk)
 [![YouTube demo](https://img.shields.io/badge/demo-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=wLiVhkLOd-8)
 [![PyPI](https://img.shields.io/pypi/v/aon-agent?style=for-the-badge&logo=pypi&logoColor=white&label=PyPI&color=3775A9)](https://pypi.org/project/aon-agent/)

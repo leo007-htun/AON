@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AON (aon-agent): self-hosted, uncensored AI agent with an MCP server</title>
+<meta name="description" content="AON is a self-contained, obliterated AI agent that runs on your own GPU. Zero cloud, zero filters: long-term memory, document RAG, tools, maps, multi-user via vLLM, and an MCP server for Claude Desktop, Claude Code and Cursor. pip install aon-agent.">
+<meta name="keywords" content="AON, aon-agent, self-hosted AI agent, uncensored LLM, abliterated model, local LLM, MCP server, Model Context Protocol, vLLM, Ollama, RAG, Claude Desktop, Cursor">
+<link rel="canonical" href="https://leo007-htun.github.io/AON/">
+<meta name="theme-color" content="#0a1628">
+<link rel="icon" href="aon-logo-animated.svg" type="image/svg+xml">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AON">
+<meta property="og:title" content="AON: your own uncensored AI agent. One GPU. Zero cloud. Zero filters.">
+<meta property="og:description" content="Self-hosted AI agent with long-term memory, document RAG, tools, maps and an MCP server for Claude Desktop, Claude Code and Cursor. pip install aon-agent.">
+<meta property="og:url" content="https://leo007-htun.github.io/AON/">
+<meta property="og:image" content="https://leo007-htun.github.io/AON/screenshot.png">
+<meta property="og:image:width" content="1919">
+<meta property="og:image:height" content="1077">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AON: your own uncensored AI agent">
+<meta name="twitter:description" content="One GPU. Zero cloud. Zero filters. Memory, RAG, tools, MCP server. pip install aon-agent">
+<meta name="twitter:image" content="https://leo007-htun.github.io/AON/screenshot.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "AON",
+  "alternateName": "aon-agent",
+  "description": "Self-contained, obliterated AI agent that runs on your own GPU, with long-term memory, document RAG, tools, maps, multi-user serving via vLLM and an MCP server.",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Linux, Android",
+  "softwareVersion": "1.0.2",
+  "license": "https://opensource.org/licenses/MIT",
+  "url": "https://leo007-htun.github.io/AON/",
+  "downloadUrl": "https://pypi.org/project/aon-agent/",
+  "codeRepository": "https://github.com/leo007-htun/AON",
+  "image": "https://leo007-htun.github.io/AON/screenshot.png",
+  "author": { "@type": "Person", "name": "Sithu Htun", "url": "https://github.com/leo007-htun" },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "sameAs": ["https://github.com/leo007-htun/AON", "https://pypi.org/project/aon-agent/", "https://www.youtube.com/watch?v=wLiVhkLOd-8"]
+}
+</script>
+
+<style>
+  :root {
+    --bg: #0a1628; --bg2: #0e1e36; --panel: #10233f; --line: #1d3a5f; --grid: rgba(0, 229, 255, .05);
+    --fg: #e6f1ff; --muted: #8aa4c4; --cyan: #00e5ff; --green: #3ddc84; --violet: #8b7cf6;
+    --mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; color: var(--fg); font: 17px/1.6 var(--sans);
+    background: var(--bg);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  a { color: var(--cyan); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+  nav { position: sticky; top: 0; z-index: 5; background: rgba(10, 22, 40, .9); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+  nav .wrap { display: flex; align-items: center; gap: 22px; height: 56px; }
+  nav .brand { font: 700 18px var(--mono); letter-spacing: .25em; color: var(--cyan); text-decoration: none; margin-right: auto; }
+  nav a.link { color: var(--muted); text-decoration: none; font-size: 15px; }
+  nav a.link:hover { color: var(--fg); }
+
+  .hero { text-align: center; padding: 56px 0 24px; }
+  .hero img.logo { width: 150px; height: 150px; }
+  .hero h1 { font: 800 clamp(40px, 7vw, 76px)/1.05 var(--mono); letter-spacing: .18em; margin: 8px 0 6px; color: var(--cyan);
+             text-shadow: 0 0 24px rgba(0, 229, 255, .35); }
+  .hero .sub { font-size: clamp(20px, 3vw, 28px); font-weight: 700; margin: 0 0 10px; }
+  .hero p.lead { max-width: 760px; margin: 0 auto 26px; color: var(--muted); }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 18px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 6px; font-weight: 700;
+         text-decoration: none; border: 1px solid var(--line); color: var(--fg); background: var(--panel); }
+  .btn.primary { background: var(--cyan); color: #04121f; border-color: var(--cyan); }
+  .btn.green { background: var(--green); color: #052012; border-color: var(--green); }
+  .btn:hover { filter: brightness(1.1); }
+  .install { display: inline-flex; align-items: center; gap: 12px; font: 16px var(--mono); background: #06101f; border: 1px solid var(--line);
+             border-radius: 6px; padding: 10px 14px; margin-top: 4px; }
+  .install button { background: transparent; color: var(--cyan); border: 1px solid var(--line); border-radius: 4px; padding: 4px 10px; cursor: pointer; font: 13px var(--mono); }
+
+  .shots { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 34px 0 10px; }
+  .shots figure { margin: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .shots img { width: 100%; display: block; }
+  .shots figcaption { padding: 8px 12px; color: var(--muted); font-size: 14px; }
+
+  section { padding: 56px 0 8px; }
+  h2 { font: 800 30px var(--mono); letter-spacing: .04em; margin: 0 0 8px; }
+  h2 .tag { color: var(--cyan); }
+  .intro { color: var(--muted); max-width: 760px; margin: 0 0 26px; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--cyan); border-radius: 8px; padding: 18px; }
+  .card h3 { margin: 0 0 6px; font-size: 18px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  th, td { padding: 10px 14px; border-bottom: 1px solid var(--line); text-align: left; font-size: 15px; }
+  th { color: var(--muted); font-weight: 600; }
+  td code, p code { font: 14px var(--mono); color: var(--green); }
+  pre { background: #06101f; border: 1px solid var(--line); border-radius: 8px; padding: 16px; overflow-x: auto; font: 14px/1.55 var(--mono); color: #cfe8ff; }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+  .two > * { min-width: 0; }   /* let grid columns shrink below their content width */
+  td code { overflow-wrap: anywhere; }
+  .video { position: relative; padding-top: 56.25%; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #000; }
+  .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .note { border-left: 3px solid var(--violet); background: rgba(139, 124, 246, .08); padding: 10px 14px; border-radius: 4px; color: var(--muted); font-size: 15px; }
+
+  footer { margin-top: 64px; padding: 28px 0 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; text-align: center; }
+  footer a { margin: 0 8px; }
+
+  @media (max-width: 820px) {
+    .shots, .two { grid-template-columns: 1fr; }
+    .cards { grid-template-columns: 1fr; }
+    nav a.link.opt { display: none; }
+    th, td { padding: 8px 10px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top">AON</a>
+    <a class="link" href="#why">Why AON</a>
+    <a class="link" href="#mcp">MCP server</a>
+    <a class="link opt" href="#demo">Demo</a>
+    <a class="link opt" href="#start">Quick start</a>
+    <a class="link" href="https://github.com/leo007-htun/AON">GitHub</a>
+  </div>
+</nav>
+
+<header class="hero wrap" id="top">
+  <img class="logo" src="aon-logo-animated.svg" alt="AON logo">
+  <h1>AON</h1>
+  <p class="sub">Your own uncensored AI agent. One GPU. Zero cloud. Zero filters.</p>
+  <p class="lead">A self-contained, obliterated AI agent that runs on your own hardware. It remembers you, reads
+    your documents, runs tools, draws real routes on a 3D globe, serves your whole team from one GPU,
+    and plugs into Claude Desktop, Claude Code and Cursor as an MCP server.</p>
+  <div class="cta">
+    <a class="btn primary" href="https://github.com/leo007-htun/AON">★ View on GitHub</a>
+    <a class="btn" href="https://pypi.org/project/aon-agent/">PyPI: aon-agent</a>
+    <a class="btn" href="#demo">▶ Watch the demo</a>
+    <a class="btn green" href="https://github.com/leo007-htun/AON/releases/latest/download/AON.apk">Android APK</a>
+  </div>
+  <div class="install"><span>$ pipx install aon-agent</span><button type="button" id="copy">copy</button></div>
+
+  <div class="shots">
+    <figure><img src="screenshot.png" alt="AON chat interface" loading="lazy"><figcaption>Chat: a blueprint-style web UI</figcaption></figure>
+    <figure><img src="map.png" alt="AON drawing a route to Paris on a 3D globe" loading="lazy"><figcaption>Maps: real routes on a 3D globe</figcaption></figure>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="why">
+  <h2><span class="tag">›</span> Why AON</h2>
+  <p class="intro">Memory and RAG are table stakes now. What AON adds:</p>
+  <div class="cards">
+    <div class="card"><h3>🔓 Obliterated and fully yours</h3><p>An uncensored 27B model on a single consumer GPU (RTX 4090). Your chats, memory and documents never leave the box.</p></div>
+    <div class="card"><h3>🧬 It extends itself</h3><p>Paste a link and AON works out what it is: a model to pull, an MCP server to connect, a skill to import, or docs to learn from.</p></div>
+    <div class="card"><h3>🔌 Plugs into your AI apps</h3><p><code>aon mcp</code> makes AON an MCP server for Claude Desktop, Claude Code and Cursor.</p></div>
+    <div class="card"><h3>👥 One GPU, whole crew</h3><p>vLLM serves several people at once, behind email-PIN sign-in with every user approved by hand.</p></div>
+    <div class="card"><h3>🛡️ Honest by design</h3><p>Shell commands and file writes wait for approval; "done" claims without a tool run aren't trusted; secrets never go to memory.</p></div>
+    <div class="card"><h3>🗺️ Grounded, not guessed</h3><p>Places and routes come from OpenStreetMap routing on a 3D globe; distances are computed, not invented.</p></div>
+  </div>
+</section>
+
+<section id="compare">
+  <h2><span class="tag">›</span> AON vs cloud AI chat</h2>
+  <table>
+    <tr><th></th><th>🛰️ AON</th><th>☁️ Typical cloud AI chat</th></tr>
+    <tr><td>Runs on your own hardware</td><td>✅</td><td>❌</td></tr>
+    <tr><td>Your chats and files stay with you</td><td>✅</td><td>❌</td></tr>
+    <tr><td>Provider content filtering</td><td>❌ none</td><td>✅</td></tr>
+    <tr><td>Cost</td><td>your GPU's power</td><td>subscription or per token</td></tr>
+    <tr><td>Long-term memory + your documents (RAG)</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Runs commands on your server (with approval)</td><td>✅</td><td>❌</td></tr>
+    <tr><td>Installs models, MCP servers and skills from a link</td><td>✅</td><td>❌</td></tr>
+    <tr><td>Usable from Claude Desktop / Cursor (MCP)</td><td>✅</td><td>❌</td></tr>
+  </table>
+</section>
+
+<section id="mcp">
+  <h2><span class="tag">›</span> MCP server</h2>
+  <p class="intro">Use AON inside Claude Desktop, Claude Code, Cursor and any other
+    <a href="https://modelcontextprotocol.io">Model Context Protocol</a> client. Your MCP client starts <code>aon mcp</code> for you.</p>
+  <div class="two">
+    <div>
+      <table>
+        <tr><th>Tool</th><th>What it does</th></tr>
+        <tr><td><code>ask_aon</code></td><td>Hand AON a task; it answers with its own model, memory, documents and tools</td></tr>
+        <tr><td><code>search_memory</code></td><td>Search AON's long-term memory about you</td></tr>
+        <tr><td><code>remember</code></td><td>Save a fact to AON's memory</td></tr>
+        <tr><td><code>search_documents</code></td><td>Search your document library</td></tr>
+        <tr><td><code>list_documents</code></td><td>List the library</td></tr>
+        <tr><td><code>add_document</code></td><td>Add a document to the library</td></tr>
+      </table>
+      <p class="note">Shell commands and file writes are always refused over MCP: nobody is there to approve them.</p>
+    </div>
+    <div>
+      <p><b>Claude Desktop</b> and <b>Cursor</b> config:</p>
+<pre>{
+  "mcpServers": {
+    "aon": { "command": "aon", "args": ["mcp"] }
+  }
+}</pre>
+      <p><b>Claude Code</b>:</p>
+<pre>claude mcp add aon -- aon mcp</pre>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <h2><span class="tag">›</span> Demo</h2>
+  <div class="video">
+    <iframe src="https://www.youtube-nocookie.com/embed/wLiVhkLOd-8" title="AON demo video" loading="lazy"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen"></iframe>
+  </div>
+</section>
+
+<section id="start">
+  <h2><span class="tag">›</span> Quick start</h2>
+  <div class="two">
+<pre># 1. install
+pipx install aon-agent
+
+# 2. create ~/.aon with a starter config
+aon init
+
+# 3. web UI on http://127.0.0.1:8700
+aon serve
+
+# or: AON as an MCP server
+aon mcp</pre>
+    <div>
+      <p>You need <a href="https://ollama.com">Ollama</a> with an embedding model and a chat model that supports tools:</p>
+<pre>ollama pull nomic-embed-text
+ollama pull qwen3:14b</pre>
+      <p>For several users at once, put the chat model on <a href="https://docs.vllm.ai">vLLM</a>.
+        Full docs: <a href="https://github.com/leo007-htun/AON#readme">README on GitHub</a>.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div>
+    <a href="https://github.com/leo007-htun/AON">GitHub</a> ·
+    <a href="https://pypi.org/project/aon-agent/">PyPI</a> ·
+    <a href="https://www.youtube.com/watch?v=wLiVhkLOd-8">YouTube</a> ·
+    <a href="https://github.com/leo007-htun/AON/releases/latest">Releases</a> ·
+    <a href="https://github.com/leo007-htun/AON/issues">Issues</a>
+  </div>
+  <p>AON is open source under the MIT License. © 2026 Sithu Htun.</p>
+</footer>
+
+<script>
+  document.getElementById('copy').addEventListener('click', function () {
+    var b = this;
+    navigator.clipboard.writeText('pipx install aon-agent').then(function () {
+      b.textContent = 'copied'; setTimeout(function () { b.textContent = 'copy'; }, 1500);
+    });
+  });
+</script>
+</body>
+</html>

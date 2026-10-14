@@ -1,0 +1,19 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.leo007-htun/aon",
+  "title": "AON",
+  "description": "Self-hosted, uncensored AI agent: ask it tasks, search its long-term memory and your documents.",
+  "repository": { "url": "https://github.com/leo007-htun/AON", "source": "github" },
+  "websiteUrl": "https://leo007-htun.github.io/AON/",
+  "version": "1.0.2",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "aon-agent",
+      "version": "1.0.2",
+      "runtimeHint": "uvx",
+      "transport": { "type": "stdio" },
+      "packageArguments": [ { "type": "positional", "value": "mcp" } ]
+    }
+  ]
+}

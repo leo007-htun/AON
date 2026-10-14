@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aon-agent"
-version = "1.0.1"
+version = "1.0.2"
 description = "Self-contained, obliterated AI agent on your own GPU: memory, document RAG, tools, MCP, maps, multi-user via vLLM."
 readme = "docs/PYPI.md"
 license = "MIT"
@@ -37,9 +37,10 @@ test = ["pytest>=8", "pytest-asyncio>=0.23"]
 
 [project.scripts]
 aon = "aon.cli:main"
+aon-agent = "aon.cli:main"     # so `uvx aon-agent mcp` works
 
 [project.urls]
-Homepage = "https://github.com/leo007-htun/AON"
+Homepage = "https://leo007-htun.github.io/AON/"
 Source = "https://github.com/leo007-htun/AON"
 Issues = "https://github.com/leo007-htun/AON/issues"
 Demo = "https://www.youtube.com/watch?v=wLiVhkLOd-8"
