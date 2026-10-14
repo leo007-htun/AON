@@ -12,7 +12,6 @@
 [![MCP server](https://img.shields.io/badge/MCP-server-6E56CF?style=for-the-badge&logo=modelcontextprotocol&logoColor=white)](#-mcp-server)
 [![Android APK](https://img.shields.io/badge/Android-download%20APK-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/leo007-htun/AON/releases/latest/download/AON.apk)
 
-[![GitHub stars](https://img.shields.io/github/stars/leo007-htun/AON?style=for-the-badge&logo=github&color=ffd700)](https://github.com/leo007-htun/AON/stargazers)
 [![License: MIT](https://img.shields.io/badge/license-MIT-22c55e?style=for-the-badge)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://pypi.org/project/aon-agent/)
 
@@ -441,8 +440,6 @@ highlight.js (BSD-3-Clause), and the Exo 2, JetBrains Mono, Orbitron and Rajdhan
 <div align="center">
 
 **If AON is useful to you, give it a ⭐. It helps others find it.**
-
-[![Star AON on GitHub](https://img.shields.io/github/stars/leo007-htun/AON?style=social)](https://github.com/leo007-htun/AON/stargazers)
 
 [⬆ Back to top](#top)
 
