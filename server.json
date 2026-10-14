@@ -4,7 +4,7 @@
   "title": "AON",
   "description": "Self-hosted, uncensored AI agent: ask it tasks, search its long-term memory and your documents.",
   "repository": { "url": "https://github.com/leo007-htun/AON", "source": "github" },
-  "websiteUrl": "https://leo007-htun.github.io/AON/",
+  "websiteUrl": "https://sithu.vulkron.uk/AON/",
   "version": "1.0.2",
   "packages": [
     {

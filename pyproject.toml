@@ -40,7 +40,7 @@ aon = "aon.cli:main"
 aon-agent = "aon.cli:main"     # so `uvx aon-agent mcp` works
 
 [project.urls]
-Homepage = "https://leo007-htun.github.io/AON/"
+Homepage = "https://sithu.vulkron.uk/AON/"
 Source = "https://github.com/leo007-htun/AON"
 Issues = "https://github.com/leo007-htun/AON/issues"
 Demo = "https://www.youtube.com/watch?v=wLiVhkLOd-8"

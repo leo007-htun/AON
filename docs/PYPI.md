@@ -4,7 +4,7 @@
 
 <!-- mcp-name: io.github.leo007-htun/aon -->
 
-**Website:** https://leo007-htun.github.io/AON/ · **GitHub:** https://github.com/leo007-htun/AON · **Demo:** https://www.youtube.com/watch?v=wLiVhkLOd-8
+**Website:** https://sithu.vulkron.uk/AON/ · **GitHub:** https://github.com/leo007-htun/AON · **Demo:** https://www.youtube.com/watch?v=wLiVhkLOd-8
 
 AON is a self-hosted AI agent that runs on your own hardware with local models. It answers questions, runs tools (files, shell, web search, maps), remembers you across chats, reads your documents, and extends itself with new models, skills and MCP servers. Use it from the web, the Android app, Telegram, or from Claude Desktop, Claude Code and Cursor through the MCP server.
 
