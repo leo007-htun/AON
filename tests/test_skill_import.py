@@ -2,8 +2,8 @@ import io
 import stat
 import zipfile
 import pytest
-from agent.skills import SkillStore
-from agent.skill_import import (scan_zip, install_zip, zip_from_skill_md, github_zip_url,
+from aon.skills import SkillStore
+from aon.skill_import import (scan_zip, install_zip, zip_from_skill_md, github_zip_url,
                                 ImportError_)
 
 
@@ -77,7 +77,7 @@ def test_scan_rejects_not_a_zip():
 
 
 def test_scan_rejects_oversize(monkeypatch):
-    import agent.skill_import as si
+    import aon.skill_import as si
     monkeypatch.setattr(si, "MAX_TOTAL_BYTES", 10)
     with pytest.raises(ImportError_):
         scan_zip(_zip({"x/SKILL.md": SK.format(n="x")}))

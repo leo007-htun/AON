@@ -1,12 +1,12 @@
 import json
 import pytest
 import httpx
-from agent.link_intake import LinkIntake, IntakeResult, find_urls, OPTIONS
-from agent.persistence import Database
-from agent.llm_client import ChatResult, ToolCall
-from agent.engine import Agent
-from agent.tools.base import Tool, ToolResult, ToolRegistry
-from agent.approval_gate import AutoGate
+from aon.link_intake import LinkIntake, IntakeResult, find_urls, OPTIONS
+from aon.persistence import Database
+from aon.llm_client import ChatResult, ToolCall
+from aon.engine import Agent
+from aon.tools.base import Tool, ToolResult, ToolRegistry
+from aon.approval_gate import AutoGate
 
 MCP_PAGE = ("Playwright MCP. Add to your MCP client: {\"mcpServers\": {\"playwright\": "
             "{\"command\": \"npx\", \"args\": [\"@playwright/mcp@latest\"]}}}")
@@ -167,7 +167,7 @@ class FakeMgr:
 
 @pytest.mark.asyncio
 async def test_add_mcp_server_tool_is_gated_and_reports():
-    from agent.install_tools import AddMcpServerTool
+    from aon.install_tools import AddMcpServerTool
     m = FakeMgr(); t = AddMcpServerTool(m)
     assert t.mutating is True
     r = await t.run({"name": "pw", "command": "/x/npx", "args": ["-y", "@playwright/mcp@latest"]})
@@ -180,7 +180,7 @@ async def test_add_mcp_server_tool_is_gated_and_reports():
 
 @pytest.mark.asyncio
 async def test_add_mcp_server_tool_errors():
-    from agent.install_tools import AddMcpServerTool
+    from aon.install_tools import AddMcpServerTool
     t = AddMcpServerTool(FakeMgr(status="error: HTTP 401"))
     r = await t.run({"name": "x", "transport": "http", "url": "https://h/mcp"})
     assert not r.ok and "401" in r.error
@@ -191,9 +191,9 @@ async def test_add_mcp_server_tool_errors():
 @pytest.mark.asyncio
 async def test_import_skills_tool(tmp_path, monkeypatch):
     import io, zipfile
-    import agent.skill_import as si
-    from agent.install_tools import ImportSkillsTool
-    from agent.skills import SkillStore
+    import aon.skill_import as si
+    from aon.install_tools import ImportSkillsTool
+    from aon.skills import SkillStore
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w") as z:
         z.writestr("r-1/skills/a/SKILL.md", "---\nname: a\ndescription: does a\n---\nbody")
@@ -210,7 +210,7 @@ async def test_import_skills_tool(tmp_path, monkeypatch):
 
 @pytest.mark.asyncio
 async def test_http_preflight_raises_on_401():
-    from agent.mcp_client import _http_preflight, McpServerCfg
+    from aon.mcp_client import _http_preflight, McpServerCfg
     def handler(req): return httpx.Response(401, json={"error": "auth.failed"})
     cfg = McpServerCfg("t", transport="http", url="https://h/mcp")
     with pytest.raises(RuntimeError) as e:
@@ -220,7 +220,7 @@ async def test_http_preflight_raises_on_401():
 
 @pytest.mark.asyncio
 async def test_http_preflight_ok_on_200():
-    from agent.mcp_client import _http_preflight, McpServerCfg
+    from aon.mcp_client import _http_preflight, McpServerCfg
     def handler(req):
         assert req.headers["authorization"] == "Bearer k"
         return httpx.Response(200, json={"jsonrpc": "2.0", "id": 1, "result": {}})
@@ -230,7 +230,7 @@ async def test_http_preflight_ok_on_200():
 
 @pytest.mark.asyncio
 async def test_add_mcp_server_adds_npx_yes_flag():
-    from agent.install_tools import AddMcpServerTool
+    from aon.install_tools import AddMcpServerTool
     m = FakeMgr(); t = AddMcpServerTool(m)
     await t.run({"name": "pw", "command": "/home/ubuntu/app/bin/npx", "args": ["@playwright/mcp@latest"]})
     assert m.added[0].args == ["-y", "@playwright/mcp@latest"]
@@ -239,7 +239,7 @@ async def test_add_mcp_server_adds_npx_yes_flag():
 
 
 def test_playbook_mentions_chromium_and_yes():
-    from agent.link_intake import mcp_playbook
+    from aon.link_intake import mcp_playbook
     p = mcp_playbook()
     assert "--browser=chromium" in p and "-y" in p
 

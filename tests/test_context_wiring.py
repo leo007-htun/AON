@@ -1,12 +1,12 @@
 """The agent keeps each request inside its context limit and passes chat background along."""
 import pytest
 from pathlib import Path
-from agent.config import Config, load_config
-from agent.engine import Agent
-from agent.approval_gate import AutoGate
-from agent.llm_client import ChatResult, ToolCall
-from agent.tools.base import Tool, ToolResult, ToolRegistry
-from agent.context import message_tokens, estimate_tokens
+from aon.config import Config, load_config
+from aon.engine import Agent
+from aon.approval_gate import AutoGate
+from aon.llm_client import ChatResult, ToolCall
+from aon.tools.base import Tool, ToolResult, ToolRegistry
+from aon.context import message_tokens, estimate_tokens
 
 
 class BigRead(Tool):
@@ -82,8 +82,8 @@ def test_config_reads_context_settings(tmp_path):
 
 def test_web_sends_only_the_history_that_fits(tmp_path):
     from fastapi.testclient import TestClient
-    from agent.persistence import Database
-    from agent.web import create_app
+    from aon.persistence import Database
+    from aon.web import create_app
     db = Database(str(tmp_path / "d.db"))
     for i in range(20):
         db.add_turn("c1", "user" if i % 2 == 0 else "assistant", f"t{i} " + "q" * 9000)

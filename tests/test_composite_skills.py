@@ -1,7 +1,7 @@
 import pytest
-from agent.skills import SkillStore, WriteSkillTool
-from agent.composite_skills import CompositeSkills
-from agent.mcp_client import McpPromptSpec
+from aon.skills import SkillStore, WriteSkillTool
+from aon.composite_skills import CompositeSkills
+from aon.mcp_client import McpPromptSpec
 
 
 class FakeMgr:

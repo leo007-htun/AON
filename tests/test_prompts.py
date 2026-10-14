@@ -1,4 +1,4 @@
-from agent.prompts import SYSTEM_PROMPT, build_messages
+from aon.prompts import SYSTEM_PROMPT, build_messages
 
 def test_system_prompt_mentions_key_behaviours():
     s = SYSTEM_PROMPT.lower()

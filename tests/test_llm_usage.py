@@ -1,6 +1,6 @@
 import httpx
 import pytest
-from agent.llm_client import LLMClient
+from aon.llm_client import LLMClient
 
 
 @pytest.mark.asyncio

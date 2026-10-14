@@ -1,4 +1,4 @@
-from agent.persistence import Database
+from aon.persistence import Database
 
 
 def _db(tmp): return Database(str(tmp / "a.db"))

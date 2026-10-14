@@ -1,9 +1,9 @@
 from fastapi.testclient import TestClient
-from agent.config import Config
-from agent.persistence import Database
-from agent.web import create_app
-from agent.memory import MemoryStore
-from agent.skills import SkillStore
+from aon.config import Config
+from aon.persistence import Database
+from aon.web import create_app
+from aon.memory import MemoryStore
+from aon.skills import SkillStore
 
 def _app(tmp):
     db=Database(str(tmp/"d.db"))

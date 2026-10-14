@@ -7,14 +7,14 @@ import zipfile
 import zlib
 import pytest
 from fastapi.testclient import TestClient
-from agent.docs import (DocStore, DocError, extract_text, chunk_text, ingest, search, docs_background,
+from aon.docs import (DocStore, DocError, extract_text, chunk_text, ingest, search, docs_background,
                         fts_query, SearchDocumentsTool, ListDocumentsTool, AddDocumentTool, CHUNK_CHARS)
-from agent.recall import exact_terms, recall, _pack, _unit
-from agent.summary import outline_background
-from agent.persistence import Database
-from agent.config import Config
-from agent.web import create_app
-from agent.engine import RunResult
+from aon.recall import exact_terms, recall, _pack, _unit
+from aon.summary import outline_background
+from aon.persistence import Database
+from aon.config import Config
+from aon.web import create_app
+from aon.engine import RunResult
 
 
 class FakeEmbedder:

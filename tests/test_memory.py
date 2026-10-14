@@ -1,5 +1,5 @@
 import pytest
-from agent.memory import MemoryStore, RememberTool
+from aon.memory import MemoryStore, RememberTool
 
 def test_read_empty(tmp_path):
     assert MemoryStore(tmp_path/"m.md").read() == ""

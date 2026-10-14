@@ -1,9 +1,9 @@
 import pytest
-from agent.engine import Agent
-from agent.router import Plan, deliberate
-from agent.llm_client import ChatResult
-from agent.tools.base import ToolRegistry
-from agent.approval_gate import AutoGate
+from aon.engine import Agent
+from aon.router import Plan, deliberate
+from aon.llm_client import ChatResult
+from aon.tools.base import ToolRegistry
+from aon.approval_gate import AutoGate
 
 
 class CapLLM:

@@ -1,5 +1,5 @@
 import httpx, pytest
-from agent.llm_client import LLMClient, ChatResult, ToolCall
+from aon.llm_client import LLMClient, ChatResult, ToolCall
 
 def _resp(message):
     return httpx.Response(200, json={"choices": [{"message": message}]})

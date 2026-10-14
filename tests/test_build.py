@@ -1,7 +1,7 @@
 from pathlib import Path
-from agent.config import Config
-from agent.build import build_registry, build_agent
-from agent.approval_gate import AutoGate
+from aon.config import Config
+from aon.build import build_registry, build_agent
+from aon.approval_gate import AutoGate
 
 def _cfg(tmp_path):
     return Config(ollama_base_url="http://x/v1", default_model="gpt-oss", workdir=tmp_path,

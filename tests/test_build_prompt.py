@@ -1,8 +1,8 @@
 from pathlib import Path
-from agent.config import Config
-from agent.build import build_agent
-from agent.approval_gate import AutoGate
-from agent.prompts import save_system_prompt
+from aon.config import Config
+from aon.build import build_agent
+from aon.approval_gate import AutoGate
+from aon.prompts import save_system_prompt
 
 def test_build_agent_loads_saved_prompt(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)

@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
-from agent.config import Config
-from agent.persistence import Database
-from agent.web import create_app
+from aon.config import Config
+from aon.persistence import Database
+from aon.web import create_app
 
 
 class FakeMgr:

@@ -1,4 +1,4 @@
-from agent.prompts import build_messages
+from aon.prompts import build_messages
 
 
 def test_create_skill_guidance_present():

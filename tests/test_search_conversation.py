@@ -1,6 +1,6 @@
 import pytest
-from agent.persistence import Database
-from agent.memory_extract import SearchConversationTool
+from aon.persistence import Database
+from aon.memory_extract import SearchConversationTool
 
 
 def _db(tmp):

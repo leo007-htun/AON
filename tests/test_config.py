@@ -1,6 +1,6 @@
 from pathlib import Path
 import pytest
-from agent.config import load_config, Config, GUARDRAIL_PATHS
+from aon.config import load_config, Config, GUARDRAIL_PATHS
 
 def test_loads_valid_config(tmp_path):
     p = tmp_path / "config.toml"
@@ -27,5 +27,5 @@ def test_missing_file_raises(tmp_path):
         load_config(tmp_path / "nope.toml")
 
 def test_guardrail_paths_present():
-    assert "src/agent/executor.py" in GUARDRAIL_PATHS
-    assert "src/agent/approval_gate.py" in GUARDRAIL_PATHS
+    assert "src/aon/executor.py" in GUARDRAIL_PATHS
+    assert "src/aon/approval_gate.py" in GUARDRAIL_PATHS

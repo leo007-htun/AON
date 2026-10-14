@@ -1,10 +1,10 @@
 import pytest
 from pathlib import Path
-from agent.prompts import SYSTEM_PROMPT, load_system_prompt, save_system_prompt, build_messages
-from agent.engine import Agent
-from agent.llm_client import ChatResult
-from agent.tools.base import ToolRegistry
-from agent.approval_gate import AutoGate
+from aon.prompts import SYSTEM_PROMPT, load_system_prompt, save_system_prompt, build_messages
+from aon.engine import Agent
+from aon.llm_client import ChatResult
+from aon.tools.base import ToolRegistry
+from aon.approval_gate import AutoGate
 
 def test_load_default_when_missing(tmp_path):
     assert load_system_prompt(tmp_path/"nope.txt") == SYSTEM_PROMPT

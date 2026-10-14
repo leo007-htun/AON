@@ -1,4 +1,4 @@
-from agent.persistence import Database
+from aon.persistence import Database
 
 def test_session_and_messages(tmp_path):
     db = Database(str(tmp_path / "a.db"))

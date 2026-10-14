@@ -1,6 +1,6 @@
 import pytest
-from agent.mcp_tools import McpTool
-from agent.mcp_client import McpToolSpec
+from aon.mcp_tools import McpTool
+from aon.mcp_client import McpToolSpec
 
 
 class FakeMgr:

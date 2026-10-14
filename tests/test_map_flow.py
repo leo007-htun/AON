@@ -1,15 +1,15 @@
 import json, pytest
 from fastapi.testclient import TestClient
-from agent.router import deliberate, Plan, _SYS
-from agent.engine import Agent, RunResult
-from agent.geo import MapResult
-from agent.llm_client import ChatResult, ToolCall
-from agent.tools.base import ToolRegistry
-from agent.tools.map_tool import ShowMapTool
-from agent.approval_gate import AutoGate
-from agent.config import Config
-from agent.persistence import Database
-from agent.web import create_app
+from aon.router import deliberate, Plan, _SYS
+from aon.engine import Agent, RunResult
+from aon.geo import MapResult
+from aon.llm_client import ChatResult, ToolCall
+from aon.tools.base import ToolRegistry
+from aon.tools.map_tool import ShowMapTool
+from aon.approval_gate import AutoGate
+from aon.config import Config
+from aon.persistence import Database
+from aon.web import create_app
 
 # ---- planner ----
 
@@ -266,7 +266,7 @@ async def test_route_with_named_start_uses_location_only_for_ranking():
     assert seen == [(["Lime Street", "Formby station"], {"lat": 53.43, "lon": -2.95})]   # start kept, location passed
 
 def test_ws_stores_choices_with_a_place_question(tmp_path):
-    from agent.geo import parse_choices
+    from aon.geo import parse_choices
     class Q:
         def __init__(self, emit): self.emit = emit
         async def run(self, goal, conversation=None):
@@ -288,9 +288,9 @@ def test_ws_stores_choices_with_a_place_question(tmp_path):
 
 @pytest.mark.asyncio
 async def test_map_message_skips_the_planner_when_extractor_finds_a_map(tmp_path):
-    from agent.build import make_router
-    from agent.config import Config
-    from agent.tools.base import ToolRegistry as TR
+    from aon.build import make_router
+    from aon.config import Config
+    from aon.tools.base import ToolRegistry as TR
     calls = []
     class L:
         async def chat(self, m, tools=None):

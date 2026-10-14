@@ -1,13 +1,13 @@
 """Memory facts found by meaning (embeddings), with keyword fallback; near-duplicate facts are
 judged by the model and the outdated one is retired."""
 import pytest
-from agent.memory import EpisodicMemory
-from agent.memory_semantic import (index_episodes, search_episodes, SemanticMemory, consolidate)
-from agent.memory_extract import SearchMemoryTool
-from agent.llm_client import ChatResult
-from agent.engine import Agent
-from agent.approval_gate import AutoGate
-from agent.tools.base import ToolRegistry
+from aon.memory import EpisodicMemory
+from aon.memory_semantic import (index_episodes, search_episodes, SemanticMemory, consolidate)
+from aon.memory_extract import SearchMemoryTool
+from aon.llm_client import ChatResult
+from aon.engine import Agent
+from aon.approval_gate import AutoGate
+from aon.tools.base import ToolRegistry
 
 # a toy embedder that knows a few synonyms, so "food" and "pizza" land on the same axis
 AXES = {"colour": "col", "color": "col", "teal": "col", "blue": "col", "food": "eat", "pizza": "eat",
@@ -176,10 +176,10 @@ async def test_agent_prepares_memory_before_planning():
 def test_web_consolidates_memory_after_the_reply(tmp_path, monkeypatch):
     import time
     from fastapi.testclient import TestClient
-    from agent.config import Config
-    from agent.persistence import Database
-    from agent.web import create_app
-    import agent.web as W
+    from aon.config import Config
+    from aon.persistence import Database
+    from aon.web import create_app
+    import aon.web as W
     seen = {}
 
     class FakeAgent:

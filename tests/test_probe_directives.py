@@ -1,5 +1,5 @@
-from agent.prompts import SYSTEM_PROMPT
-from agent.router import _SYS
+from aon.prompts import SYSTEM_PROMPT
+from aon.router import _SYS
 
 
 def test_system_prompt_probe():

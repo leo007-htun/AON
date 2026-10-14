@@ -1,14 +1,14 @@
 import base64, pytest
 from fastapi.testclient import TestClient
-from agent.config import Config
-from agent.persistence import Database
-from agent.web import create_app
-from agent.engine import Agent, RunResult
-from agent.prompts import build_messages
-from agent.router import Plan
-from agent.llm_client import ChatResult
-from agent.tools.base import ToolRegistry
-from agent.approval_gate import AutoGate
+from aon.config import Config
+from aon.persistence import Database
+from aon.web import create_app
+from aon.engine import Agent, RunResult
+from aon.prompts import build_messages
+from aon.router import Plan
+from aon.llm_client import ChatResult
+from aon.tools.base import ToolRegistry
+from aon.approval_gate import AutoGate
 
 IMG = {"type": "image_url", "image_url": {"url": "data:image/png;base64,AAAA"}}
 PNG = base64.b64decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==")

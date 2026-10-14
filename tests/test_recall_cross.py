@@ -3,11 +3,11 @@ deleting a chat in the UI deletes it on the server so it never comes back."""
 import time
 import pytest
 from fastapi.testclient import TestClient
-from agent.config import Config
-from agent.persistence import Database
-from agent.web import create_app
-from agent.recall import index_all, index_turns, recall, recall_other_chats, other_chats_background
-from agent.memory_extract import SearchConversationTool
+from aon.config import Config
+from aon.persistence import Database
+from aon.web import create_app
+from aon.recall import index_all, index_turns, recall, recall_other_chats, other_chats_background
+from aon.memory_extract import SearchConversationTool
 from tests.test_recall import FakeEmbedder
 
 
@@ -84,7 +84,7 @@ async def test_search_conversation_can_search_all_chats(tmp_path):
 
 
 def test_config_cross_chat_default_and_toml(tmp_path):
-    from agent.config import load_config
+    from aon.config import load_config
     assert Config("http://x/v1", "m", tmp_path, [], 5, 10, "127.0.0.1:8700").cross_chat_recall is True
     p = tmp_path / "c.toml"
     p.write_text('ollama_base_url="http://x/v1"\ndefault_model="m"\nworkdir="."\ncross_chat_recall=false\n')
@@ -139,13 +139,13 @@ def test_deleting_a_chat_removes_it_from_the_server(tmp_path):
 
 def test_the_page_deletes_chats_on_the_server():
     from pathlib import Path
-    html = (Path(__file__).resolve().parent.parent / "static" / "index.html").read_text(encoding="utf-8")
+    html = (Path(__file__).resolve().parent.parent / "src" / "aon" / "static" / "index.html").read_text(encoding="utf-8")
     assert "fetch('/api/conversations/'+encodeURIComponent(id),{method:'DELETE'})" in html
 
 
 @pytest.mark.asyncio
 async def test_backfill_indexes_every_turn(tmp_path):
-    from agent.recall import backfill
+    from aon.recall import backfill
     db = _db(tmp_path)
     for i in range(300):
         db.add_turn(f"c{i % 7}", "user", f"note {i} about docker")

@@ -1,5 +1,5 @@
 import pytest
-from agent.memory import EpisodicMemory, RememberTool
+from aon.memory import EpisodicMemory, RememberTool
 
 
 def _m(tmp):

@@ -1,9 +1,9 @@
 import pytest
-from agent.prompts import build_messages
-from agent.engine import Agent
-from agent.llm_client import ChatResult
-from agent.tools.base import Tool, ToolResult, ToolRegistry
-from agent.approval_gate import AutoGate
+from aon.prompts import build_messages
+from aon.engine import Agent
+from aon.llm_client import ChatResult
+from aon.tools.base import Tool, ToolResult, ToolRegistry
+from aon.approval_gate import AutoGate
 
 
 def test_tool_summary_injected():

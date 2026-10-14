@@ -1,7 +1,7 @@
 import pytest
-from agent.skills import SkillStore, WriteSkillTool
-from agent.capabilities import CapabilitiesTool
-from agent.tools.base import ToolRegistry
+from aon.skills import SkillStore, WriteSkillTool
+from aon.capabilities import CapabilitiesTool
+from aon.tools.base import ToolRegistry
 
 
 @pytest.mark.asyncio

@@ -1,6 +1,6 @@
-from agent.config import Config
-from agent.build import build_agent, build_eval_agent
-from agent.approval_gate import AutoGate
+from aon.config import Config
+from aon.build import build_agent, build_eval_agent
+from aon.approval_gate import AutoGate
 
 
 def _cfg(tmp):

@@ -1,7 +1,7 @@
 import pytest
-from agent.skill_author import draft_skill_md, DraftSkillTool
-from agent.skills import SkillStore
-from agent.llm_client import ChatResult
+from aon.skill_author import draft_skill_md, DraftSkillTool
+from aon.skills import SkillStore
+from aon.llm_client import ChatResult
 
 
 class FakeLLM:

@@ -1,11 +1,11 @@
 import pytest
-from agent.prompts import build_messages
-from agent.engine import Agent
-from agent.llm_client import ChatResult
-from agent.tools.base import ToolRegistry
-from agent.approval_gate import AutoGate
-from agent.memory import MemoryStore
-from agent.skills import SkillStore
+from aon.prompts import build_messages
+from aon.engine import Agent
+from aon.llm_client import ChatResult
+from aon.tools.base import ToolRegistry
+from aon.approval_gate import AutoGate
+from aon.memory import MemoryStore
+from aon.skills import SkillStore
 
 def test_build_messages_injects(tmp_path):
     msgs = build_messages("g", [], memory_text="- fact A", skill_list=[("deploy","Deploy steps")])

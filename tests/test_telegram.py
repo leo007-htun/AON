@@ -1,5 +1,5 @@
 import httpx, pytest
-from agent.telegram import Telegram, parse_decision
+from aon.telegram import Telegram, parse_decision
 
 def test_parse_decision():
     assert parse_decision("ok 5") == (5, True)

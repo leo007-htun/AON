@@ -1,7 +1,7 @@
 import json
 import pytest
-import agent.mcp_client as mc
-from agent.mcp_client import McpManager, McpServerCfg
+import aon.mcp_client as mc
+from aon.mcp_client import McpManager, McpServerCfg
 
 
 def test_cfg_roundtrip(tmp_path):

@@ -1,5 +1,5 @@
 import pytest
-from agent.skills import SkillStore, ReadSkillTool, WriteSkillTool
+from aon.skills import SkillStore, ReadSkillTool, WriteSkillTool
 
 def test_safe_rejects_escape(tmp_path):
     s = SkillStore(tmp_path)
@@ -38,7 +38,7 @@ async def test_description_from_frontmatter(tmp_path):
 
 
 # --- Task 1: SkillStore v2 (multi-file, path-confined, 1024 cap) ---
-from agent.skills import SkillFilesTool
+from aon.skills import SkillFilesTool
 
 @pytest.mark.asyncio
 async def test_multifile_write_read_and_files(tmp_path):
@@ -71,7 +71,7 @@ async def test_skill_files_tool_lists(tmp_path):
 
 
 def test_parse_frontmatter_strips_quotes_and_joins_block_scalars():
-    from agent.skills import parse_frontmatter
+    from aon.skills import parse_frontmatter
     meta, body = parse_frontmatter('---\nname: a\ndescription: "Use when: x"\n---\nbody')
     assert meta["description"] == "Use when: x" and body == "body"
     meta, _ = parse_frontmatter("---\nname: 'b'\ndescription: >\n  line one\n  line two\nlicense: MIT\n---\n")

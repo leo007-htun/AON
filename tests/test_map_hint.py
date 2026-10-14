@@ -1,7 +1,7 @@
 import json, pytest
-from agent.geo import map_hint
-from agent.router import ensure_map, Plan
-from agent.llm_client import ChatResult
+from aon.geo import map_hint
+from aon.router import ensure_map, Plan
+from aon.llm_client import ChatResult
 
 @pytest.mark.parametrize("text", [
     "Where is Albert Dock?", "where's the Liver Building", "How do I get to Albert Dock?",
@@ -57,10 +57,10 @@ async def test_ensure_map_survives_bad_extractor_output():
 
 def test_stored_turn_marks_that_a_map_was_shown(tmp_path):
     from fastapi.testclient import TestClient
-    from agent.config import Config
-    from agent.persistence import Database
-    from agent.web import create_app
-    from agent.engine import RunResult
+    from aon.config import Config
+    from aon.persistence import Database
+    from aon.web import create_app
+    from aon.engine import RunResult
     class A:
         def __init__(self, emit): self.emit = emit
         async def run(self, goal, conversation=None):
@@ -76,7 +76,7 @@ def test_stored_turn_marks_that_a_map_was_shown(tmp_path):
     assert turns[-1]["role"] == "assistant" and "[map shown]" in turns[-1]["content"]
 
 # ---- "A in B": the city qualifies the place, it is not a second place ----
-from agent.geo import merge_qualifiers
+from aon.geo import merge_qualifiers
 
 Q = "Where is the Liver Building in Liverpool?"
 
@@ -100,7 +100,7 @@ async def test_ensure_map_merges_split_city_and_fixes_mode():
     assert (await ensure_map(pl, Q, LLM({}))).map["places"] == ["Liver Building, Liverpool"]
 
 # ---- "Formby station": keep the place-type word the model dropped ----
-from agent.geo import expand_place_types
+from aon.geo import expand_place_types
 
 def test_expand_place_types_restores_dropped_type_word():
     assert expand_place_types(["Formby"], "how can I get to formby station?") == ["Formby station"]
@@ -120,8 +120,8 @@ async def test_ensure_map_applies_place_type_expansion():
     assert (await ensure_map(pl, "how can I get to formby station?", LLM({}))).map["places"] == ["Formby station"]
 
 # ---- explicit from/to from the model ----
-from agent.geo import normalize_map
-from agent.router import _MAP_SYS
+from aon.geo import normalize_map
+from aon.router import _MAP_SYS
 
 def test_normalize_map_accepts_from_to():
     a = normalize_map({"mode": "route", "from": None, "to": "Formby station"})
@@ -145,14 +145,14 @@ async def test_reply_to_place_question_goes_to_the_extractor():
     assert "Do you mean that one" in json.dumps(llm.calls[0])        # it sees the question it is answering
 
 def test_pending_place_question_detection():
-    from agent.router import pending_place_question
+    from aon.router import pending_place_question
     assert pending_place_question(ASKED)
     assert not pending_place_question([{"role": "assistant", "content": "Map updated: 3D view.\n[map shown]"}])
     assert not pending_place_question([{"role": "assistant", "content": "What do you want?"}])
     assert not pending_place_question(None)
 
 # ---- exact answers to "which place?" and full destination phrases ----
-from agent.geo import choices_marker, parse_choices, choice_from_reply, recover_route_phrases
+from aon.geo import choices_marker, parse_choices, choice_from_reply, recover_route_phrases
 
 EV = {"type": "map", "mode": "area", "pending": {"mode": "route", "travel": "walk", "from": None},
       "targets": [{"name": "Crewe", "display": "Crewe, Cheshire East", "lat": 53.089, "lon": -2.433},
@@ -198,7 +198,7 @@ def test_location_words_in_from_mean_the_user():
     assert normalize_map({"mode": "route", "places": ["my location", "Formby station"]})["places"] == ["Formby station"]
 
 # ---- second live run: route wording, corrections after a map ----
-from agent.geo import force_route_mode
+from aon.geo import force_route_mode
 
 def test_route_wording_forces_route_mode():
     m = {"mode": "area", "places": ["Crewe station", "Liverpool"], "travel": "drive", "view": "auto", "orbit": None}

@@ -1,9 +1,9 @@
 import pytest
-from agent.engine import Agent
-from agent.prompts import build_messages
-from agent.llm_client import ChatResult, ToolCall
-from agent.tools.base import Tool, ToolResult, ToolRegistry
-from agent.approval_gate import AutoGate
+from aon.engine import Agent
+from aon.prompts import build_messages
+from aon.llm_client import ChatResult, ToolCall
+from aon.tools.base import Tool, ToolResult, ToolRegistry
+from aon.approval_gate import AutoGate
 
 CALL = {"role": "assistant", "content": "", "tool_calls": [{"id": "1", "type": "function",
         "function": {"name": "list_dir", "arguments": "{}"}}]}

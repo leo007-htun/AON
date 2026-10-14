@@ -1,7 +1,7 @@
 import json
 import pytest
 import httpx
-from agent.model_tools import (parse_model_ref, pick_quant, ollama_root, PullModelTool,
+from aon.model_tools import (parse_model_ref, pick_quant, ollama_root, PullModelTool,
                                ListModelsTool, RemoveModelTool)
 
 GB = 1024 ** 3
@@ -122,9 +122,9 @@ async def test_list_and_remove():
 
 @pytest.mark.asyncio
 async def test_link_intake_offers_install_model(tmp_path):
-    from agent.link_intake import LinkIntake, OPTIONS
-    from agent.persistence import Database
-    from agent.llm_client import ChatResult
+    from aon.link_intake import LinkIntake, OPTIONS
+    from aon.persistence import Database
+    from aon.llm_client import ChatResult
     class L:
         async def chat(self, m, tools=None):
             return ChatResult(json.dumps({"kind": "docs", "title": "Qwen GGUF", "summary": "s", "user_intent": None}), [])

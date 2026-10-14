@@ -1,11 +1,11 @@
 import pytest
 import httpx
-from agent.engine import Agent
-from agent.router import Plan, _SYS
-from agent.llm_client import ChatResult
-from agent.tools.base import ToolRegistry
-from agent.approval_gate import AutoGate
-from agent.memory import EpisodicMemory, RememberTool, contains_secret
+from aon.engine import Agent
+from aon.router import Plan, _SYS
+from aon.llm_client import ChatResult
+from aon.tools.base import ToolRegistry
+from aon.approval_gate import AutoGate
+from aon.memory import EpisodicMemory, RememberTool, contains_secret
 
 FAKE_PAT = "ghp_" + "A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6Q7r8"
 
@@ -66,7 +66,7 @@ async def test_memory_never_stores_secrets(tmp_path):
 
 @pytest.mark.asyncio
 async def test_fetch_text_raises_on_http_error():
-    from agent.link_intake import fetch_text
+    from aon.link_intake import fetch_text
     t = httpx.MockTransport(lambda req: httpx.Response(401, text="missing required Authorization header"))
     with pytest.raises(RuntimeError) as e:
         await fetch_text("https://api.githubcopilot.com/mcp/", transport=t)
@@ -75,6 +75,6 @@ async def test_fetch_text_raises_on_http_error():
 
 @pytest.mark.asyncio
 async def test_fetch_text_returns_readable_on_200():
-    from agent.link_intake import fetch_text
+    from aon.link_intake import fetch_text
     t = httpx.MockTransport(lambda req: httpx.Response(200, text="<html><body><h1>Hi</h1><script>x</script></body></html>"))
     assert (await fetch_text("https://x.dev", transport=t)).strip() == "Hi"
