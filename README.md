@@ -4,6 +4,7 @@
 
 [![Live](https://img.shields.io/badge/live-aon.vulkron.uk-00e5ff?style=for-the-badge&logo=cloudflare&logoColor=white)](https://aon.vulkron.uk)
 [![YouTube demo](https://img.shields.io/badge/demo-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=wLiVhkLOd-8)
+[![PyPI](https://img.shields.io/pypi/v/aon-agent?style=for-the-badge&logo=pypi&logoColor=white&label=PyPI&color=3775A9)](https://pypi.org/project/aon-agent/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-22c55e?style=for-the-badge)](LICENSE)
 [![Android APK](https://img.shields.io/badge/Android-download%20APK-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/leo007-htun/AON/releases/latest/download/AON.apk)
 
