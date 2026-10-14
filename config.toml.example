@@ -1,9 +1,18 @@
-ollama_base_url = "http://localhost:11434/v1"
-default_model = "gpt-oss"
-workdir = "~/app/workspace"
+# AON configuration example. `aon init` writes a config.toml like this into your AON home.
+ollama_base_url = "http://localhost:11434/v1"   # Ollama's OpenAI-compatible endpoint (chat + embeddings)
+default_model = "qwen3:14b"                     # a chat model with tool support
+workdir = "~/.aon/workspace"
+bind = "127.0.0.1:8700"                         # this computer only; AON has no login, see the README before opening it up
 always_ask = []
 max_steps = 40
 command_timeout = 120
-bind = "192.168.1.84:8700"
+embed_model = "nomic-embed-text"
+context_window = 16384                          # the chat model's context length
+reply_reserve = 6144
+history_tokens = 5000
 telegram_bot_token = ""
 telegram_allowed_chat_ids = []
+
+# Optional: chat on a vLLM server for several users at once
+# chat_base_url = "http://gpu-box:8001/v1"
+# chat_model = "aon"

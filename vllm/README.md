@@ -1,11 +1,10 @@
-# vLLM server for AON (copied from the GPU box on 2026-10-14)
+# vLLM server for AON
 
-Source: `cmpuser1@100.72.82.59` (port 23957), RTX 4090 24 GB.
+Tested on one RTX 4090 (24 GB). Replace `YOUR_USER` and `GPU_BOX_IP` with your own values.
 
 | Here | On the GPU box |
 |---|---|
 | `systemd/vllm.service` | `/etc/systemd/system/vllm.service` (live: 16K context, thinking on) |
-| `systemd/vllm.service.bak-*` | earlier versions: `bak-20261013` (old AWQ path), `bak-32k`, `bak-8k` |
 | `QWEN-config/` | `~/QWEN` without the weights (`model.safetensors` 18.6 GB, `model_mtp.safetensors` 0.8 GB) |
 | `vllm-env-requirements.txt` | `pip freeze` of `~/vllm-env` (vLLM 0.31.0) |
 
@@ -16,9 +15,9 @@ folder's own `chat_template.jinja` (506 bytes) has no tool support. `preprocesso
 
 ## Restore on a fresh machine
 
-1. Put the weights and these config files in `/home/cmpuser1/QWEN`.
+1. Put the weights and these config files in `/home/YOUR_USER/QWEN`.
 2. Create the venv: `uv venv ~/vllm-env && ~/vllm-env/bin/pip install -r vllm-env-requirements.txt`.
 3. `sudo cp systemd/vllm.service /etc/systemd/system/ && sudo systemctl daemon-reload && sudo systemctl enable --now vllm`.
-4. Check it: `curl http://100.72.82.59:8001/v1/models` should list `aon` with `max_model_len` 16384.
+4. Check it: `curl http://GPU_BOX_IP:8001/v1/models` should list `aon` with `max_model_len` 16384.
 
-AON reaches it via `chat_base_url = "http://100.72.82.59:8001/v1"` in `config.toml`.
+AON reaches it via `chat_base_url = "http://GPU_BOX_IP:8001/v1"` in `config.toml`.

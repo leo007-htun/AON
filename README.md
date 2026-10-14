@@ -217,7 +217,7 @@ flowchart TB
 3. Open AON and sign in with your approved email address (see [Try the live instance](#-try-the-live-instance)).
 
 The app opens <https://aon.vulkron.uk> by default. To use your own server, press **Back** in the
-app and choose **Change server**, for example `http://192.168.1.84:8700` on your home network.
+app and choose **Change server**, for example `http://192.168.1.50:8700` on your home network.
 The APK is signed (APK Signature Scheme v2, certificate `CN=AON, O=Vulkron, C=GB`); its SHA-256 is
 on the [release page](https://github.com/leo007-htun/AON/releases/latest).
 
@@ -286,7 +286,7 @@ equal to vLLM's `--max-model-len` (or the Ollama model's context).
 | `ollama_base_url` | Ollama's OpenAI-compatible endpoint (embeddings, and chat unless `chat_base_url` is set) | `"http://localhost:11434/v1"` |
 | `default_model` | Model used when the UI does not pick one | `"qwen3:14b"` |
 | `workdir` | The agent's workspace; chats and documents are stored here | `"~/.aon/workspace"` |
-| `bind` | Address and port of the web UI | `"0.0.0.0:8700"` |
+| `bind` | Address and port of the web UI. AON has no login: keep it on `127.0.0.1` unless every device that can reach it is trusted | `"127.0.0.1:8700"` |
 | `max_steps` | Tool calls allowed per request | `40` |
 | `command_timeout` | Seconds before a shell command is stopped | `120` |
 | `always_ask` | Extra tools that always need approval | `[]` |

@@ -80,7 +80,7 @@ def test_existing_app_folder_works_as_home(tmp_path, monkeypatch):
     (home / "workspace").mkdir(parents=True)
     (home / "config.toml").write_text(
         f'ollama_base_url = "http://x/v1"\ndefault_model = "m"\nworkdir = "{(home / "workspace").as_posix()}"\n'
-        'bind = "192.168.1.84:8700"\n')
+        'bind = "192.168.1.50:8700"\n')
     import uvicorn
     seen = {}
     monkeypatch.setattr(uvicorn, "run", lambda app, host, port, **kw: seen.update(host=host, port=port))
@@ -89,4 +89,4 @@ def test_existing_app_folder_works_as_home(tmp_path, monkeypatch):
         assert main(["serve", "--home", str(home)]) == 0
     finally:
         os.chdir(cwd)
-    assert seen == {"host": "192.168.1.84", "port": 8700}
+    assert seen == {"host": "192.168.1.50", "port": 8700}

@@ -91,7 +91,7 @@ Download the APK from GitHub releases: https://github.com/leo007-htun/AON/releas
 2. Allow installs from your browser when Android asks, then tap Install.
 3. Open AON and sign in with your approved email address.
 
-The app opens https://aon.vulkron.uk by default, or you can point it at your own AON server such as `http://192.168.1.84:8700`.
+The app opens https://aon.vulkron.uk by default, or you can point it at your own AON server such as `http://192.168.1.50:8700`.
 
 ## Installation and configuration
 
