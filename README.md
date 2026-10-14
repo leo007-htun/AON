@@ -37,7 +37,7 @@ has a web UI (also usable on phones) and an optional Telegram bot.
 
 <div align="center">
 
-[![Watch the AON demo on YouTube](https://img.youtube.com/vi/wLiVhkLOd-8/hqdefault.jpg)](https://www.youtube.com/watch?v=wLiVhkLOd-8)
+[![Watch the AON demo on YouTube](https://img.youtube.com/vi/wLiVhkLOd-8/maxresdefault.jpg)](https://www.youtube.com/watch?v=wLiVhkLOd-8)
 
 ▶️ *Click the image to watch on YouTube*
 
