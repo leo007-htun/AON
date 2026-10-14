@@ -94,14 +94,14 @@ Memory and RAG are table stakes now. What AON adds:
 in the [`aon-agent`](https://pypi.org/project/aon-agent/) package
 ([source](src/aon/mcp_server.py)); your MCP client starts it for you.
 
-| Tool | What it does | |
+| Tool | What it does | Access |
 |---|---|:---:|
-| `ask_aon` | Hand AON a task or question; it answers with its own model, memory, documents and tools. Pass `chat` to continue a conversation. | ✍️ |
-| `search_memory` | Search AON's long-term memory about you | 👀 read-only |
-| `remember` | Save a fact to AON's memory | ✍️ |
-| `search_documents` | Search your document library by meaning and exact words | 👀 read-only |
-| `list_documents` | List the library | 👀 read-only |
-| `add_document` | Add a text document to the library | ✍️ |
+| `ask_aon` | Hand AON a task or question; it answers with its own model, memory, documents and tools. Pass `chat` to continue a conversation. | ✍️&nbsp;write |
+| `search_memory` | Search AON's long-term memory about you | 👀&nbsp;read |
+| `remember` | Save a fact to AON's memory | ✍️&nbsp;write |
+| `search_documents` | Search your document library by meaning and exact words | 👀&nbsp;read |
+| `list_documents` | List the library | 👀&nbsp;read |
+| `add_document` | Add a text document to the library | ✍️&nbsp;write |
 
 > [!NOTE]
 > Shell commands and file writes are always refused over MCP: there is nobody to approve them
@@ -112,9 +112,9 @@ in the [`aon-agent`](https://pypi.org/project/aon-agent/) package
 
 <br>
 
-[Claude Desktop](https://modelcontextprotocol.io/docs/develop/connect-local-servers): Settings →
-Developer → Edit Config (`claude_desktop_config.json`), then restart it.
-[Cursor](https://cursor.com/docs/mcp): `~/.cursor/mcp.json`, or `.cursor/mcp.json` in a project.
+- [Claude Desktop](https://modelcontextprotocol.io/docs/develop/connect-local-servers): Settings →
+  Developer → Edit Config (`claude_desktop_config.json`), then restart it.
+- [Cursor](https://cursor.com/docs/mcp): `~/.cursor/mcp.json`, or `.cursor/mcp.json` in a project.
 
 ```json
 {
@@ -170,23 +170,18 @@ Add `"--home", "/path/to/home"` to `args` for a different home folder. If the cl
 ## 🏗️ Architecture
 
 ```mermaid
-flowchart LR
-    subgraph Clients
-        W["🌐 Web UI"]
-        A["📱 Android app"]
-        T["💬 Telegram"]
-        M["🤖 Claude / Cursor"]
+flowchart TB
+    subgraph clients["Clients"]
+        direction LR
+        W["🌐 Web UI"] ~~~ A["📱 Android"] ~~~ T["💬 Telegram"] ~~~ M["🤖 Claude / Cursor"]
     end
-    W -- "HTTPS + Cloudflare Access" --> S
-    A -- "HTTPS + Cloudflare Access" --> S
-    T --> S
-    M -- "aon mcp (stdio)" --> S
-    S["🛰️ AON<br/>FastAPI + agent loop"]
-    S --> TL["🛠️ Tools<br/>shell, files, web, maps"]
-    S --> DB[("🧠 Chats, memory, documents<br/>SQLite FTS5 + vectors")]
-    S --> V["⚡ vLLM<br/>chat model"]
-    S --> O["🦙 Ollama<br/>embeddings"]
-    S --> X["🔌 External MCP servers"]
+    S["🛰️ AON server · FastAPI + agent loop"]
+    subgraph backends["Behind AON"]
+        direction LR
+        TL["🛠️ Tools"] ~~~ DB[("🧠 Memory + docs")] ~~~ V["⚡ vLLM"] ~~~ O["🦙 Ollama"] ~~~ X["🔌 MCP servers"]
+    end
+    clients -- "HTTPS via Cloudflare Access, or MCP over stdio" --> S
+    S --> backends
 ```
 
 <details>
