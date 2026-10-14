@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🛰️ AON — a self-hosted AI agent
+# 🛰️ AON : Self-Contained Obliterated AI
 
 [![Live](https://img.shields.io/badge/live-aon.vulkron.uk-00e5ff?style=for-the-badge&logo=cloudflare&logoColor=white)](https://aon.vulkron.uk)
 [![YouTube demo](https://img.shields.io/badge/demo-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=wLiVhkLOd-8)
