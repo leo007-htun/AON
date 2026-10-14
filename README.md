@@ -1,6 +1,6 @@
 <div align="center">
 
-![AON](docs/aon-logo-animated.svg)
+![AON](https://raw.githubusercontent.com/leo007-htun/AON/main/docs/aon-logo-animated.svg)
 
 # 🛰️ AON : Self-Contained Obliterated AI
 
@@ -19,7 +19,7 @@
 
 | 💬 Chat | 🗺️ Maps |
 |:---:|:---:|
-| ![AON chat UI](docs/screenshot.png) | ![AON route on the 3D globe map](docs/map.png) |
+| ![AON chat UI](https://raw.githubusercontent.com/leo007-htun/AON/main/docs/screenshot.png) | ![AON route on the 3D globe map](https://raw.githubusercontent.com/leo007-htun/AON/main/docs/map.png) |
 
 </div>
 

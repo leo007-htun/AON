@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aon-agent"
-version = "1.0.0"
+version = "1.0.1"
 description = "Self-contained, obliterated AI agent on your own GPU: memory, document RAG, tools, MCP, maps, multi-user via vLLM."
-readme = "README.md"
+readme = "docs/PYPI.md"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "Sithu Htun" }]
@@ -54,3 +54,5 @@ aon = ["static/**/*", "default_skills/**/*"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 pythonpath = ["src"]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
