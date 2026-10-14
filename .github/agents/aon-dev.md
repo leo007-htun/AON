@@ -58,8 +58,9 @@ AON runs inside its **home folder** (`--home`, `$AON_HOME` or `~/.aon`); data pa
    `git diff --stat`: a diff much larger than your edit means the endings flipped.
 5. **Dependencies.** Add runtime dependencies to `pyproject.toml` with a version range. Keep
    `mcp>=1.20,<2`: 2.x renamed `FastMCP` and changed the client API.
-6. **Don't touch data.** Leave `workspace/`, `memory/*.db`, `workspace/*.db`, `workspace/uploads/`
-   and `.glama_key` alone; they are a data snapshot, not code.
+6. **Never commit personal data.** Chats, memory, uploads, logs and local settings (`workspace/`,
+   `memory/`, `*.log`, `config.toml`, `mcp.json`, `system_prompt.txt`, `.glama_key`) are in
+   `.gitignore`; never add them, and never use `git add -f` on them.
 7. **Web UI style** (`src/aon/static/index.html`): blueprint navy with cyan and green accents;
    red only for warnings, errors and destructive buttons. Framework styles sit in CSS `@layer`s,
    so AON's own unlayered rules override them. When `static/lib/aon-map.js` or `.css` change, bump
